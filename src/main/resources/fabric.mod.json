@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "unbreakable",
-  "version": "1.0",
+  "version": "v1.0.0",
   "name": "Unbreakable",
   "description": "Overhauls and improves the base durability system!",
   "authors": [
