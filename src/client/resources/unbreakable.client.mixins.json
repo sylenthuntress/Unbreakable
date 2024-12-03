@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "sylenthuntress.unbreakable.mixin.client",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "item_repair.anvil.AnvilScreenMixin",
+    "item_shatter.ItemMixin",
+    "item_shatter.ItemStackMixin",
+    "item_shatter.ModelPredicateProviderRegistryMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

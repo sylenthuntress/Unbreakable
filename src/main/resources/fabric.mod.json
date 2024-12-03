@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "id": "unbreakable",
+  "version": "0.1-beta",
+  "name": "Unbreakable",
+  "description": "Overhauls and improves the base durability system!",
+  "authors": [
+    "SylentHuntress\n\n"
+  ],
+  "contact": {
+    "homepage": "",
+    "sources": ""
+  },
+  "license": "CC0-1.0",
+  "icon": "assets/unbreakable/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "sylenthuntress.unbreakable.util.Unbreakable"
+    ],
+    "client": [
+      "sylenthuntress.unbreakable.util.UnbreakableClient"
+    ],
+    "fabric-datagen": [
+      "sylenthuntress.unbreakable.datagen.ModDataGenerator"
+    ]
+  },
+  "mixins": [
+    "unbreakable.mixins.json",
+    {
+      "config": "unbreakable.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.7",
+    "minecraft": "~1.21.3",
+    "java": ">=21",
+    "fabric-api": "*"
+  },
+  "suggests": {
+    "another-mod": "*"
+  },
+  "custom": {
+    "modmenu": {
+      "links": {
+        "unbreakable.discord": "https://discord.gg/gYWwjRfNH7"
+      },
+      "update_checker": true
+    }
+  }
+}
