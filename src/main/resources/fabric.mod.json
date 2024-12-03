@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "unbreakable",
-  "version": "0.1-beta",
+  "version": "1.0",
   "name": "Unbreakable",
   "description": "Overhauls and improves the base durability system!",
   "authors": [
@@ -20,9 +20,6 @@
     ],
     "client": [
       "sylenthuntress.unbreakable.util.UnbreakableClient"
-    ],
-    "fabric-datagen": [
-      "sylenthuntress.unbreakable.datagen.ModDataGenerator"
     ]
   },
   "mixins": [
