@@ -1,8 +1,6 @@
 package sylenthuntress.unbreakable.mixin.client.item_shatter;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.component.ComponentHolder;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -13,7 +11,7 @@ import sylenthuntress.unbreakable.util.ItemShatterHelper;
 import sylenthuntress.unbreakable.util.ModComponents;
 import sylenthuntress.unbreakable.util.Unbreakable;
 
-@Environment(EnvType.CLIENT)
+
 @Mixin(Item.class)
 public abstract class ItemMixin implements ComponentHolder {
     @ModifyReturnValue(method = "getItemBarStep", at = @At("RETURN"))

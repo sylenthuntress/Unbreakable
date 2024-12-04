@@ -1,13 +1,11 @@
 package sylenthuntress.unbreakable.util;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
 import java.util.TreeMap;
 
-@Environment(EnvType.CLIENT)
+
 public class NumberHelper {
     private final static TreeMap<Integer, Integer> romanNumerals = new TreeMap<>();
 

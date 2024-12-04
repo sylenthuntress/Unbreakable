@@ -1,7 +1,5 @@
 package sylenthuntress.unbreakable.mixin.client.item_shatter;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.component.ComponentHolder;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
@@ -22,7 +20,7 @@ import sylenthuntress.unbreakable.util.Unbreakable;
 
 import java.util.function.Consumer;
 
-@Environment(EnvType.CLIENT)
+
 @Mixin(ItemStack.class)
 public abstract class ItemStackMixin implements ComponentHolder {
     @Unique

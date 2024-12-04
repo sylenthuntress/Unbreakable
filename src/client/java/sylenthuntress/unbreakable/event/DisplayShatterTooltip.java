@@ -1,7 +1,5 @@
 package sylenthuntress.unbreakable.event;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -15,7 +13,7 @@ import sylenthuntress.unbreakable.util.Unbreakable;
 
 import java.util.List;
 
-@Environment(EnvType.CLIENT)
+
 public class DisplayShatterTooltip implements ItemTooltipCallback {
     @Override
     public void getTooltip(ItemStack stack, Item.TooltipContext context, TooltipType type, List<Text> lines) {
