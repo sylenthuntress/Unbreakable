@@ -4,9 +4,9 @@
   "compatibilityLevel": "JAVA_21",
   "client": [
     "item_repair.anvil.AnvilScreenMixin",
+    "item_shatter.BrokenPropertyMixin",
     "item_shatter.ItemMixin",
-    "item_shatter.ItemStackMixin",
-    "item_shatter.ModelPredicateProviderRegistryMixin"
+    "item_shatter.ItemStackMixin"
   ],
   "injectors": {
     "defaultRequire": 1

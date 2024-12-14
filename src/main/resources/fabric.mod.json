@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "unbreakable",
-  "version": "v1.0.0+1.21.3",
+  "version": "v1.0.1+1.21.4",
   "name": "Unbreakable",
   "description": "Overhauls and improves the base durability system!",
   "authors": [
@@ -31,7 +31,7 @@
   ],
   "depends": {
     "fabricloader": ">=0.16.7",
-    "minecraft": "1.21.3",
+    "minecraft": "~1.21.4",
     "java": ">=21",
     "fabric-api": "*"
   },
