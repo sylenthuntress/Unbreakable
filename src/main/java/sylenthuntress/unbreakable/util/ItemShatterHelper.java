@@ -62,7 +62,8 @@ public class ItemShatterHelper {
     public static boolean isInList$shatterPreventsUse(RegistryEntry<Item> item, ItemStack stack) {
         List<String> itemIdAndTags = new java.util.ArrayList<>(List.of(item.getIdAsString()));
         List<String> configList = Unbreakable.CONFIG.shatterPenalties.LIST();
-        item.streamTags().toList().forEach(itemTagKey -> itemIdAndTags.add(itemTagKey.id().toString()));
-        return !Unbreakable.CONFIG.shatterPenalties.INVERT() == itemIdAndTags.retainAll(configList) && ((Unbreakable.CONFIG.shatterPenalties.THRESHOLD() > -1 && stack.getOrDefault(ModComponents.SHATTER_LEVEL, 0) >= Unbreakable.CONFIG.shatterPenalties.THRESHOLD()) || (Unbreakable.CONFIG.shatterPenalties.THRESHOLD() == -1 && isMaxShatterLevel(stack)));
+        item.streamTags().toList().forEach(itemTagKey -> itemIdAndTags.add("#" + itemTagKey.id().toString()));
+        itemIdAndTags.retainAll(configList);
+        return Unbreakable.CONFIG.shatterPenalties.INVERT() == itemIdAndTags.isEmpty() && ((Unbreakable.CONFIG.shatterPenalties.THRESHOLD() > -1 && stack.getOrDefault(ModComponents.SHATTER_LEVEL, 0) >= Unbreakable.CONFIG.shatterPenalties.THRESHOLD()) || (Unbreakable.CONFIG.shatterPenalties.THRESHOLD() == -1 && isMaxShatterLevel(stack)));
     }
 }
