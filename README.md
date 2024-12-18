@@ -29,3 +29,5 @@ can still be repaired, but it may be more expensive.
 **And yes, the mod is fully customizable!**
 All features are 100% configurable using [Mod Menu](https://modrinth.com/mod/modmenu) and can be tweaked or disabled.
 If you like, you can disable and/or tweak every feature of the mod, individually!
+
+*[A full list of features can be found here.](https://github.com/sylenthuntress/Unbreakable/wiki/Feature-List)*
