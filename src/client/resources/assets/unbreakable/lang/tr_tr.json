@@ -107,7 +107,7 @@
   "text.config.unbreakable-config.option.dynamicDamage.COMBAT_MULTIPLIER": "Dinamik silah hasarı için çarpan",
   "text.config.unbreakable-config.option.dynamicDamage.MINING": "Blok sertliğine göre aletlere hasar ver",
   "text.config.unbreakable-config.option.dynamicDamage.MINING_MULTIPLIER": "Dinamik alet hasarı için çarpan",
-  "text.config.unbreakable-config.option.dynamicDamage.PROJECTILE": "Atılabilir gücüne göre uzun menzilli silahlara hasar ver",
+  "text.config.unbreakable-config.option.dynamicDamage.PROJECTILE": "Atılabilir gücüne göre uzun menzilli\n silahlara hasar ver",
   "text.config.unbreakable-config.option.dynamicDamage.PROJECTILE_MULTIPLIER": "Dinamik uzun menzilli silahlar için çarpan",
   "text.config.unbreakable-config.option.dynamicDamage.ELYTRA": "Süzülme hızına göre elitraya hasar ver",
   "text.config.unbreakable-config.option.dynamicDamage.ELYTRA_MULTIPLIER": "Dinamik elitra hasarı için çarpan",
@@ -140,11 +140,11 @@
   "text.config.unbreakable-config.option.tooExpensiveWarning": "40+ onarımMaliyetinde onarımı durdur (vanilla)",
   "text.config.unbreakable-config.category.repairCost": "Onarım Maliyeti",
   "text.config.unbreakable-config.option.repairCost.MULTIPLIER": "Maliyet çarpanı",
-  "text.config.unbreakable-config.option.repairCost.SHATTER_SCALING": "Parçalanmış eşyaları onarırken onarım maliyetini çarp",
+  "text.config.unbreakable-config.option.repairCost.SHATTER_SCALING": "Parçalanmış eşyaları onarırken\nonarım maliyetini çarp",
   "text.config.unbreakable-config.option.repairCost.ENCHANTMENT_SCALING": "Büyülerle onarım ücretini arttır",
   "text.config.unbreakable-config.option.repairCost.ANVIL_SCALING": "Örs kullanımıyla onarımMaliyetini arttır (vanilla)",
   "text.config.unbreakable-config.section.enchantmentSection": "Büyü Değişiklikleri",
-  "text.config.unbreakable-config.option.disableBindingWhenShattered": "Parçalanmış eşyalarda bağlanma\n lanetini kaldır",
+  "text.config.unbreakable-config.option.disableBindingWhenShattered": "Parçalanmış eşyalarda bağlanma\nlanetini kaldır",
   "text.config.unbreakable-config.option.shatterCursedItems": "Öldüğünde kaybolma lanetli eşyaları \nkaybetmek yerine parçala",
   "text.config.unbreakable-config.option.exclusiveMending": "Onarımı kırılmazlıkla beraber çalışmaz hale getir"
 }
