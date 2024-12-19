@@ -1,4 +1,4 @@
-# Version v1.0.4+1.21.4
+# Version v1.0.3+1.21.4
 
 * Updated `README.md` to include feature list
 * Added `CHANGELOG.md` file in project /root
