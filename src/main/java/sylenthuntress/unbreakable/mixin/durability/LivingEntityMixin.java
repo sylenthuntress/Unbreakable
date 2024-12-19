@@ -5,10 +5,10 @@ import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyConstant;
+import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 import sylenthuntress.unbreakable.util.Unbreakable;
 
 @Mixin(LivingEntity.class)
@@ -28,10 +28,8 @@ public abstract class LivingEntityMixin {
         }
     }
 
-    @ModifyConstant(method = "tickGliding", constant = @Constant(intValue = 1, ordinal = 1))
-    int damageElytraOnGlide(int constant) {
-        constant += cachedDamage;
-        cachedDamage = 0;
-        return constant;
+    @ModifyArgs(method = "tickGliding", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;damage(ILnet/minecraft/entity/LivingEntity;Lnet/minecraft/entity/EquipmentSlot;)V"))
+    void damageElytraOnGlide(Args args) {
+        args.set(0, ((int) args.get(0)) + cachedDamage);
     }
 }

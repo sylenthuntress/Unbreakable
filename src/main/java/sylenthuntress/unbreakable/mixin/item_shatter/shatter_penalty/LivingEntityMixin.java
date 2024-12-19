@@ -18,9 +18,7 @@ import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import sylenthuntress.unbreakable.util.ItemShatterHelper;
 import sylenthuntress.unbreakable.util.ModComponents;
@@ -108,13 +106,13 @@ public abstract class LivingEntityMixin extends Entity {
         }
     }
 
-    @ModifyConstant(method = "blockedByShield", constant = @Constant(doubleValue = 0.0D, ordinal = 1))
-    public double blockedByShield$applyShatterPenalty(double original) {
+    @ModifyExpressionValue(method = "blockedByShield", at = @At(value = "CONSTANT", args = {"floatValue=0.0F", "ordinal=2"}))
+    public float blockedByShield$applyShatterPenalty(float original) {
         ItemStack stack = this.getBlockingItem();
-        double penaltyMultiplier = 0;
+        float penaltyMultiplier = 0;
         if (ItemShatterHelper.isShattered(stack) && !stack.isIn(SHATTER_BLACKLIST) && Unbreakable.CONFIG.shatterPenalties.SHIELD_ARC())
             penaltyMultiplier += 1 - ItemShatterHelper.calculateShatterPenalty(stack);
-        return -1 * penaltyMultiplier;
+        return original + (-1 * penaltyMultiplier);
     }
 
     @ModifyExpressionValue(method = "calcGlidingVelocity", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getEffectiveGravity()D"))

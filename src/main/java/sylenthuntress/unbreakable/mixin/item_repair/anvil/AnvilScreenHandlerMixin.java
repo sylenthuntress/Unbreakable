@@ -11,8 +11,6 @@ import net.minecraft.screen.AnvilScreenHandler;
 import net.minecraft.screen.Property;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Constant;
-import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import sylenthuntress.unbreakable.util.ItemShatterHelper;
 import sylenthuntress.unbreakable.util.ModComponents;
@@ -62,7 +60,7 @@ public class AnvilScreenHandlerMixin {
         return original;
     }
 
-    @ModifyConstant(method = "updateResult", constant = @Constant(intValue = 4))
+    @ModifyExpressionValue(method = "updateResult", at = @At(value = "CONSTANT", args = "intValue=4"))
     private int repairCostFactor(int original) {
         return Math.round(original * Unbreakable.CONFIG.repairCost.MULTIPLIER());
     }
