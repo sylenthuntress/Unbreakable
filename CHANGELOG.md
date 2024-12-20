@@ -1,8 +1,8 @@
-# Version v1.0.3+1.21.4
+# Version v1.0.4+1.21.4
 
-* Updated `README.md` to include feature list
-* Added `CHANGELOG.md` file in project /root
-* Fixed dead homepage link in `fabric.mod.json`
-* Fixed incompatibilities and broken logic with certain features
-* Fixed formatting inconsistency in `en_us.json` localization
-* Added Turkish localization (Credit: Hexasan)
+* Changed formatting of shattered description
+* Shatter level no longer displays at 1 for vanilla parity (configurable)
+* Fixed bug applying bonus damage + knockback on
+  punch [(Issue #3)](https://github.com/sylenthuntress/Unbreakable/issues/3)
+* Fixed bug with item bars rendering out of bounds when an item's shatter level was above its max shatter level
+* Optimized tooltip render code
