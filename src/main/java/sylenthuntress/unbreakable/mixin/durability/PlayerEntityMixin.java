@@ -46,7 +46,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     void damageItemOnAttack(Entity target, CallbackInfo ci, @Local(ordinal = 0) float damage, @Local(ordinal = 0) LocalFloatRef newDamage, @Local(ordinal = 1) float bonusDamage, @Local(ordinal = 2) float cooldownProgress, @Local DamageSource damageSource) {
         if (!target.isInvulnerable() && target instanceof LivingEntity livingEntity && livingEntity.hurtTime == 0) {
             ItemStack stack = getWeaponStack();
-            if (!stack.isEmpty() && Unbreakable.CONFIG.dynamicDamage.COMBAT()) {
+            if (stack.isDamageable() && Unbreakable.CONFIG.dynamicDamage.COMBAT()) {
                 damage += bonusDamage;
                 damage *= Math.max(1, 1 + (livingEntity.getArmor() * 0.1F));
                 damage += stack.getItem().getBonusAttackDamage(target, damage, damageSource);
@@ -62,7 +62,6 @@ public abstract class PlayerEntityMixin extends LivingEntity {
                 else if (cooldownProgress <= 0.95)
                     damage += (float) (this.getAttributeValue(EntityAttributes.ATTACK_DAMAGE) * (5.0F - (cooldownProgress * 4.0F)));
                 stack.damage((int) ((damage * 0.3F) * Unbreakable.CONFIG.dynamicDamage.COMBAT_MULTIPLIER()), (PlayerEntity) (Object) this);
-            }
             stack.set(DataComponentTypes.DAMAGE, stack.getOrDefault(DataComponentTypes.DAMAGE, 1) + 1);
             if ((((unbreakable$incrementedShatterLevel(stack)) && stack.getOrDefault(ModComponents.SHATTER_LEVEL, 0) == 1) || (stack.shouldBreak() || stack.isEmpty())) && Unbreakable.CONFIG.bonusDamageOnBreak.DO_BONUS()) {
                 newDamage.set(newDamage.get() * Unbreakable.CONFIG.bonusDamageOnBreak.BONUS_ATTACK_MULTIPLIER());
@@ -71,6 +70,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
                 this.getWorld().playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.BLOCK_ANVIL_PLACE, this.getSoundCategory(), 0.3F, 2F);
             } else if (stack.getOrDefault(ModComponents.SHATTER_LEVEL, 0) == 0) {
                 stack.set(DataComponentTypes.DAMAGE, stack.getOrDefault(DataComponentTypes.DAMAGE, 1) - 1);
+            }
             }
         }
     }
