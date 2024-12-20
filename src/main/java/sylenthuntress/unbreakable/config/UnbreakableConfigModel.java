@@ -59,6 +59,7 @@ public class UnbreakableConfigModel {
         public boolean DISPLAY_TOOLTIP_DESC = true;
         public boolean SEPARATE_TOOLTIP = true;
         public boolean ROMAN_NUMERALS = true;
+        public boolean DISPLAY_LEVEL_AT_ONE = false;
         @ExcludeFromScreen
         public boolean INDEX_OVERRIDE = false;
         @ExcludeFromScreen

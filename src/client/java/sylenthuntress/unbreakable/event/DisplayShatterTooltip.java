@@ -27,9 +27,8 @@ public class DisplayShatterTooltip implements ItemTooltipCallback {
                 if (translatableContent.getKey().equalsIgnoreCase("item.durability"))
                     tooltipIndex = lines.indexOf(text);
             }
-            else tooltipIndex = Math.clamp(Unbreakable.CONFIG.shatterTooltip.INDEX(), 0, lines.size());
-            if (advancedToolTips && tooltipIndex == lines.size())
-                tooltipIndex -= 2;
+            else if (Unbreakable.CONFIG.shatterTooltip.INDEX_OVERRIDE())
+                tooltipIndex = Math.clamp(Unbreakable.CONFIG.shatterTooltip.INDEX(), 0, lines.size());
             if (Unbreakable.CONFIG.shatterTooltip.DISPLAY_TOOLTIP_DESC()) lines.add(
                     tooltipIndex,
                     Text.translatable(
@@ -41,7 +40,7 @@ public class DisplayShatterTooltip implements ItemTooltipCallback {
                     Text.translatable("unbreakable.shatter.level").append(
                             NumberHelper.toRomanOrArabic(
                                     shatterLevel, "unbreakable.roman_numeral.",
-                                    Unbreakable.CONFIG.shatterTooltip.ROMAN_NUMERALS()
+                                    Unbreakable.CONFIG.shatterTooltip.ROMAN_NUMERALS(), Unbreakable.CONFIG.shatterTooltip.DISPLAY_LEVEL_AT_ONE()
                             )
                     ));
             if (((advancedToolTips && lines.size() > 2) || lines.size() > 4) && Unbreakable.CONFIG.shatterTooltip.SEPARATE_TOOLTIP())
