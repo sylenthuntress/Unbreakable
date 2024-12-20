@@ -2,8 +2,8 @@
   "unbreakable.discord": "https://discord.gg/gYWwjRfNH7",
   "unbreakable.shatter.info": [
     {
-      "text": " Less effective until repaired",
-      "color": "#AAAAAA",
+      "text": "Less effective until repaired",
+      "color": "#555555",
       "italic": true
     }
   ],
@@ -13,6 +13,7 @@
       "color": "#AA0000"
     }
   ],
+  "unbreakable.roman_numeral.null": " ",
   "unbreakable.roman_numeral.1": [
     {
       "text": "I",
@@ -94,6 +95,7 @@
   "text.config.unbreakable-config.option.shatterTooltip.DISPLAY_TOOLTIP": "Display §7shatterLevel§r tooltip",
   "text.config.unbreakable-config.option.shatterTooltip.DISPLAY_TOOLTIP_DESC": "Explain §7shatterLevel§r in tooltip",
   "text.config.unbreakable-config.option.shatterTooltip.SEPARATE_TOOLTIP": "Separate §7shatterLevel§r tooltip from the\nrest of an item's tooltips",
+  "text.config.unbreakable-config.option.shatterTooltip.DISPLAY_LEVEL_AT_ONE": "Display §7shatterLevel§r if equal to one",
   "text.config.unbreakable-config.option.shatterTooltip.ROMAN_NUMERALS": "Display §7shatterLevel§r as roman numerals",
   "text.config.unbreakable-config.section.damageSection": "Item Durability",
   "text.config.unbreakable-config.option.maxDamageMultiplier": "Global durability multiplier",
