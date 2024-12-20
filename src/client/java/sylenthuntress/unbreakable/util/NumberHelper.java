@@ -32,11 +32,11 @@ public class NumberHelper {
     public static MutableText toRoman(int number, String translationKey, boolean displayIfOne) {
         int numeral = romanNumerals.floorKey(number);
         if (number == numeral)
-            return Text.translatable("unbreakable.number." + (displayIfOne ? romanNumerals.get(number) : "null"));
+            return Text.translatable("unbreakable.roman_numeral." + (displayIfOne ? romanNumerals.get(number) : "null"));
         return Text.translatable(translationKey + numeral).append(toRoman(number - numeral, translationKey, false));
     }
 
     public static MutableText toArabic(int number, boolean displayIfOne) {
-        return Text.literal(displayIfOne ? Integer.toString(number) : "unbreakable.number.null");
+        return Text.literal(displayIfOne ? Integer.toString(number) : "unbreakable.roman_numeral.null");
     }
 }
