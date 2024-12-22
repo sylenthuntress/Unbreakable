@@ -48,13 +48,13 @@ public class ItemShatterHelper {
     public static double getAttribute(ItemStack stack, RegistryEntry<EntityAttribute> attribute, double base) {
         if (!stack.isEmpty()) {
             AttributeModifiersComponent attributeModifierComponent = stack.get(DataComponentTypes.ATTRIBUTE_MODIFIERS);
-            assert attributeModifierComponent != null;
-            for (AttributeModifiersComponent.Entry entry : attributeModifierComponent.modifiers()) {
-                RegistryKey<EntityAttribute> target_attribute = attribute.getKey().get();
-                if (entry.attribute().matchesKey(target_attribute)) {
-                    base += entry.modifier().value();
+            if (attributeModifierComponent != null && attribute.getKey().isPresent())
+                for (AttributeModifiersComponent.Entry entry : attributeModifierComponent.modifiers()) {
+                    RegistryKey<EntityAttribute> target_attribute = attribute.getKey().get();
+                    if (entry.attribute().matchesKey(target_attribute)) {
+                        base += entry.modifier().value();
+                    }
                 }
-            }
         }
         return base;
     }
