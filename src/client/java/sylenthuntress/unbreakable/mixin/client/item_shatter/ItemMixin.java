@@ -8,6 +8,7 @@ import net.minecraft.util.math.MathHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import sylenthuntress.unbreakable.util.ItemShatterHelper;
+import sylenthuntress.unbreakable.util.ModComponents;
 import sylenthuntress.unbreakable.util.Unbreakable;
 
 
@@ -17,7 +18,7 @@ public abstract class ItemMixin implements ComponentHolder {
     private int getItemBarStepWhenShattered(int itemBarStep, ItemStack stack) {
         if (stack.getDamage() > stack.getMaxDamage()) {
             if (ItemShatterHelper.isShattered(stack)) {
-                itemBarStep = (int) 13.0F * ItemShatterHelper.getMaxShatterLevel(stack) / ItemShatterHelper.getMaxShatterLevel(stack);
+                itemBarStep = (int) 13.0F * stack.getOrDefault(ModComponents.SHATTER_LEVEL, 0) / ItemShatterHelper.getMaxShatterLevel(stack);
                 int oneStep = (int) 13.0F / ItemShatterHelper.getMaxShatterLevel(stack);
                 itemBarStep -= MathHelper.clamp(oneStep - Math.round(
                         (float) oneStep - (float) stack.getDamage() * (float) oneStep / (float) stack.getMaxDamage()

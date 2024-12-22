@@ -23,7 +23,7 @@ public class ItemShatterHelper {
     }
 
     public static int getMaxShatterLevel(ItemStack stack) {
-        return Math.max(stack.getOrDefault(ModComponents.MAX_SHATTER_LEVEL, Unbreakable.CONFIG.maxShatterLevel() + (getEnchantmentLevel(Enchantments.UNBREAKING, stack.copy()) * Unbreakable.CONFIG.enchantmentScaling())), stack.getOrDefault(ModComponents.SHATTER_LEVEL, 0));
+        return stack.getOrDefault(ModComponents.MAX_SHATTER_LEVEL, Unbreakable.CONFIG.maxShatterLevel() + (getEnchantmentLevel(Enchantments.UNBREAKING, stack.copy()) * Unbreakable.CONFIG.enchantmentScaling()));
     }
 
     public static boolean isMaxShatterLevel(ItemStack stack) {
