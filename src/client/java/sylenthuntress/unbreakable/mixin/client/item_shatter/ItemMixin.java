@@ -27,7 +27,7 @@ public abstract class ItemMixin implements ComponentHolder {
                 itemBarStep *= -2;
             }
         }
-        return itemBarStep;
+        return Math.min(itemBarStep, 13);
     }
 
     @ModifyReturnValue(method = "getItemBarColor", at = @At("RETURN"))
