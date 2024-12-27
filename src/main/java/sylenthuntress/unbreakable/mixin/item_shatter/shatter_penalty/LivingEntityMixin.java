@@ -42,7 +42,7 @@ public abstract class LivingEntityMixin extends Entity {
 
     @ModifyExpressionValue(method = "canGlideWith", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;willBreakNextUse()Z"))
     private static boolean canGlideWith$applyShatterPenalty(boolean original, ItemStack stack) {
-        return original && !ItemShatterHelper.isInList$shatterPreventsUse(stack.getRegistryEntry(), stack);
+        return original && !ItemShatterHelper.shouldPreventUse(stack.getRegistryEntry(), stack);
     }
 
     @Shadow
@@ -86,12 +86,12 @@ public abstract class LivingEntityMixin extends Entity {
 
     @ModifyReturnValue(method = "canEquip", at = @At("RETURN"))
     private boolean canEquip$applyShatterPenalty(boolean original, ItemStack stack) {
-        return original && !ItemShatterHelper.isInList$shatterPreventsUse(stack.getRegistryEntry(), stack);
+        return original && !ItemShatterHelper.shouldPreventUse(stack.getRegistryEntry(), stack);
     }
 
     @ModifyReturnValue(method = "canEquipFromDispenser", at = @At("RETURN"))
     private boolean canEquipFromDispenser$applyShatterPenalty(boolean original, ItemStack stack) {
-        return original && !ItemShatterHelper.isInList$shatterPreventsUse(stack.getRegistryEntry(), stack);
+        return original && !ItemShatterHelper.shouldPreventUse(stack.getRegistryEntry(), stack);
     }
 
     @Inject(method = "damageEquipment", at = @At("TAIL"))
@@ -99,7 +99,7 @@ public abstract class LivingEntityMixin extends Entity {
         for (EquipmentSlot slot : slots) {
             ItemStack stack = this.getEquippedStack(slot);
             if (isArmorSlot(slot)) continue;
-            if (ItemShatterHelper.isInList$shatterPreventsUse(stack.getRegistryEntry(), stack)) {
+            if (ItemShatterHelper.shouldPreventUse(stack.getRegistryEntry(), stack)) {
                 dropStack(Objects.requireNonNull(this.getServer()).getWorld(this.getWorld().getRegistryKey()), stack);
                 stack.decrement(stack.getOrDefault(DataComponentTypes.MAX_STACK_SIZE, 1));
             }

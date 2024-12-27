@@ -59,6 +59,11 @@ public class ItemShatterHelper {
         return base;
     }
 
+    public static boolean shouldPreventUse(RegistryEntry<Item> item, ItemStack stack) {
+        int shatterLevel = stack.getOrDefault(ModComponents.SHATTER_LEVEL, 0);
+        return isInList$shatterPreventsUse(item, stack) && (Unbreakable.CONFIG.shatterPenalties.THRESHOLD() == -1 ? shatterLevel == ItemShatterHelper.getMaxShatterLevel(stack) : shatterLevel >= Unbreakable.CONFIG.shatterPenalties.THRESHOLD());
+    }
+
     public static boolean isInList$shatterPreventsUse(RegistryEntry<Item> item, ItemStack stack) {
         List<String> itemIdAndTags = new java.util.ArrayList<>(List.of(item.getIdAsString()));
         List<String> configList = Unbreakable.CONFIG.shatterPenalties.LIST();
