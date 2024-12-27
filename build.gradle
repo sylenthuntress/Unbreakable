@@ -1,6 +1,35 @@
 plugins {
     id 'fabric-loom' version '1.8-SNAPSHOT'
     id 'maven-publish'
+    id "me.modmuss50.mod-publish-plugin" version "0.8.3"
+}
+
+publishMods {
+    file = remapJar.archiveFile
+    changelog = files("CHANGELOG.md").singleFile
+    type = STABLE
+    modLoaders.add("fabric")
+
+    curseforge {
+        projectId = "1153034"
+        projectSlug = "durability-rework"
+        accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
+        minecraftVersions.add("1.21.4")
+        requires("fabric-api", "owo-lib")
+        optional("modmenu")
+    }
+    modrinth {
+        projectId = "IR8T4xSw"
+        accessToken = providers.environmentVariable("MODRINTH_TOKEN")
+        minecraftVersions.add("1.21.4")
+        requires("fabric-api", "owo-lib")
+        optional("modmenu")
+    }
+    github {
+        repository = "https://github.com/sylenthuntress/Unbreakable"
+        accessToken = providers.environmentVariable("GITHUB_TOKEN")
+        commitish = "main"
+    }
 }
 
 version = project.mod_version
