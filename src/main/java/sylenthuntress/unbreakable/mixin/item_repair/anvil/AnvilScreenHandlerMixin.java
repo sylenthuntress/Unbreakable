@@ -39,6 +39,11 @@ public class AnvilScreenHandlerMixin {
         return original;
     }
 
+    @ModifyExpressionValue(method = "updateResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;canRepairWith(Lnet/minecraft/item/ItemStack;)Z"))
+    private boolean cancelAnvilRepair(boolean original) {
+        return original && Unbreakable.CONFIG.anvilRepair.ALLOW();
+    }
+
     @ModifyExpressionValue(method = "updateResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;getOrDefault(Lnet/minecraft/component/ComponentType;Ljava/lang/Object;)Ljava/lang/Object;"))
     private Object scaleWithEnchantments(Object original, @Local(ordinal = 0) ItemStack inputStack) {
         float repairCost = (Integer) original;

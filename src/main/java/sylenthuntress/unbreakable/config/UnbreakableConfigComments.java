@@ -55,6 +55,8 @@ public abstract class UnbreakableConfigComments {
     public final static String GRINDSTONE_REPAIR = "\n-- Grindstone Repair --\nAllows players to repair their items in a grindstone, using only XP levels";
     public final static String ALLOW_REPAIR = "Whether to enable this method of repair";
     public final static String DEGRADE_REPAIR_FACTOR = "Repairing items using this method will become more expensive with each use";
+    public final static String SMITHING_DECREMENTS_DEGRADATION = "Whether repairing items using a smithing table decreases degradation from the above option";
+    public final static String GRINDING_DECREMENTS_DEGRADATION = "Whether repairing items using a grindstone decreases degradation from the above option";
     public final static String ANVILS_CLEAR_DEGRADATION = "Repairing items with an anvil will reset the effectiveness of this repair method";
     // Enchantments
     public final static String disableBindingWhenShattered = "Whether curse of binding should work on shattered items";

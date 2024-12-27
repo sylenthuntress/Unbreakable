@@ -71,6 +71,8 @@ public class UnbreakableConfigModel {
     }
 
     public static class AnvilRepair {
+        @Comment(UnbreakableConfigComments.ALLOW_REPAIR)
+        public boolean ALLOW = true;
         @Comment(UnbreakableConfigComments.TOO_EXPENSIVE)
         public boolean TOO_EXPENSIVE = false;
         @Nest
@@ -228,6 +230,8 @@ public class UnbreakableConfigModel {
         public float MULTIPLIER = 1;
         @Comment(UnbreakableConfigComments.DEGRADE_REPAIR_FACTOR)
         public boolean DEGRADE_REPAIR_FACTOR = true;
+        @Comment(UnbreakableConfigComments.GRINDING_DECREMENTS_DEGRADATION)
+        public boolean GRINDING_DECREMENTS_DEGRADATION = true;
         @Comment(UnbreakableConfigComments.ANVILS_CLEAR_DEGRADATION)
         public boolean ANVILS_CLEAR_DEGRADATION = true;
     }
@@ -238,6 +242,8 @@ public class UnbreakableConfigModel {
         public float MULTIPLIER = 1;
         @Comment(UnbreakableConfigComments.DEGRADE_REPAIR_FACTOR)
         public boolean DEGRADE_REPAIR_FACTOR = true;
+        @Comment(UnbreakableConfigComments.SMITHING_DECREMENTS_DEGRADATION)
+        public boolean SMITHING_DECREMENTS_DEGRADATION = true;
         @Comment(UnbreakableConfigComments.ANVILS_CLEAR_DEGRADATION)
         public boolean ANVILS_CLEAR_DEGRADATION = true;
     }
