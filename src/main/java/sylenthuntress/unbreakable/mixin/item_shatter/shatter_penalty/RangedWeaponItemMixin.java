@@ -17,7 +17,7 @@ import sylenthuntress.unbreakable.util.Unbreakable;
 
 import java.util.List;
 
-import static sylenthuntress.unbreakable.provider.ModItemTagProvider.SHATTER_BLACKLIST;
+import static sylenthuntress.unbreakable.util.DataTagKeys.SHATTER_BLACKLIST;
 
 @Mixin(RangedWeaponItem.class)
 public class RangedWeaponItemMixin {

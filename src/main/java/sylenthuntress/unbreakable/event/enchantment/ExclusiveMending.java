@@ -9,7 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.registry.entry.RegistryEntry;
 import sylenthuntress.unbreakable.util.Unbreakable;
 
-import static sylenthuntress.unbreakable.provider.ModEnchantmentTagProvider.INCOMPATIBLE_ENCHANTMENTS;
+import static sylenthuntress.unbreakable.util.DataTagKeys.INCOMPATIBLE_ENCHANTMENTS;
 
 public class ExclusiveMending implements EnchantmentEvents.AllowEnchanting {
     @Override

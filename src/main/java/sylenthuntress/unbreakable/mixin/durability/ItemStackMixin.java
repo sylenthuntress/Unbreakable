@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import sylenthuntress.unbreakable.util.Unbreakable;
 
-import static sylenthuntress.unbreakable.provider.ModItemTagProvider.SHATTER_BLACKLIST;
+import static sylenthuntress.unbreakable.util.DataTagKeys.SHATTER_BLACKLIST;
 
 @Mixin(ItemStack.class)
 public abstract class ItemStackMixin {

@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import sylenthuntress.unbreakable.util.ItemShatterHelper;
 import sylenthuntress.unbreakable.util.Unbreakable;
 
-import static sylenthuntress.unbreakable.provider.ModItemTagProvider.SHATTER_BLACKLIST;
+import static sylenthuntress.unbreakable.util.DataTagKeys.SHATTER_BLACKLIST;
 
 @Mixin(TridentEntity.class)
 public abstract class TridentEntityMixin extends Entity {

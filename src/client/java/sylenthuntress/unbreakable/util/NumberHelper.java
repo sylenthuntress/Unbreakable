@@ -32,7 +32,7 @@ public class NumberHelper {
     public static MutableText toRoman(int number, String translationKey) {
         int numeral = romanNumerals.floorKey(number);
         if (number == numeral)
-            return Text.translatable("unbreakable.roman_numeral." + romanNumerals.get(number));
+            return Text.translatable(translationKey + romanNumerals.get(number));
         return Text.translatable(translationKey + numeral).append(toRoman(number - numeral, translationKey));
     }
 

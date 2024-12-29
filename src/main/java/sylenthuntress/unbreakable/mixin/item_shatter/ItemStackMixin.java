@@ -22,8 +22,8 @@ import sylenthuntress.unbreakable.util.Unbreakable;
 
 import java.util.function.Consumer;
 
-import static sylenthuntress.unbreakable.provider.ModItemTagProvider.BREAKABLE_ITEMS;
-import static sylenthuntress.unbreakable.provider.ModItemTagProvider.SHATTER_BLACKLIST;
+import static sylenthuntress.unbreakable.util.DataTagKeys.BREAKABLE_ITEMS;
+import static sylenthuntress.unbreakable.util.DataTagKeys.SHATTER_BLACKLIST;
 
 @Mixin(ItemStack.class)
 public abstract class ItemStackMixin implements ItemStackAccess {

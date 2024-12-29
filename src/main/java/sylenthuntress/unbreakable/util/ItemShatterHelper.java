@@ -11,7 +11,7 @@ import net.minecraft.registry.entry.RegistryEntry;
 
 import java.util.List;
 
-public class ItemShatterHelper {
+public abstract class ItemShatterHelper {
     public static float calculateShatterPenalty(ItemStack stack, float minimum) {
         return Math.max(minimum, 1.0F - ((float) stack.getOrDefault(ModComponents.SHATTER_LEVEL, 0) / getMaxShatterLevel(stack)));
     }

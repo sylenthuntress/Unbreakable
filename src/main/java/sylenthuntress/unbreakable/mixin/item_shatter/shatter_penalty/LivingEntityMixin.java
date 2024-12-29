@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import static sylenthuntress.unbreakable.provider.ModItemTagProvider.SHATTER_BLACKLIST;
+import static sylenthuntress.unbreakable.util.DataTagKeys.SHATTER_BLACKLIST;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity {
