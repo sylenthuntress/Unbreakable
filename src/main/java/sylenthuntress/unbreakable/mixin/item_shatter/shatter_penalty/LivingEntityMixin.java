@@ -2,14 +2,15 @@ package sylenthuntress.unbreakable.mixin.item_shatter.shatter_penalty;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import com.llamalad7.mixinextras.sugar.Local;
+import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -17,14 +18,17 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import sylenthuntress.unbreakable.util.ItemShatterHelper;
 import sylenthuntress.unbreakable.util.ModComponents;
 import sylenthuntress.unbreakable.util.Unbreakable;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import static sylenthuntress.unbreakable.provider.ModItemTagProvider.SHATTER_BLACKLIST;
@@ -46,12 +50,6 @@ public abstract class LivingEntityMixin extends Entity {
     }
 
     @Shadow
-    public abstract Iterable<ItemStack> getEquippedItems();
-
-    @Shadow
-    public abstract AttributeContainer getAttributes();
-
-    @Shadow
     @NotNull
     public abstract ItemStack getWeaponStack();
 
@@ -64,25 +62,8 @@ public abstract class LivingEntityMixin extends Entity {
     @Shadow
     protected abstract boolean isArmorSlot(EquipmentSlot slot);
 
-    @ModifyReturnValue(method = "getAttributeValue", at = @At(value = "RETURN"))
-    public double getAttributeValue$applyShatterPenalty(double original, RegistryEntry<EntityAttribute> attribute) {
-        if ((attribute == EntityAttributes.ARMOR && Unbreakable.CONFIG.shatterPenalties.ARMOR()) || (attribute == EntityAttributes.ARMOR_TOUGHNESS && Unbreakable.CONFIG.shatterPenalties.ARMOR_TOUGHNESS()) || (attribute == EntityAttributes.KNOCKBACK_RESISTANCE && Unbreakable.CONFIG.shatterPenalties.KNOCKBACK_RESISTANCE())) {
-            double newAttribute = 0;
-            for (ItemStack stack : this.getEquippedItems()) {
-                double itemAttribute = ItemShatterHelper.getAttribute(stack, attribute, this.getAttributes().getBaseValue(attribute));
-                if (itemAttribute >= 0)
-                    newAttribute += itemAttribute * ItemShatterHelper.calculateShatterPenalty(stack);
-            }
-            original = newAttribute;
-        }
-        if ((attribute == EntityAttributes.ATTACK_DAMAGE && Unbreakable.CONFIG.shatterPenalties.ATTACK_DAMAGE()) || (attribute == EntityAttributes.ATTACK_SPEED && Unbreakable.CONFIG.shatterPenalties.ATTACK_SPEED())) {
-            ItemStack stack = this.getWeaponStack();
-            double itemAttribute = ItemShatterHelper.getAttribute(stack, attribute, this.getAttributes().getBaseValue(attribute));
-            if (itemAttribute != this.getAttributes().getBaseValue(attribute))
-                original = itemAttribute * ItemShatterHelper.calculateShatterPenalty(stack);
-        }
-        return original;
-    }
+    @Unique
+    ItemStack sharedItemStack;
 
     @ModifyReturnValue(method = "canEquip", at = @At("RETURN"))
     private boolean canEquip$applyShatterPenalty(boolean original, ItemStack stack) {
@@ -141,5 +122,32 @@ public abstract class LivingEntityMixin extends Entity {
             penaltyMultiplier = Math.max(ItemShatterHelper.calculateShatterPenalty(stack), 0.1);
         }
         return original * penaltyMultiplier;
+    }
+
+    @Shadow
+    public abstract double getAttributeBaseValue(RegistryEntry<EntityAttribute> attribute);
+
+    @Inject(method = "getEquipmentChanges", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;applyAttributeModifiers(Lnet/minecraft/entity/EquipmentSlot;Ljava/util/function/BiConsumer;)V"))
+    void applyShatterPenalty(CallbackInfoReturnable<Map<EquipmentSlot, ItemStack>> cir, @Local ItemStack itemStack) {
+        sharedItemStack = itemStack;
+    }
+
+    @Inject(method = "method_61423", at = @At("HEAD"))
+    void applyShatterPenalty(RegistryEntry<EntityAttribute> attribute, EntityAttributeModifier modifier, CallbackInfo ci, @Local(argsOnly = true) LocalRef<EntityAttributeModifier> newModifier) {
+        if (sharedItemStack != null) {
+            ItemStack itemStack = sharedItemStack;
+            if (ItemShatterHelper.isShattered(itemStack)) {
+                double penaltyMultiplier = ItemShatterHelper.calculateShatterPenalty(itemStack);
+                double newModifierValue;
+                if (modifier.value() >= 0) {
+                    newModifierValue = modifier.value() * penaltyMultiplier;
+                    newModifier.set(new EntityAttributeModifier(modifier.id(), newModifierValue, modifier.operation()));
+                } else {
+                    newModifierValue = modifier.value() + this.getAttributeBaseValue(attribute);
+                    newModifierValue = newModifierValue - (newModifierValue * penaltyMultiplier);
+                    newModifier.set(new EntityAttributeModifier(modifier.id(), modifier.value() - newModifierValue, modifier.operation()));
+                }
+            }
+        }
     }
 }
