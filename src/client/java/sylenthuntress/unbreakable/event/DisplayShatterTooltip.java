@@ -19,7 +19,7 @@ public class DisplayShatterTooltip implements ItemTooltipCallback {
     @Override
     public void getTooltip(ItemStack stack, Item.TooltipContext context, TooltipType type, List<Text> lines) {
         if (ItemShatterHelper.isShattered(stack) && Unbreakable.CONFIG.shatterTooltip.DISPLAY_TOOLTIP()) {
-            boolean advancedToolTips = !Unbreakable.CONFIG.shatterTooltip.INDEX_OVERRIDE() && MinecraftClient.getInstance().options.advancedItemTooltips;
+            boolean advancedToolTips = MinecraftClient.getInstance().options.advancedItemTooltips;
             int shatterLevel = stack.getOrDefault(ModComponents.SHATTER_LEVEL, 0);
             int tooltipIndex = getTooltipIndex(lines, advancedToolTips);
             displayTooltip(lines, tooltipIndex, shatterLevel, advancedToolTips);
@@ -27,8 +27,8 @@ public class DisplayShatterTooltip implements ItemTooltipCallback {
     }
 
     public int getTooltipIndex(List<Text> lines, boolean advancedToolTips) {
-        int tooltipIndex = lines.size();
-        if (advancedToolTips) for (Text text : lines) {
+        int tooltipIndex = 0;
+        if (!Unbreakable.CONFIG.shatterTooltip.INDEX_OVERRIDE() && advancedToolTips) for (Text text : lines) {
             if (!(text.getContent() instanceof TranslatableTextContent translatableContent)) continue;
             if (translatableContent.getKey().equalsIgnoreCase("item.durability"))
                 tooltipIndex = lines.indexOf(text);
@@ -48,12 +48,11 @@ public class DisplayShatterTooltip implements ItemTooltipCallback {
         lines.add(
                 tooltipIndex,
                 Text.translatable("unbreakable.shatter.level").append(
-                        Unbreakable.CONFIG.shatterTooltip.DISPLAY_LEVEL_AT_ONE() || shatterLevel > 1 ? NumberHelper.toRomanOrArabic(
+                        NumberHelper.toRomanOrArabic(
                                 shatterLevel, "unbreakable.roman_numeral.",
-                                Unbreakable.CONFIG.shatterTooltip.ROMAN_NUMERALS()
-                        ) : Text.translatable("unbreakable.numbers.null")
-                )
-        );
+                                Unbreakable.CONFIG.shatterTooltip.ROMAN_NUMERALS(), Unbreakable.CONFIG.shatterTooltip.DISPLAY_LEVEL_AT_ONE()
+                        )
+                ));
         if (((advancedToolTips && lines.size() > 2) || lines.size() > 4) && Unbreakable.CONFIG.shatterTooltip.SEPARATE_TOOLTIP())
             lines.add(tooltipIndex, Text.of(" "));
     }

@@ -24,19 +24,19 @@ public class NumberHelper {
         romanNumerals.put(1, 1);
     }
 
-    public static MutableText toRomanOrArabic(int number, String translationKey, boolean doRoman) {
-        if (doRoman) return toRoman(number, translationKey);
-        return toArabic(number);
+    public static MutableText toRomanOrArabic(int number, String translationKey, boolean doRoman, boolean displayIfOne) {
+        if (doRoman) return toRoman(number, translationKey, displayIfOne);
+        return toArabic(number, displayIfOne);
     }
 
-    public static MutableText toRoman(int number, String translationKey) {
+    public static MutableText toRoman(int number, String translationKey, boolean displayIfOne) {
         int numeral = romanNumerals.floorKey(number);
         if (number == numeral)
-            return Text.translatable("unbreakable.roman_numeral." + romanNumerals.get(number));
-        return Text.translatable(translationKey + numeral).append(toRoman(number - numeral, translationKey));
+            return Text.translatable("unbreakable.roman_numeral." + (displayIfOne ? romanNumerals.get(number) : "null"));
+        return Text.translatable(translationKey + numeral).append(toRoman(number - numeral, translationKey, false));
     }
 
-    public static MutableText toArabic(int number) {
-        return Text.literal(Integer.toString(number));
+    public static MutableText toArabic(int number, boolean displayIfOne) {
+        return Text.literal(displayIfOne ? Integer.toString(number) : "unbreakable.roman_numeral.null");
     }
 }
