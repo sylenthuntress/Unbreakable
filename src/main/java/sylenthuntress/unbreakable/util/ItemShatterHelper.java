@@ -1,11 +1,9 @@
 package sylenthuntress.unbreakable.util;
 
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.component.type.ItemEnchantmentsComponent;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryKey;
@@ -45,18 +43,9 @@ public class ItemShatterHelper {
         return level;
     }
 
-    public static double getAttribute(ItemStack stack, RegistryEntry<EntityAttribute> attribute, double base) {
-        if (!stack.isEmpty()) {
-            AttributeModifiersComponent attributeModifierComponent = stack.get(DataComponentTypes.ATTRIBUTE_MODIFIERS);
-            if (attributeModifierComponent != null && attribute.getKey().isPresent())
-                for (AttributeModifiersComponent.Entry entry : attributeModifierComponent.modifiers()) {
-                    RegistryKey<EntityAttribute> target_attribute = attribute.getKey().get();
-                    if (entry.attribute().matchesKey(target_attribute)) {
-                        base += entry.modifier().value();
-                    }
-                }
-        }
-        return base;
+    public static boolean shouldPreventUse(RegistryEntry<Item> item, ItemStack stack) {
+        int shatterLevel = stack.getOrDefault(ModComponents.SHATTER_LEVEL, 0);
+        return isInList$shatterPreventsUse(item, stack) && (Unbreakable.CONFIG.shatterPenalties.THRESHOLD() == -1 ? shatterLevel == ItemShatterHelper.getMaxShatterLevel(stack) : shatterLevel >= Unbreakable.CONFIG.shatterPenalties.THRESHOLD());
     }
 
     public static boolean isInList$shatterPreventsUse(RegistryEntry<Item> item, ItemStack stack) {
