@@ -13,9 +13,9 @@ public class DynamicMiningDamageEvent implements PlayerBlockBreakEvents.After {
     @Override
     public void afterBlockBreak(World world, PlayerEntity player, BlockPos pos, BlockState block, @Nullable BlockEntity blockEntity) {
         if (Unbreakable.CONFIG.dynamicDamage.MINING()) {
-            int blockHardness = (int) block.getHardness(world, pos);
-            blockHardness += (int) Math.min(blockHardness, player.getBlockBreakingSpeed(block));
-            player.getMainHandStack().damage((int) (blockHardness * Unbreakable.CONFIG.dynamicDamage.MINING_MULTIPLIER()), player);
+            int itemDamage = (int) block.getHardness(world, pos);
+            itemDamage += (int) Math.min(itemDamage, player.getBlockBreakingSpeed(block));
+            player.getMainHandStack().damage((int) (itemDamage * Unbreakable.CONFIG.dynamicDamage.MINING_MULTIPLIER()), player);
         }
     }
 }

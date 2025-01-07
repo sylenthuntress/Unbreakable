@@ -1,4 +1,4 @@
-package sylenthuntress.unbreakable.mixin.durability;
+package sylenthuntress.unbreakable.mixin.item_damage;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;

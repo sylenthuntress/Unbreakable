@@ -1,4 +1,4 @@
-package sylenthuntress.unbreakable.mixin.durability;
+package sylenthuntress.unbreakable.mixin.item_damage;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
