@@ -14,7 +14,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import sylenthuntress.unbreakable.util.ItemShatterHelper;
 import sylenthuntress.unbreakable.util.Unbreakable;
 
-import static sylenthuntress.unbreakable.util.DataTagKeys.SHATTER_BLACKLIST;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends Entity {
@@ -33,7 +32,7 @@ public abstract class PlayerEntityMixin extends Entity {
     int applyShatterPenalty(int original) {
         ItemStack stack = getEquippedStack(EquipmentSlot.HEAD);
         double penaltyMultiplier = 1;
-        if (ItemShatterHelper.isShattered(stack) && !stack.isIn(SHATTER_BLACKLIST) && Unbreakable.CONFIG.shatterPenalties.ARMOR_EFFECTS())
+        if (ItemShatterHelper.isShattered(stack) && !ItemShatterHelper.isInList$shatterBlacklist(stack.getRegistryEntry()) && Unbreakable.CONFIG.shatterPenalties.ARMOR_EFFECTS())
             penaltyMultiplier = ItemShatterHelper.calculateShatterPenalty(stack);
         return (int) (original * penaltyMultiplier);
     }

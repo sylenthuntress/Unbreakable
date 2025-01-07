@@ -13,6 +13,12 @@
       "color": "#AA0000"
     }
   ],
+  "unbreakable.numbers.max": [
+    {
+      "text": "MAX",
+      "color": "#AA0000"
+    }
+  ],
   "unbreakable.numbers.null": " ",
   "unbreakable.roman_numeral.1": [
     {
@@ -88,6 +94,7 @@
   ],
   "tag.item.unbreakable.retains_breaking": "Retains vanilla breaking",
   "tag.item.unbreakable.shatter_blacklist": "Can't shatter",
+  "tag.item.unbreakable.prevent_use_when_shattered": "Can't be used when shattered",
   "text.config.unbreakable-config.title": "Unbreakable Config",
   "text.config.unbreakable-config.section.clientSection": "Client Settings",
   "text.config.unbreakable-config.option.shatteredItemBarColor": "Shattered item bar color",
@@ -96,10 +103,13 @@
   "text.config.unbreakable-config.option.shatterTooltip.DISPLAY_TOOLTIP_DESC": "Explain §7shatterLevel§r in tooltip",
   "text.config.unbreakable-config.option.shatterTooltip.SEPARATE_TOOLTIP": "Separate §7shatterLevel§r tooltip from the\nrest of an item's tooltips",
   "text.config.unbreakable-config.option.shatterTooltip.DISPLAY_LEVEL_AT_ONE": "Display §7shatterLevel§r if equal to one",
+  "text.config.unbreakable-config.option.shatterTooltip.DISPLAY_TEXT_AT_MAX": "Display \"MAX\" if level is max",
   "text.config.unbreakable-config.option.shatterTooltip.ROMAN_NUMERALS": "Display §7shatterLevel§r as roman numerals",
   "text.config.unbreakable-config.section.damageSection": "Item Durability",
-  "text.config.unbreakable-config.option.maxDamageMultiplier": "Global durability multiplier",
-  "text.config.unbreakable-config.option.onlyMultiplyShatterableItems": "Only apply above to shatterable items",
+  "text.config.unbreakable-config.category.durabilityModifier": "Durability Tweaks",
+  "text.config.unbreakable-config.option.durabilityModifier.MULTIPLIER": "Durability multiplier",
+  "text.config.unbreakable-config.option.durabilityModifier.LIST": "Items with normal durability",
+  "text.config.unbreakable-config.option.durabilityModifier.INVERT": "Above list is whitelist",
   "text.config.unbreakable-config.category.bonusDamageOnBreak": "Bonus damage on break/shatter",
   "text.config.unbreakable-config.option.bonusDamageOnBreak.DO_BONUS": "Enable bonus damage",
   "text.config.unbreakable-config.option.bonusDamageOnBreak.BONUS_ATTACK_MULTIPLIER": "Attack damage multiplier",
@@ -118,6 +128,9 @@
   "text.config.unbreakable-config.option.maxShatterLevel": "The default §7maxShatterLevel§f (max: 255)",
   "text.config.unbreakable-config.option.enchantmentScaling": "How much each level of unbreaking adds\nto an item's §7maxShatterLevel§f (max: 255)",
   "text.config.unbreakable-config.option.negativeDurabilityMultiplier": "Negative durability cap multiplier",
+  "text.config.unbreakable-config.category.shatterBlacklist": "Shatter Blacklist",
+  "text.config.unbreakable-config.option.shatterBlacklist.LIST": "Items that can't shatter",
+  "text.config.unbreakable-config.option.shatterBlacklist.INVERT": "Above list is whitelist",
   "text.config.unbreakable-config.category.shatterPenalties": "Shattered item penalties",
   "text.config.unbreakable-config.option.shatterPenalties.LIST": "Items disabled by shattering",
   "text.config.unbreakable-config.option.shatterPenalties.INVERT": "Above list is whitelist",

@@ -6,6 +6,7 @@ import net.minecraft.component.ComponentType;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.jetbrains.annotations.Nullable;
@@ -23,7 +24,6 @@ import sylenthuntress.unbreakable.util.Unbreakable;
 import java.util.function.Consumer;
 
 import static sylenthuntress.unbreakable.util.DataTagKeys.BREAKABLE_ITEMS;
-import static sylenthuntress.unbreakable.util.DataTagKeys.SHATTER_BLACKLIST;
 
 @Mixin(ItemStack.class)
 public abstract class ItemStackMixin implements ItemStackAccess {
@@ -53,6 +53,9 @@ public abstract class ItemStackMixin implements ItemStackAccess {
     @Shadow
     public abstract int getDamage();
 
+    @Shadow
+    public abstract RegistryEntry<Item> getRegistryEntry();
+
     // Prevents items from breaking at normal values
     @ModifyReturnValue(method = "shouldBreak", at = @At(value = "RETURN"))
     private boolean shouldBreak$preventItemBreak(boolean original) {
@@ -67,7 +70,7 @@ public abstract class ItemStackMixin implements ItemStackAccess {
     // Allows items to enter negative durability (twice their normal MAX_DAMAGE)
     @Unique
     private int disableDamageCap(int original) {
-        if (Unbreakable.CONFIG.negativeDurabilityMultiplier() != 0.0 && !this.isIn(SHATTER_BLACKLIST))
+        if (Unbreakable.CONFIG.negativeDurabilityMultiplier() != 0.0 && !ItemShatterHelper.isInList$shatterBlacklist(this.getRegistryEntry()))
             return (int) (original * (Unbreakable.CONFIG.negativeDurabilityMultiplier() + 1) + 1);
         return original;
     }
@@ -93,7 +96,7 @@ public abstract class ItemStackMixin implements ItemStackAccess {
     private void applyShatter(int damage, CallbackInfo ci) {
         incrementedShatterLevel = false;
         ItemStack stack = this.copy();
-        if (ItemShatterHelper.getMaxShatterLevel(stack) > 0 && !this.isIn(SHATTER_BLACKLIST)) {
+        if (ItemShatterHelper.getMaxShatterLevel(stack) > 0 && !ItemShatterHelper.isInList$shatterBlacklist(this.getRegistryEntry())) {
             int shatterLevel = stack.getOrDefault(ModComponents.SHATTER_LEVEL, 0);
             int maxShatterLevel = ItemShatterHelper.getMaxShatterLevel(stack);
             int maxDamage = this.getMaxDamage();

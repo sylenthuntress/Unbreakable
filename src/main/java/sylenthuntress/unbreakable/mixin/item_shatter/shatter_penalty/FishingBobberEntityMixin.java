@@ -12,7 +12,6 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import sylenthuntress.unbreakable.util.ItemShatterHelper;
 import sylenthuntress.unbreakable.util.Unbreakable;
 
-import static sylenthuntress.unbreakable.util.DataTagKeys.SHATTER_BLACKLIST;
 
 @Mixin(FishingBobberEntity.class)
 public abstract class FishingBobberEntityMixin {
@@ -21,7 +20,7 @@ public abstract class FishingBobberEntityMixin {
         ItemStack stack = thrower.getMainHandStack();
         if (!stack.isOf(Items.FISHING_ROD)) stack = thrower.getOffHandStack();
         double penaltyMultiplier = 1;
-        if (ItemShatterHelper.isShattered(stack) && !stack.isIn(SHATTER_BLACKLIST) && Unbreakable.CONFIG.shatterPenalties.PROJECTILES())
+        if (ItemShatterHelper.isShattered(stack) && !ItemShatterHelper.isInList$shatterBlacklist(stack.getRegistryEntry()) && Unbreakable.CONFIG.shatterPenalties.PROJECTILES())
             penaltyMultiplier = ItemShatterHelper.calculateShatterPenalty(stack);
         return vec3d.multiply(penaltyMultiplier, penaltyMultiplier, penaltyMultiplier);
     }
@@ -29,7 +28,7 @@ public abstract class FishingBobberEntityMixin {
     @ModifyExpressionValue(method = "use", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;getLuck()F"))
     private float use$applyShatterPenalty(float original, ItemStack stack) {
         double penaltyMultiplier = 1;
-        if (ItemShatterHelper.isShattered(stack) && !stack.isIn(SHATTER_BLACKLIST) && Unbreakable.CONFIG.shatterPenalties.ARMOR_TOUGHNESS())
+        if (ItemShatterHelper.isShattered(stack) && !ItemShatterHelper.isInList$shatterBlacklist(stack.getRegistryEntry()) && Unbreakable.CONFIG.shatterPenalties.ARMOR_TOUGHNESS())
             penaltyMultiplier = ItemShatterHelper.calculateShatterPenalty(stack);
         return (int) (original * penaltyMultiplier);
     }

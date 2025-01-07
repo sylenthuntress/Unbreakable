@@ -22,7 +22,7 @@ public class DisplayShatterTooltip implements ItemTooltipCallback {
             boolean advancedToolTips = !Unbreakable.CONFIG.shatterTooltip.INDEX_OVERRIDE() && MinecraftClient.getInstance().options.advancedItemTooltips;
             int shatterLevel = stack.getOrDefault(ModComponents.SHATTER_LEVEL, 0);
             int tooltipIndex = getTooltipIndex(lines, advancedToolTips);
-            displayTooltip(lines, tooltipIndex, shatterLevel, advancedToolTips);
+            displayTooltip(lines, stack, tooltipIndex, shatterLevel, advancedToolTips);
         }
     }
 
@@ -38,7 +38,7 @@ public class DisplayShatterTooltip implements ItemTooltipCallback {
         return tooltipIndex;
     }
 
-    public void displayTooltip(List<Text> lines, int tooltipIndex, int shatterLevel, boolean advancedToolTips) {
+    public void displayTooltip(List<Text> lines, ItemStack stack, int tooltipIndex, int shatterLevel, boolean advancedToolTips) {
         if (Unbreakable.CONFIG.shatterTooltip.DISPLAY_TOOLTIP_DESC()) lines.add(
                 tooltipIndex,
                 Text.translatable(
@@ -48,10 +48,10 @@ public class DisplayShatterTooltip implements ItemTooltipCallback {
         lines.add(
                 tooltipIndex,
                 Text.translatable("unbreakable.shatter.level").append(
-                        Unbreakable.CONFIG.shatterTooltip.DISPLAY_LEVEL_AT_ONE() || shatterLevel > 1 ? NumberHelper.toRomanOrArabic(
+                        ItemShatterHelper.isMaxShatterLevel(stack) && Unbreakable.CONFIG.shatterTooltip.DISPLAY_TEXT_AT_MAX() ? Text.translatable("unbreakable.numbers.max") : (Unbreakable.CONFIG.shatterTooltip.DISPLAY_LEVEL_AT_ONE() || shatterLevel > 1 ? NumberHelper.toRomanOrArabic(
                                 shatterLevel, "unbreakable.roman_numeral.",
                                 Unbreakable.CONFIG.shatterTooltip.ROMAN_NUMERALS()
-                        ) : Text.translatable("unbreakable.numbers.null")
+                        ) : Text.translatable("unbreakable.numbers.null"))
                 )
         );
         if (((advancedToolTips && lines.size() > 2) || lines.size() > 4) && Unbreakable.CONFIG.shatterTooltip.SEPARATE_TOOLTIP())

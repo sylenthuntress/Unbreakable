@@ -9,6 +9,8 @@ import net.minecraft.util.Identifier;
 public abstract class DataTagKeys {
     public static final TagKey<Item> SHATTER_BLACKLIST = TagKey.of(RegistryKeys.ITEM, Identifier.of(Unbreakable.MOD_ID, "shatter_blacklist"));
     public static final TagKey<Item> BREAKABLE_ITEMS = TagKey.of(RegistryKeys.ITEM, Identifier.of(Unbreakable.MOD_ID, "retains_breaking"));
+    public static final TagKey<Item> PREVENT_USE_WHEN_SHATTERED = TagKey.of(RegistryKeys.ITEM, Identifier.of(Unbreakable.MOD_ID, "prevent_use_when_shattered"));
+    public static final TagKey<Item> GOLDEN_TOOLS = TagKey.of(RegistryKeys.ITEM, Identifier.of(Unbreakable.MOD_ID, "golden_tools"));
     public static final TagKey<Enchantment> INCOMPATIBLE_ENCHANTMENTS = TagKey.of(RegistryKeys.ENCHANTMENT, Identifier.of(Unbreakable.MOD_ID, "incompatible_enchantments"));
 
 }

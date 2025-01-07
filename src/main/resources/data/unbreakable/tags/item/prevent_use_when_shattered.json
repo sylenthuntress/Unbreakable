@@ -1,0 +1,10 @@
+{
+  "values": [
+    "minecraft:brush",
+    "minecraft:fishing_rod",
+    "minecraft:flint_and_steel",
+    "minecraft:shears",
+    "minecraft:shield",
+    "#minecraft:hoes"
+  ]
+}

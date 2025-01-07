@@ -17,7 +17,6 @@ import sylenthuntress.unbreakable.util.Unbreakable;
 
 import java.util.List;
 
-import static sylenthuntress.unbreakable.util.DataTagKeys.SHATTER_BLACKLIST;
 
 @Mixin(RangedWeaponItem.class)
 public class RangedWeaponItemMixin {
@@ -32,7 +31,7 @@ public class RangedWeaponItemMixin {
     @ModifyArgs(method = "method_61659", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/RangedWeaponItem;shoot(Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/entity/projectile/ProjectileEntity;IFFFLnet/minecraft/entity/LivingEntity;)V"))
     public void shootAll$applyShatterPenalty(Args args) {
         ItemStack stack = savedItemStack;
-        if (ItemShatterHelper.isShattered(stack) && !stack.isIn(SHATTER_BLACKLIST) && Unbreakable.CONFIG.shatterPenalties.PROJECTILES()) {
+        if (ItemShatterHelper.isShattered(stack) && !ItemShatterHelper.isInList$shatterBlacklist(stack.getRegistryEntry()) && Unbreakable.CONFIG.shatterPenalties.PROJECTILES()) {
             // Speed
             float projectileSpeed = args.get(3);
             projectileSpeed *= ItemShatterHelper.calculateShatterPenalty(stack);

@@ -7,7 +7,6 @@ import io.wispforest.owo.ui.core.Color;
 import sylenthuntress.unbreakable.util.Unbreakable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -25,12 +24,10 @@ public class UnbreakableConfigModel {
     public ShatterTooltip shatterTooltip = new ShatterTooltip();
     @SectionHeader("damageSection")
     @RangeConstraint(min = 0.1F, max = 2.0F, decimalPlaces = 1)
-    @Comment(UnbreakableConfigComments.maxDamageMultiplier)
-    public float maxDamageMultiplier = 0.5F;
-    @Comment(UnbreakableConfigComments.onlyMultiplyShatterableItems)
-    public boolean onlyMultiplyShatterableItems = true;
     @Nest
     @Expanded
+    public DurabilityModifier durabilityModifier = new DurabilityModifier();
+    @Nest
     public BonusDamage bonusDamageOnBreak = new BonusDamage();
     @Nest
     public DynamicDamage dynamicDamage = new DynamicDamage();
@@ -46,6 +43,8 @@ public class UnbreakableConfigModel {
     @RangeConstraint(min = 0.0F, max = 3.0F, decimalPlaces = 1)
     @Comment(UnbreakableConfigComments.negativeDurabilityMultiplier)
     public float negativeDurabilityMultiplier = 1;
+    @Nest
+    public ShatterBlacklist shatterBlacklist = new ShatterBlacklist();
     @Nest
     public ShatterPenalties shatterPenalties = new ShatterPenalties();
     @SectionHeader("repairSection")
@@ -76,6 +75,8 @@ public class UnbreakableConfigModel {
         public boolean SEPARATE_TOOLTIP = true;
         @Comment(UnbreakableConfigComments.ROMAN_NUMERALS)
         public boolean ROMAN_NUMERALS = true;
+        @Comment(UnbreakableConfigComments.DISPLAY_TEXT_AT_MAX)
+        public boolean DISPLAY_TEXT_AT_MAX = true;
         @Comment(UnbreakableConfigComments.DISPLAY_LEVEL_AT_ONE)
         public boolean DISPLAY_LEVEL_AT_ONE = false;
         @ExcludeFromScreen
@@ -83,6 +84,21 @@ public class UnbreakableConfigModel {
         public boolean INDEX_OVERRIDE = false;
         @ExcludeFromScreen
         public int INDEX = 0;
+    }
+
+    public static class DurabilityModifier {
+        @Comment(UnbreakableConfigComments.DurabilityModifier_MULTIPLIER)
+        public float MULTIPLIER = 0.5F;
+        @Comment(UnbreakableConfigComments.DurabilityModifier_LIST)
+        @Expanded
+        public List<String> LIST = new ArrayList<>(
+                List.of(
+                        "#unbreakable:exclude_modifier",
+                        "#unbreakable:shatter_blacklist"
+                )
+        );
+        @Comment(UnbreakableConfigComments.INVERT)
+        public boolean INVERT = false;
     }
 
     public static class BonusDamage {
@@ -116,16 +132,24 @@ public class UnbreakableConfigModel {
         public float ELYTRA_MULTIPLIER = 1F;
     }
 
-    public static class ShatterPenalties {
-        @Comment(UnbreakableConfigComments.LIST)
+    public static class ShatterBlacklist {
+        @Comment(UnbreakableConfigComments.ShatterBlacklist_LIST)
+        @Expanded
         public List<String> LIST = new ArrayList<>(
-                Arrays.asList(
-                        "minecraft:brush",
-                        "minecraft:fishing_rod",
-                        "minecraft:flint_and_steel",
-                        "minecraft:shears",
-                        "minecraft:shield",
-                        "#minecraft:hoes"
+                List.of(
+                        "#unbreakable:shatter_blacklist"
+                )
+        );
+        @Comment(UnbreakableConfigComments.INVERT)
+        public boolean INVERT = false;
+    }
+
+    public static class ShatterPenalties {
+        @Comment(UnbreakableConfigComments.ShatterPenalty_LIST)
+        @Expanded
+        public List<String> LIST = new ArrayList<>(
+                List.of(
+                        "#unbreakable:prevent_use_when_shattered"
                 )
         );
         @Comment(UnbreakableConfigComments.INVERT)
@@ -154,7 +178,7 @@ public class UnbreakableConfigModel {
 
     public static class RepairCost {
         @RangeConstraint(min = 0.0, max = 4.0, decimalPlaces = 1)
-        @Comment(UnbreakableConfigComments.MULTIPLIER)
+        @Comment(UnbreakableConfigComments.RepairCost_MULTIPLIER)
         public float MULTIPLIER = 1;
         @Comment(UnbreakableConfigComments.SHATTER_SCALING)
         public boolean SHATTER_SCALING = true;

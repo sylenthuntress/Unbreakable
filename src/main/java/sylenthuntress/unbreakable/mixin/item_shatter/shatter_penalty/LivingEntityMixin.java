@@ -31,7 +31,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import static sylenthuntress.unbreakable.util.DataTagKeys.SHATTER_BLACKLIST;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity {
@@ -91,7 +90,7 @@ public abstract class LivingEntityMixin extends Entity {
     public float blockedByShield$applyShatterPenalty(float original) {
         ItemStack stack = this.getBlockingItem();
         float penaltyMultiplier = 0;
-        if (ItemShatterHelper.isShattered(stack) && !stack.isIn(SHATTER_BLACKLIST) && Unbreakable.CONFIG.shatterPenalties.SHIELD_ARC())
+        if (ItemShatterHelper.isShattered(stack) && !ItemShatterHelper.isInList$shatterBlacklist(stack.getRegistryEntry()) && Unbreakable.CONFIG.shatterPenalties.SHIELD_ARC())
             penaltyMultiplier += 1 - ItemShatterHelper.calculateShatterPenalty(stack);
         return original + (-1 * penaltyMultiplier);
     }

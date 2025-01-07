@@ -12,7 +12,6 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import sylenthuntress.unbreakable.util.ItemShatterHelper;
 import sylenthuntress.unbreakable.util.Unbreakable;
 
-import static sylenthuntress.unbreakable.util.DataTagKeys.SHATTER_BLACKLIST;
 
 @Mixin(TridentEntity.class)
 public abstract class TridentEntityMixin extends Entity {
@@ -27,7 +26,7 @@ public abstract class TridentEntityMixin extends Entity {
     private float onEntityHit$applyShatterPenalty(float original) {
         ItemStack stack = this.getWeaponStack();
         float penaltyMultiplier = 1;
-        if (stack != null && ItemShatterHelper.isShattered(stack) && !stack.isIn(SHATTER_BLACKLIST) && Unbreakable.CONFIG.shatterPenalties.ATTACK_DAMAGE()) {
+        if (stack != null && ItemShatterHelper.isShattered(stack) && !ItemShatterHelper.isInList$shatterBlacklist(stack.getRegistryEntry()) && Unbreakable.CONFIG.shatterPenalties.ATTACK_DAMAGE()) {
             penaltyMultiplier = ItemShatterHelper.calculateShatterPenalty(stack);
         }
         return original * penaltyMultiplier;
