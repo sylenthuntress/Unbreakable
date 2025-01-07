@@ -76,7 +76,7 @@ public class UnbreakableConfigModel {
         @Comment(UnbreakableConfigComments.ROMAN_NUMERALS)
         public boolean ROMAN_NUMERALS = true;
         @Comment(UnbreakableConfigComments.DISPLAY_TEXT_AT_MAX)
-        public boolean DISPLAY_TEXT_AT_MAX = true;
+        public boolean DISPLAY_TEXT_AT_MAX = false;
         @Comment(UnbreakableConfigComments.DISPLAY_LEVEL_AT_ONE)
         public boolean DISPLAY_LEVEL_AT_ONE = false;
         @ExcludeFromScreen

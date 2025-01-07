@@ -48,27 +48,23 @@ public abstract class ItemShatterHelper {
         return isInList$shatterPreventsUse(item, stack) && (Unbreakable.CONFIG.shatterPenalties.THRESHOLD() == -1 ? shatterLevel == ItemShatterHelper.getMaxShatterLevel(stack) : shatterLevel >= Unbreakable.CONFIG.shatterPenalties.THRESHOLD());
     }
 
-    public static boolean isInList$shatterBlacklist(RegistryEntry<Item> item) {
+    private static boolean isInStringList(List<String> list, RegistryEntry<Item> item, boolean invertList) {
         List<String> itemIdAndTags = new java.util.ArrayList<>(List.of(item.getIdAsString()));
-        List<String> configList = Unbreakable.CONFIG.shatterBlacklist.LIST();
+        List<String> configList = list;
         item.streamTags().toList().forEach(itemTagKey -> itemIdAndTags.add("#" + itemTagKey.id().toString()));
         itemIdAndTags.retainAll(configList);
-        return Unbreakable.CONFIG.shatterBlacklist.INVERT() == itemIdAndTags.isEmpty();
+        return invertList == itemIdAndTags.isEmpty();
+    }
+
+    public static boolean isInList$shatterBlacklist(RegistryEntry<Item> item) {
+        return isInStringList(Unbreakable.CONFIG.shatterBlacklist.LIST(), item, Unbreakable.CONFIG.shatterBlacklist.INVERT());
     }
 
     public static boolean isInList$durabilityModifier(RegistryEntry<Item> item) {
-        List<String> itemIdAndTags = new java.util.ArrayList<>(List.of(item.getIdAsString()));
-        List<String> configList = Unbreakable.CONFIG.durabilityModifier.LIST();
-        item.streamTags().toList().forEach(itemTagKey -> itemIdAndTags.add("#" + itemTagKey.id().toString()));
-        itemIdAndTags.retainAll(configList);
-        return Unbreakable.CONFIG.durabilityModifier.INVERT() == itemIdAndTags.isEmpty();
+        return isInStringList(Unbreakable.CONFIG.durabilityModifier.LIST(), item, Unbreakable.CONFIG.durabilityModifier.INVERT());
     }
 
     public static boolean isInList$shatterPreventsUse(RegistryEntry<Item> item, ItemStack stack) {
-        List<String> itemIdAndTags = new java.util.ArrayList<>(List.of(item.getIdAsString()));
-        List<String> configList = Unbreakable.CONFIG.shatterPenalties.LIST();
-        item.streamTags().toList().forEach(itemTagKey -> itemIdAndTags.add("#" + itemTagKey.id().toString()));
-        itemIdAndTags.retainAll(configList);
-        return Unbreakable.CONFIG.shatterPenalties.INVERT() == itemIdAndTags.isEmpty() && ((Unbreakable.CONFIG.shatterPenalties.THRESHOLD() > -1 && stack.getOrDefault(ModComponents.SHATTER_LEVEL, 0) >= Unbreakable.CONFIG.shatterPenalties.THRESHOLD()) || (Unbreakable.CONFIG.shatterPenalties.THRESHOLD() == -1 && isMaxShatterLevel(stack)));
+        return isInStringList(Unbreakable.CONFIG.shatterPenalties.LIST(), item, Unbreakable.CONFIG.shatterPenalties.INVERT()) && ((Unbreakable.CONFIG.shatterPenalties.THRESHOLD() > -1 && stack.getOrDefault(ModComponents.SHATTER_LEVEL, 0) >= Unbreakable.CONFIG.shatterPenalties.THRESHOLD()) || (Unbreakable.CONFIG.shatterPenalties.THRESHOLD() == -1 && isMaxShatterLevel(stack)));
     }
 }
