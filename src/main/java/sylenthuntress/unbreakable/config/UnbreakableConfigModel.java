@@ -154,6 +154,12 @@ public class UnbreakableConfigModel {
         );
         @Comment(UnbreakableConfigComments.INVERT)
         public boolean INVERT = false;
+        @Comment(UnbreakableConfigComments.FUNCTIONS)
+        public boolean ITEM_USE = true;
+        public boolean ENTITY_USE = true;
+        public boolean ENTITY_HIT = false;
+        public boolean BLOCK_USE = true;
+        public boolean BLOCK_HIT = false;
         @Comment(UnbreakableConfigComments.THRESHOLD)
         public int THRESHOLD = -1;
         @SectionHeader("statSection")

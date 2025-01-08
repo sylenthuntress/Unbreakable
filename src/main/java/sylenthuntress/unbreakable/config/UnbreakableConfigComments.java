@@ -38,6 +38,7 @@ public abstract class UnbreakableConfigComments {
     // -> Item Penalties
     public final static String ShatterPenalty_LIST = "The list of items to completely disable when shattered";
     public final static String THRESHOLD = "The shatter level threshhold to enable the above list";
+    public final static String FUNCTIONS = "Which item functions to disable when shattered";
     // --> Stat Penalties
     public final static String STAT_MINIMUM = "The minimum effectiveness for a penalized stat";
     public final static String PENALTIES = "Which stats to penalize for shattered items";

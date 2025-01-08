@@ -43,9 +43,9 @@ public abstract class ItemShatterHelper {
         return level;
     }
 
-    public static boolean shouldPreventUse(RegistryEntry<Item> item, ItemStack stack) {
+    public static boolean shouldPreventUse(ItemStack stack) {
         int shatterLevel = stack.getOrDefault(ModComponents.SHATTER_LEVEL, 0);
-        return isInList$shatterPreventsUse(item, stack) && (Unbreakable.CONFIG.shatterPenalties.THRESHOLD() == -1 ? shatterLevel == ItemShatterHelper.getMaxShatterLevel(stack) : shatterLevel >= Unbreakable.CONFIG.shatterPenalties.THRESHOLD());
+        return isInList$shatterPreventsUse(stack.getRegistryEntry()) && (Unbreakable.CONFIG.shatterPenalties.THRESHOLD() == -1 ? shatterLevel == ItemShatterHelper.getMaxShatterLevel(stack) : shatterLevel >= Unbreakable.CONFIG.shatterPenalties.THRESHOLD());
     }
 
     private static boolean isInStringList(List<String> list, RegistryEntry<Item> item, boolean invertList) {
@@ -64,7 +64,7 @@ public abstract class ItemShatterHelper {
         return isInStringList(Unbreakable.CONFIG.durabilityModifier.LIST(), item, Unbreakable.CONFIG.durabilityModifier.INVERT());
     }
 
-    public static boolean isInList$shatterPreventsUse(RegistryEntry<Item> item, ItemStack stack) {
-        return isInStringList(Unbreakable.CONFIG.shatterPenalties.LIST(), item, Unbreakable.CONFIG.shatterPenalties.INVERT()) && ((Unbreakable.CONFIG.shatterPenalties.THRESHOLD() > -1 && stack.getOrDefault(ModComponents.SHATTER_LEVEL, 0) >= Unbreakable.CONFIG.shatterPenalties.THRESHOLD()) || (Unbreakable.CONFIG.shatterPenalties.THRESHOLD() == -1 && isMaxShatterLevel(stack)));
+    public static boolean isInList$shatterPreventsUse(RegistryEntry<Item> item) {
+        return isInStringList(Unbreakable.CONFIG.shatterPenalties.LIST(), item, Unbreakable.CONFIG.shatterPenalties.INVERT());
     }
 }

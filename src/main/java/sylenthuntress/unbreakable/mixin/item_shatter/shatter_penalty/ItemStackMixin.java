@@ -30,14 +30,14 @@ public abstract class ItemStackMixin implements ComponentHolder {
 
     @ModifyReturnValue(method = "useOnBlock", at = @At(value = "RETURN", target = "Lnet/minecraft/item/Item;use(Lnet/minecraft/world/World;Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/Hand;)Lnet/minecraft/util/ActionResult;"))
     private ActionResult useOnBlock$applyShatterPenalty1(ActionResult original) {
-        if (ItemShatterHelper.shouldPreventUse(this.getRegistryEntry(), this.copy()))
+        if (ItemShatterHelper.shouldPreventUse(this.copy()))
             return ActionResult.FAIL;
         return original;
     }
 
     @ModifyReturnValue(method = "useOnEntity", at = @At(value = "RETURN", target = "Lnet/minecraft/item/Item;use(Lnet/minecraft/world/World;Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/Hand;)Lnet/minecraft/util/ActionResult;"))
     private ActionResult useOnEntity$applyShatterPenalty(ActionResult original) {
-        if (ItemShatterHelper.shouldPreventUse(this.getRegistryEntry(), this.copy()))
+        if (ItemShatterHelper.shouldPreventUse(this.copy()))
             return ActionResult.FAIL;
         return original;
     }
@@ -45,7 +45,7 @@ public abstract class ItemStackMixin implements ComponentHolder {
     @ModifyExpressionValue(method = "calculateDamage", at = @At(value = "INVOKE", target = "Lnet/minecraft/enchantment/EnchantmentHelper;getItemDamage(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/item/ItemStack;I)I"))
     private int applyShatterPenalty(int original) {
         double penaltyMultiplier = 1;
-        if (ItemShatterHelper.shouldPreventUse(this.getRegistryEntry(), this.copy()))
+        if (ItemShatterHelper.shouldPreventUse(this.copy()))
             penaltyMultiplier = 2 - ItemShatterHelper.calculateShatterPenalty((ItemStack) (Object) this);
         return (int) (original * penaltyMultiplier);
     }

@@ -1,17 +1,14 @@
 package sylenthuntress.unbreakable.mixin.item_shatter.shatter_penalty;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
-import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.world.World;
@@ -29,8 +26,6 @@ import sylenthuntress.unbreakable.util.Unbreakable;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity {
@@ -45,7 +40,7 @@ public abstract class LivingEntityMixin extends Entity {
 
     @ModifyExpressionValue(method = "canGlideWith", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;willBreakNextUse()Z"))
     private static boolean canGlideWith$applyShatterPenalty(boolean original, ItemStack stack) {
-        return original && !ItemShatterHelper.shouldPreventUse(stack.getRegistryEntry(), stack);
+        return original && !ItemShatterHelper.shouldPreventUse(stack);
     }
 
     @Shadow
@@ -63,28 +58,6 @@ public abstract class LivingEntityMixin extends Entity {
 
     @Unique
     ItemStack sharedItemStack;
-
-    @ModifyReturnValue(method = "canEquip", at = @At("RETURN"))
-    private boolean canEquip$applyShatterPenalty(boolean original, ItemStack stack) {
-        return original && !ItemShatterHelper.shouldPreventUse(stack.getRegistryEntry(), stack);
-    }
-
-    @ModifyReturnValue(method = "canEquipFromDispenser", at = @At("RETURN"))
-    private boolean canEquipFromDispenser$applyShatterPenalty(boolean original, ItemStack stack) {
-        return original && !ItemShatterHelper.shouldPreventUse(stack.getRegistryEntry(), stack);
-    }
-
-    @Inject(method = "damageEquipment", at = @At("TAIL"))
-    private void damageEquipment$applyShatterPenalty(DamageSource source, float amount, EquipmentSlot[] slots, CallbackInfo ci) {
-        for (EquipmentSlot slot : slots) {
-            ItemStack stack = this.getEquippedStack(slot);
-            if (isArmorSlot(slot)) continue;
-            if (ItemShatterHelper.shouldPreventUse(stack.getRegistryEntry(), stack)) {
-                dropStack(Objects.requireNonNull(this.getServer()).getWorld(this.getWorld().getRegistryKey()), stack);
-                stack.decrement(stack.getOrDefault(DataComponentTypes.MAX_STACK_SIZE, 1));
-            }
-        }
-    }
 
     @ModifyExpressionValue(method = "blockedByShield", at = @At(value = "CONSTANT", args = {"floatValue=0.0F", "ordinal=2"}))
     public float blockedByShield$applyShatterPenalty(float original) {

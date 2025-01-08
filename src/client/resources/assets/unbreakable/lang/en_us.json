@@ -13,6 +13,7 @@
       "color": "#AA0000"
     }
   ],
+  "unbreakable.shatter.cant_use_item": "%s is too shattered to use!",
   "unbreakable.numbers.max": [
     {
       "text": "MAX",
@@ -135,6 +136,11 @@
   "text.config.unbreakable-config.option.shatterPenalties.LIST": "Items disabled by shattering",
   "text.config.unbreakable-config.option.shatterPenalties.INVERT": "Above list is whitelist",
   "text.config.unbreakable-config.option.shatterPenalties.THRESHOLD": "Shatter level threshold to disable items\n -> Set to -1 for §7maxShatterLevel§f",
+  "text.config.unbreakable-config.option.shatterPenalties.ITEM_USE": "Above list prevents item usage",
+  "text.config.unbreakable-config.option.shatterPenalties.BLOCK_USE": "Above list prevents item from using blocks",
+  "text.config.unbreakable-config.option.shatterPenalties.BLOCK_HIT": "Above list prevents item from hitting blocks",
+  "text.config.unbreakable-config.option.shatterPenalties.ENTITY_USE": "Above list prevents item from using entities",
+  "text.config.unbreakable-config.option.shatterPenalties.ENTITY_HIT": "Above list prevents item from hitting entities",
   "text.config.unbreakable-config.section.statSection": "Stat Penalties",
   "text.config.unbreakable-config.option.shatterPenalties.STAT_MINIMUM": "Minimum item effectiveness",
   "text.config.unbreakable-config.option.shatterPenalties.ARMOR": "Penalize Armor",
