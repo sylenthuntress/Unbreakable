@@ -30,10 +30,14 @@
     }
   ],
   "depends": {
-    "fabricloader": ">=0.16.7",
-    "minecraft": "~1.21.4",
+    "fabricloader": ">=${loader_version}",
+    "minecraft": "~${minecraft_version}",
+    "owo-lib": ">=${owo_version}",
     "java": ">=21",
-    "fabric-api": "*"
+    "fabric-api": ">=${fabric_version}"
+  },
+  "suggests": {
+    "modmenu": "${modmenu_version}"
   },
   "custom": {
     "modmenu": {
