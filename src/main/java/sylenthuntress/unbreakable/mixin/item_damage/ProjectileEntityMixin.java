@@ -1,10 +1,12 @@
 package sylenthuntress.unbreakable.mixin.item_damage;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.Hand;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -34,7 +36,7 @@ public abstract class ProjectileEntityMixin {
     public void damageItemOnShoot(ServerWorld world, ItemStack projectileStack, CallbackInfo ci) {
         if (Unbreakable.CONFIG.dynamicDamage.PROJECTILE() && this.getOwner() instanceof PlayerEntity player) {
             ItemStack projectileItemStack = player.getActiveItem();
-            projectileItemStack.damage((int) (Math.ceil(projectilePower * 2) * Unbreakable.CONFIG.dynamicDamage.PROJECTILE_MULTIPLIER()), player);
+            projectileItemStack.damage((int) (Math.ceil(projectilePower * 2) * Unbreakable.CONFIG.dynamicDamage.PROJECTILE_MULTIPLIER()), player, player.getActiveHand() == Hand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
         }
     }
 }
