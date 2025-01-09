@@ -16,7 +16,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import sylenthuntress.unbreakable.access.ItemStackAccess;
 import sylenthuntress.unbreakable.util.ItemShatterHelper;
 import sylenthuntress.unbreakable.util.ModComponents;
 import sylenthuntress.unbreakable.util.Unbreakable;
@@ -26,14 +25,9 @@ import java.util.function.Consumer;
 import static sylenthuntress.unbreakable.util.DataTagKeys.BREAKABLE_ITEMS;
 
 @Mixin(ItemStack.class)
-public abstract class ItemStackMixin implements ItemStackAccess {
+public abstract class ItemStackMixin {
     @Unique
     boolean incrementedShatterLevel;
-
-    @Override
-    public boolean unbreakable$incrementedShatterLevel() {
-        return incrementedShatterLevel;
-    }
 
     @Shadow
     public abstract <T> T set(ComponentType<? super T> type, @Nullable T value);
