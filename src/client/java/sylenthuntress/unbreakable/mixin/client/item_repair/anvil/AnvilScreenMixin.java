@@ -12,6 +12,6 @@ public class AnvilScreenMixin {
     // Disables the "Too Expensive!" text in anvils
     @ModifyExpressionValue(method = "drawForeground", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/player/PlayerAbilities;creativeMode:Z"))
     private boolean disableTooExpensiveClient(boolean original) {
-        return !Unbreakable.CONFIG.tooExpensiveWarning();
+        return !Unbreakable.CONFIG.anvilRepair.TOO_EXPENSIVE();
     }
 }

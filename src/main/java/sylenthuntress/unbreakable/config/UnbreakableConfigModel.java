@@ -50,10 +50,10 @@ public class UnbreakableConfigModel {
     @SectionHeader("repairSection")
     @Comment(UnbreakableConfigComments.allowRepairingShattered)
     public boolean allowRepairingShattered = true;
-    @Comment(UnbreakableConfigComments.tooExpensiveWarning)
-    public boolean tooExpensiveWarning = false;
     @Nest
-    public RepairCost repairCost = new RepairCost();
+    public AnvilRepair anvilRepair = new AnvilRepair();
+    @Nest
+    public SmithingRepair smithingRepair = new SmithingRepair();
     @SectionHeader("enchantmentSection")
     @Comment(UnbreakableConfigComments.disableBindingWhenShattered)
     public boolean disableBindingWhenShattered = true;
@@ -61,6 +61,21 @@ public class UnbreakableConfigModel {
     public boolean shatterCursedItems = true;
     @Comment(UnbreakableConfigComments.exclusiveMending)
     public boolean exclusiveMending = true;
+
+    public static class AnvilRepair {
+        @Comment(UnbreakableConfigComments.TOO_EXPENSIVE)
+        public boolean TOO_EXPENSIVE = false;
+        @Nest
+        @Expanded
+        public AnvilRepairCost COST = new AnvilRepairCost();
+    }
+
+    public static class SmithingRepair {
+        public boolean ALLOW = true;
+        @Nest
+        @Expanded
+        public SmithingRepairCost COST = new SmithingRepairCost();
+    }
 
     public static boolean shatterLevelConstraint(int integer) {
         return integer >= 0 && integer <= 255;
@@ -182,7 +197,7 @@ public class UnbreakableConfigModel {
         public boolean SHIELD_ARC = true;
     }
 
-    public static class RepairCost {
+    public static class AnvilRepairCost {
         @RangeConstraint(min = 0.0, max = 4.0, decimalPlaces = 1)
         @Comment(UnbreakableConfigComments.RepairCost_MULTIPLIER)
         public float MULTIPLIER = 1;
@@ -190,7 +205,14 @@ public class UnbreakableConfigModel {
         public boolean SHATTER_SCALING = true;
         @Comment(UnbreakableConfigComments.ENCHANTMENT_SCALING)
         public boolean ENCHANTMENT_SCALING = true;
-        @Comment(UnbreakableConfigComments.ANVIL_SCALING)
-        public boolean ANVIL_SCALING = false;
+        @Comment(UnbreakableConfigComments.REPAIR_SCALING)
+        public boolean REPAIR_SCALING = false;
+    }
+
+    public static class SmithingRepairCost {
+        @RangeConstraint(min = 0.0, max = 4.0, decimalPlaces = 1)
+        @Comment(UnbreakableConfigComments.RepairCost_MULTIPLIER)
+        public float MULTIPLIER = 1;
+        public boolean DEGRADE_REPAIR_FACTOR = true;
     }
 }
