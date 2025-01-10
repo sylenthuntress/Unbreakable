@@ -81,6 +81,8 @@ public abstract class SmithingScreenHandlerMixin extends ForgingScreenHandler {
                 outputStack.setDamage(outputStack.getDamage() - repairFactor);
                 if (Unbreakable.CONFIG.smithingRepair.COST.DEGRADE_REPAIR_FACTOR())
                     outputStack.set(ModComponents.SMITHING_DEGRADATION, Math.min(20, outputStack.getOrDefault(ModComponents.SMITHING_DEGRADATION, 0) + 1));
+                if (Unbreakable.CONFIG.grindingRepair.COST.SMITHING_DECREMENTS_DEGRADATION())
+                    outputStack.set(ModComponents.GRINDING_DEGRADATION, Math.max(0, outputStack.getOrDefault(ModComponents.GRINDING_DEGRADATION, 0) - 2));
                 repairFactor = calculateRepairFactor(outputStack);
                 materialCost++;
             }
