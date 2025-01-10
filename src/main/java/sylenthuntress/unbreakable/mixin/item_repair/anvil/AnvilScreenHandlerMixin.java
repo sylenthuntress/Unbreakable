@@ -5,13 +5,16 @@ import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.screen.AnvilScreenHandler;
 import net.minecraft.screen.Property;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import sylenthuntress.unbreakable.util.ItemShatterHelper;
 import sylenthuntress.unbreakable.util.ModComponents;
 import sylenthuntress.unbreakable.util.Unbreakable;
@@ -58,6 +61,12 @@ public class AnvilScreenHandlerMixin {
         }
         scaledWithShatterLevel = newShatterLevel;
         return original;
+    }
+
+    @Inject(method = "onTakeOutput", at = @At("HEAD"))
+    void clearDegradation(PlayerEntity player, ItemStack stack, CallbackInfo ci) {
+        if (Unbreakable.CONFIG.smithingRepair.COST.ANVILS_CLEAR_DEGRADATION())
+            stack.set(ModComponents.SMITHING_DEGRADATION, 0);
     }
 
     @ModifyExpressionValue(method = "updateResult", at = @At(value = "CONSTANT", args = "intValue=4"))

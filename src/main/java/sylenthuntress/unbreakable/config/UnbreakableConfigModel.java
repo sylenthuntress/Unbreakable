@@ -214,5 +214,6 @@ public class UnbreakableConfigModel {
         @Comment(UnbreakableConfigComments.RepairCost_MULTIPLIER)
         public float MULTIPLIER = 1;
         public boolean DEGRADE_REPAIR_FACTOR = true;
+        public boolean ANVILS_CLEAR_DEGRADATION = true;
     }
 }

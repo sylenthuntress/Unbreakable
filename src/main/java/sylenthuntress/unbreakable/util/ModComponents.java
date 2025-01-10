@@ -17,7 +17,7 @@ public class ModComponents {
             Identifier.of(Unbreakable.MOD_ID, "max_shatter_level"),
             ComponentType.<Integer>builder().codec(Codecs.rangedInt(0, 255)).build()
     );
-    public static final ComponentType<Integer> SMITHING_REPAIR_FACTOR = Registry.register(
+    public static final ComponentType<Integer> SMITHING_DEGRADATION = Registry.register(
             Registries.DATA_COMPONENT_TYPE,
             Identifier.of(Unbreakable.MOD_ID, "smithing_repair_factor"),
             ComponentType.<Integer>builder().codec(Codecs.rangedInt(0, 20)).build()

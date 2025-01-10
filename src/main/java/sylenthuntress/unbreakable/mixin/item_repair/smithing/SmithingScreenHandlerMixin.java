@@ -80,7 +80,7 @@ public abstract class SmithingScreenHandlerMixin extends ForgingScreenHandler {
             while (repairFactor > 0 && materialCost < repairMaterial.getCount()) {
                 outputStack.setDamage(outputStack.getDamage() - repairFactor);
                 if (Unbreakable.CONFIG.smithingRepair.COST.DEGRADE_REPAIR_FACTOR())
-                    outputStack.set(ModComponents.SMITHING_REPAIR_FACTOR, Math.min(20, outputStack.getOrDefault(ModComponents.SMITHING_REPAIR_FACTOR, 0) + 1));
+                    outputStack.set(ModComponents.SMITHING_DEGRADATION, Math.min(20, outputStack.getOrDefault(ModComponents.SMITHING_DEGRADATION, 0) + 1));
                 repairFactor = calculateRepairFactor(outputStack);
                 materialCost++;
             }
@@ -91,7 +91,7 @@ public abstract class SmithingScreenHandlerMixin extends ForgingScreenHandler {
 
     @Unique
     private int calculateRepairFactor(ItemStack stack) {
-        int repairFactor = (int) Math.round(Math.min(stack.getDamage(), stack.getMaxDamage() / 4) * ((21 - stack.getOrDefault(ModComponents.SMITHING_REPAIR_FACTOR, 0)) * 0.05));
+        int repairFactor = (int) Math.round(Math.min(stack.getDamage(), stack.getMaxDamage() / 4) * ((21 - stack.getOrDefault(ModComponents.SMITHING_DEGRADATION, 0)) * 0.05));
         repairFactor = (int) (repairFactor * Unbreakable.CONFIG.smithingRepair.COST.MULTIPLIER());
         return repairFactor;
     }
