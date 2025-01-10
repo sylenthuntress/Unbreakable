@@ -67,6 +67,8 @@ public class AnvilScreenHandlerMixin {
     void clearDegradation(PlayerEntity player, ItemStack stack, CallbackInfo ci) {
         if (Unbreakable.CONFIG.smithingRepair.COST.ANVILS_CLEAR_DEGRADATION())
             stack.set(ModComponents.SMITHING_DEGRADATION, 0);
+        if (Unbreakable.CONFIG.grindingRepair.COST.ANVILS_CLEAR_DEGRADATION())
+            stack.set(ModComponents.GRINDING_DEGRADATION, 0);
     }
 
     @ModifyExpressionValue(method = "updateResult", at = @At(value = "CONSTANT", args = "intValue=4"))

@@ -19,8 +19,13 @@ public class ModComponents {
     );
     public static final ComponentType<Integer> SMITHING_DEGRADATION = Registry.register(
             Registries.DATA_COMPONENT_TYPE,
-            Identifier.of(Unbreakable.MOD_ID, "smithing_repair_factor"),
+            Identifier.of(Unbreakable.MOD_ID, "smithing_degradation"),
             ComponentType.<Integer>builder().codec(Codecs.rangedInt(0, 20)).build()
+    );
+    public static final ComponentType<Integer> GRINDING_DEGRADATION = Registry.register(
+            Registries.DATA_COMPONENT_TYPE,
+            Identifier.of(Unbreakable.MOD_ID, "grinding_degradation"),
+            ComponentType.<Integer>builder().codec(Codecs.rangedInt(0, 40)).build()
     );
 
     protected static void initialize() {

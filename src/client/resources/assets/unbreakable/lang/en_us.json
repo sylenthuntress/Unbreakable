@@ -96,6 +96,7 @@
   "tag.item.unbreakable.retains_breaking": "Retains vanilla breaking",
   "tag.item.unbreakable.shatter_blacklist": "Can't shatter",
   "tag.item.unbreakable.prevent_use_when_shattered": "Can't be used when shattered",
+  "unbreakable.container.repair.cost": "Repair Cost: %s",
   "text.config.unbreakable-config.title": "Unbreakable Config",
   "text.config.unbreakable-config.section.clientSection": "Client Settings",
   "text.config.unbreakable-config.option.shatteredItemBarColor": "Shattered item bar color",

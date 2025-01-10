@@ -54,6 +54,8 @@ public class UnbreakableConfigModel {
     public AnvilRepair anvilRepair = new AnvilRepair();
     @Nest
     public SmithingRepair smithingRepair = new SmithingRepair();
+    @Nest
+    public GrindingRepair grindingRepair = new GrindingRepair();
     @SectionHeader("enchantmentSection")
     @Comment(UnbreakableConfigComments.disableBindingWhenShattered)
     public boolean disableBindingWhenShattered = true;
@@ -75,6 +77,13 @@ public class UnbreakableConfigModel {
         @Nest
         @Expanded
         public SmithingRepairCost COST = new SmithingRepairCost();
+    }
+
+    public static class GrindingRepair {
+        public boolean ALLOW = true;
+        @Nest
+        @Expanded
+        public GrindingRepairCost COST = new GrindingRepairCost();
     }
 
     public static boolean shatterLevelConstraint(int integer) {
@@ -210,6 +219,14 @@ public class UnbreakableConfigModel {
     }
 
     public static class SmithingRepairCost {
+        @RangeConstraint(min = 0.0, max = 4.0, decimalPlaces = 1)
+        @Comment(UnbreakableConfigComments.RepairCost_MULTIPLIER)
+        public float MULTIPLIER = 1;
+        public boolean DEGRADE_REPAIR_FACTOR = true;
+        public boolean ANVILS_CLEAR_DEGRADATION = true;
+    }
+
+    public static class GrindingRepairCost {
         @RangeConstraint(min = 0.0, max = 4.0, decimalPlaces = 1)
         @Comment(UnbreakableConfigComments.RepairCost_MULTIPLIER)
         public float MULTIPLIER = 1;

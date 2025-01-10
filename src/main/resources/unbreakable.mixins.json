@@ -11,6 +11,8 @@
     "item_repair.ItemStackMixin",
     "item_repair.RepairableComponentMixin",
     "item_repair.anvil.AnvilScreenHandlerMixin",
+    "item_repair.grindstone.GrindstoneScreenHandlerMixin",
+    "item_repair.grindstone.GrindstoneScreenHandlerOutputSlotMixin",
     "item_repair.smithing.SmithingScreenHandlerMixin",
     "item_shatter.ItemStackMixin",
     "item_shatter.shatter_penalty.EnchantmentHelperMixin",
