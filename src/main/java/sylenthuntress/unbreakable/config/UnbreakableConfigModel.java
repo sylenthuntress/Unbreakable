@@ -50,10 +50,8 @@ public class UnbreakableConfigModel {
     @SectionHeader("repairSection")
     @Comment(UnbreakableConfigComments.allowRepairingShattered)
     public boolean allowRepairingShattered = true;
-    @Comment(UnbreakableConfigComments.tooExpensiveWarning)
-    public boolean tooExpensiveWarning = false;
     @Nest
-    public RepairCost repairCost = new RepairCost();
+    public AnvilRepair anvilRepair = new AnvilRepair();
     @SectionHeader("enchantmentSection")
     @Comment(UnbreakableConfigComments.disableBindingWhenShattered)
     public boolean disableBindingWhenShattered = true;
@@ -61,6 +59,14 @@ public class UnbreakableConfigModel {
     public boolean shatterCursedItems = true;
     @Comment(UnbreakableConfigComments.exclusiveMending)
     public boolean exclusiveMending = true;
+
+    public static class AnvilRepair {
+        @Comment(UnbreakableConfigComments.tooExpensiveWarning)
+        public boolean tooExpensiveWarning = false;
+        @Nest
+        @Expanded
+        public RepairCost repairCost = new RepairCost();
+    }
 
     public static boolean shatterLevelConstraint(int integer) {
         return integer >= 0 && integer <= 255;
