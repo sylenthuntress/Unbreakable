@@ -44,12 +44,18 @@ public abstract class UnbreakableConfigComments {
     public final static String PENALTIES = "Which stats to penalize for shattered items";
     // Item Repairing
     public final static String allowRepairingShattered = "Whether repairing items should decrease their shatter level";
-    public final static String tooExpensiveWarning = "Whether to prevent items from being repaired at 40+ level cost";
+    public final static String TOO_EXPENSIVE = "Whether to prevent items from being repaired at 40+ level cost";
+    public final static String COST_MULTIPLIER = "Repair cost multiplier";
     // -> Anvil Repairing
-    public final static String RepairCost_MULTIPLIER = "Anvil repair cost multiplier";
     public final static String SHATTER_SCALING = "Whether to scale repair cost when repairing stacks of shattered";
     public final static String ENCHANTMENT_SCALING = "Whether to scale repair cost based on the item's enchantments";
-    public final static String ANVIL_SCALING = "Whether to scale repair cost based on prior anvil uses";
+    public final static String REPAIR_SCALING = "Whether to scale repair cost based on prior anvil uses";
+    // -> Grindstone/Smithing Repairing
+    public final static String SMITHING_REPAIR = "\n-- Smithing Repair --\nAllows players to repair their items in a smithing table, using only repair materials";
+    public final static String GRINDSTONE_REPAIR = "\n-- Grindstone Repair --\nAllows players to repair their items in a grindstone, using only XP levels";
+    public final static String ALLOW_REPAIR = "Whether to enable this method of repair";
+    public final static String DEGRADE_REPAIR_FACTOR = "Repairing items using this method will become more expensive with each use";
+    public final static String ANVILS_CLEAR_DEGRADATION = "Repairing items with an anvil will reset the effectiveness of this repair method";
     // Enchantments
     public final static String disableBindingWhenShattered = "Whether curse of binding should work on shattered items";
     public final static String shatterCursedItems = "Whether curse of vanishing should shatter items instead of deleting them";

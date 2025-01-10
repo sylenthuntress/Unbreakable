@@ -52,6 +52,12 @@ public class UnbreakableConfigModel {
     public boolean allowRepairingShattered = true;
     @Nest
     public AnvilRepair anvilRepair = new AnvilRepair();
+    @Nest
+    @Comment(UnbreakableConfigComments.SMITHING_REPAIR)
+    public SmithingRepair smithingRepair = new SmithingRepair();
+    @Nest
+    @Comment(UnbreakableConfigComments.GRINDSTONE_REPAIR)
+    public GrindingRepair grindingRepair = new GrindingRepair();
     @SectionHeader("enchantmentSection")
     @Comment(UnbreakableConfigComments.disableBindingWhenShattered)
     public boolean disableBindingWhenShattered = true;
@@ -60,16 +66,32 @@ public class UnbreakableConfigModel {
     @Comment(UnbreakableConfigComments.exclusiveMending)
     public boolean exclusiveMending = true;
 
-    public static class AnvilRepair {
-        @Comment(UnbreakableConfigComments.tooExpensiveWarning)
-        public boolean tooExpensiveWarning = false;
-        @Nest
-        @Expanded
-        public RepairCost repairCost = new RepairCost();
-    }
-
     public static boolean shatterLevelConstraint(int integer) {
         return integer >= 0 && integer <= 255;
+    }
+
+    public static class AnvilRepair {
+        @Comment(UnbreakableConfigComments.TOO_EXPENSIVE)
+        public boolean TOO_EXPENSIVE = false;
+        @Nest
+        @Expanded
+        public AnvilRepairCost COST = new AnvilRepairCost();
+    }
+
+    public static class SmithingRepair {
+        @Comment(UnbreakableConfigComments.ALLOW_REPAIR)
+        public boolean ALLOW = true;
+        @Nest
+        @Expanded
+        public SmithingRepairCost COST = new SmithingRepairCost();
+    }
+
+    public static class GrindingRepair {
+        @Comment(UnbreakableConfigComments.ALLOW_REPAIR)
+        public boolean ALLOW = true;
+        @Nest
+        @Expanded
+        public GrindingRepairCost COST = new GrindingRepairCost();
     }
 
     public static class ShatterTooltip {
@@ -188,15 +210,35 @@ public class UnbreakableConfigModel {
         public boolean SHIELD_ARC = true;
     }
 
-    public static class RepairCost {
+    public static class AnvilRepairCost {
         @RangeConstraint(min = 0.0, max = 4.0, decimalPlaces = 1)
-        @Comment(UnbreakableConfigComments.RepairCost_MULTIPLIER)
+        @Comment(UnbreakableConfigComments.COST_MULTIPLIER)
         public float MULTIPLIER = 1;
         @Comment(UnbreakableConfigComments.SHATTER_SCALING)
         public boolean SHATTER_SCALING = true;
         @Comment(UnbreakableConfigComments.ENCHANTMENT_SCALING)
         public boolean ENCHANTMENT_SCALING = true;
-        @Comment(UnbreakableConfigComments.ANVIL_SCALING)
-        public boolean ANVIL_SCALING = false;
+        @Comment(UnbreakableConfigComments.REPAIR_SCALING)
+        public boolean REPAIR_SCALING = false;
+    }
+
+    public static class SmithingRepairCost {
+        @RangeConstraint(min = 0.0, max = 4.0, decimalPlaces = 1)
+        @Comment(UnbreakableConfigComments.COST_MULTIPLIER)
+        public float MULTIPLIER = 1;
+        @Comment(UnbreakableConfigComments.DEGRADE_REPAIR_FACTOR)
+        public boolean DEGRADE_REPAIR_FACTOR = true;
+        @Comment(UnbreakableConfigComments.ANVILS_CLEAR_DEGRADATION)
+        public boolean ANVILS_CLEAR_DEGRADATION = true;
+    }
+
+    public static class GrindingRepairCost {
+        @RangeConstraint(min = 0.0, max = 4.0, decimalPlaces = 1)
+        @Comment(UnbreakableConfigComments.COST_MULTIPLIER)
+        public float MULTIPLIER = 1;
+        @Comment(UnbreakableConfigComments.DEGRADE_REPAIR_FACTOR)
+        public boolean DEGRADE_REPAIR_FACTOR = true;
+        @Comment(UnbreakableConfigComments.ANVILS_CLEAR_DEGRADATION)
+        public boolean ANVILS_CLEAR_DEGRADATION = true;
     }
 }

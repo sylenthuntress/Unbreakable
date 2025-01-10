@@ -22,10 +22,6 @@ loom {
 
 }
 
-fabricApi {
-    configureDataGeneration()
-}
-
 repositories {
     maven { url = "https://api.modrinth.com/maven" }
     maven {
