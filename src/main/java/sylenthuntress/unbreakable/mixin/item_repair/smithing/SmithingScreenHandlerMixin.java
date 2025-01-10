@@ -1,15 +1,20 @@
 package sylenthuntress.unbreakable.mixin.item_repair.smithing;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.recipe.RecipePropertySet;
 import net.minecraft.screen.ForgingScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.SmithingScreenHandler;
 import net.minecraft.screen.slot.ForgingSlotsManager;
 import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -18,11 +23,18 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 import sylenthuntress.unbreakable.util.ModComponents;
 import sylenthuntress.unbreakable.util.RepairMaterialRegistry;
+import sylenthuntress.unbreakable.util.Unbreakable;
 
 import java.util.function.Predicate;
 
 @Mixin(SmithingScreenHandler.class)
 public abstract class SmithingScreenHandlerMixin extends ForgingScreenHandler {
+    @Shadow
+    @Final
+    private RecipePropertySet basePropertySet;
+    @Shadow
+    @Final
+    private RecipePropertySet additionPropertySet;
     @Unique
     private int repairMaterialCost = 0;
 
@@ -32,27 +44,43 @@ public abstract class SmithingScreenHandlerMixin extends ForgingScreenHandler {
 
     @ModifyArgs(method = "createForgingSlotsManager", at = @At(value = "INVOKE", ordinal = 1, target = "Lnet/minecraft/screen/slot/ForgingSlotsManager$Builder;input(IIILjava/util/function/Predicate;)Lnet/minecraft/screen/slot/ForgingSlotsManager$Builder;"))
     private static void allowRepairableItemsAsBase(Args args) {
-        Predicate<ItemStack> originalPredicate = args.get(3);
-        args.set(3, originalPredicate.or(ItemStack::isDamageable));
+        if (Unbreakable.CONFIG.smithingRepair.ALLOW()) {
+            Predicate<ItemStack> originalPredicate = args.get(3);
+            args.set(3, originalPredicate.or(ItemStack::isDamageable));
+        }
     }
 
-    @ModifyArgs(method = "createForgingSlotsManager", at = @At(value = "INVOKE", ordinal = 1, target = "Lnet/minecraft/screen/slot/ForgingSlotsManager$Builder;input(IIILjava/util/function/Predicate;)Lnet/minecraft/screen/slot/ForgingSlotsManager$Builder;"))
+    @ModifyArgs(method = "createForgingSlotsManager", at = @At(value = "INVOKE", ordinal = 2, target = "Lnet/minecraft/screen/slot/ForgingSlotsManager$Builder;input(IIILjava/util/function/Predicate;)Lnet/minecraft/screen/slot/ForgingSlotsManager$Builder;"))
     private static void allowRepairMaterials(Args args) {
-        Predicate<ItemStack> originalPredicate = args.get(3);
-        args.set(3, originalPredicate.or((stack) -> RepairMaterialRegistry.getInstance().isRepairMaterial(stack.getItem())));
+        if (Unbreakable.CONFIG.smithingRepair.ALLOW()) {
+            Predicate<ItemStack> originalPredicate = args.get(3);
+            args.set(3, originalPredicate.or((stack) -> RepairMaterialRegistry.getInstance().isRepairMaterial(stack.getItem())));
+        }
+    }
+
+    @WrapOperation(method = "isValidIngredient", at = @At(value = "INVOKE", target = "Lnet/minecraft/recipe/RecipePropertySet;canUse(Lnet/minecraft/item/ItemStack;)Z"))
+    private boolean allowQuickMove(RecipePropertySet instance, ItemStack stack, Operation<Boolean> original) {
+        boolean isValidForRepairs = false;
+        if (instance == basePropertySet) {
+            isValidForRepairs = stack.isDamageable();
+        } else if (instance == additionPropertySet)
+            isValidForRepairs = RepairMaterialRegistry.getInstance().isRepairMaterial(stack);
+        return original.call(instance, stack) || isValidForRepairs;
     }
 
     @Inject(method = "method_64654", at = @At("TAIL"))
     private void repairItemLogic(CallbackInfo ci) {
+        repairMaterialCost = 0;
         ItemStack repairBase = this.getSlot(1).getStack();
         ItemStack repairMaterial = this.getSlot(2).getStack();
         ItemStack outputStack = repairBase.copy();
-        if (repairBase.isDamaged() && repairBase.canRepairWith(repairMaterial)) {
+        if (Unbreakable.CONFIG.smithingRepair.ALLOW() && repairBase.isDamaged() && repairBase.canRepairWith(repairMaterial)) {
             int repairFactor = calculateRepairFactor(outputStack);
             int materialCost = 0;
             while (repairFactor > 0 && materialCost < repairMaterial.getCount()) {
                 outputStack.setDamage(outputStack.getDamage() - repairFactor);
-                outputStack.set(ModComponents.SMITHING_REPAIR_FACTOR, Math.min(20, outputStack.getOrDefault(ModComponents.SMITHING_REPAIR_FACTOR, 0) + 1));
+                if (Unbreakable.CONFIG.smithingRepair.COST.DEGRADE_REPAIR_FACTOR())
+                    outputStack.set(ModComponents.SMITHING_DEGRADATION, Math.min(20, outputStack.getOrDefault(ModComponents.SMITHING_DEGRADATION, 0) + 1));
                 repairFactor = calculateRepairFactor(outputStack);
                 materialCost++;
             }
@@ -63,7 +91,9 @@ public abstract class SmithingScreenHandlerMixin extends ForgingScreenHandler {
 
     @Unique
     private int calculateRepairFactor(ItemStack stack) {
-        return (int) Math.round(Math.min(stack.getDamage(), stack.getMaxDamage() / 4) * ((21 - stack.getOrDefault(ModComponents.SMITHING_REPAIR_FACTOR, 0)) * 0.05));
+        int repairFactor = (int) Math.round(Math.min(stack.getDamage(), stack.getMaxDamage() / 4) * ((21 - stack.getOrDefault(ModComponents.SMITHING_DEGRADATION, 0)) * 0.05));
+        repairFactor = (int) (repairFactor * Unbreakable.CONFIG.smithingRepair.COST.MULTIPLIER());
+        return repairFactor;
     }
 
     @Inject(method = "onTakeOutput", at = @At("HEAD"), cancellable = true)
@@ -72,6 +102,7 @@ public abstract class SmithingScreenHandlerMixin extends ForgingScreenHandler {
             this.getSlot(1).getStack().decrement(1);
             this.getSlot(2).getStack().decrement(repairMaterialCost);
             repairMaterialCost = 0;
+            this.quickMove(player, 2);
             ci.cancel();
         }
     }
