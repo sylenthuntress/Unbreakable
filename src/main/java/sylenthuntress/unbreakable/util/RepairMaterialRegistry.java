@@ -35,4 +35,8 @@ public class RepairMaterialRegistry {
     public void addRepairMaterial(RegistryEntryList<Item> items) {
         repairMaterials.add(items);
     }
+
+    public void removeRepairMaterial(RegistryEntryList<Item> items) {
+        repairMaterials.remove(items);
+    }
 }
