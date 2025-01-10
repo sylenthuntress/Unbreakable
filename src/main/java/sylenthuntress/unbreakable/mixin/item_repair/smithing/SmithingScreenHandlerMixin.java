@@ -1,15 +1,20 @@
 package sylenthuntress.unbreakable.mixin.item_repair.smithing;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.recipe.RecipePropertySet;
 import net.minecraft.screen.ForgingScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.SmithingScreenHandler;
 import net.minecraft.screen.slot.ForgingSlotsManager;
 import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -24,6 +29,12 @@ import java.util.function.Predicate;
 
 @Mixin(SmithingScreenHandler.class)
 public abstract class SmithingScreenHandlerMixin extends ForgingScreenHandler {
+    @Shadow
+    @Final
+    private RecipePropertySet basePropertySet;
+    @Shadow
+    @Final
+    private RecipePropertySet additionPropertySet;
     @Unique
     private int repairMaterialCost = 0;
 
@@ -39,7 +50,7 @@ public abstract class SmithingScreenHandlerMixin extends ForgingScreenHandler {
         }
     }
 
-    @ModifyArgs(method = "createForgingSlotsManager", at = @At(value = "INVOKE", ordinal = 1, target = "Lnet/minecraft/screen/slot/ForgingSlotsManager$Builder;input(IIILjava/util/function/Predicate;)Lnet/minecraft/screen/slot/ForgingSlotsManager$Builder;"))
+    @ModifyArgs(method = "createForgingSlotsManager", at = @At(value = "INVOKE", ordinal = 2, target = "Lnet/minecraft/screen/slot/ForgingSlotsManager$Builder;input(IIILjava/util/function/Predicate;)Lnet/minecraft/screen/slot/ForgingSlotsManager$Builder;"))
     private static void allowRepairMaterials(Args args) {
         if (Unbreakable.CONFIG.smithingRepair.ALLOW()) {
             Predicate<ItemStack> originalPredicate = args.get(3);
@@ -47,8 +58,19 @@ public abstract class SmithingScreenHandlerMixin extends ForgingScreenHandler {
         }
     }
 
+    @WrapOperation(method = "isValidIngredient", at = @At(value = "INVOKE", target = "Lnet/minecraft/recipe/RecipePropertySet;canUse(Lnet/minecraft/item/ItemStack;)Z"))
+    private boolean allowQuickMove(RecipePropertySet instance, ItemStack stack, Operation<Boolean> original) {
+        boolean isValidForRepairs = false;
+        if (instance == basePropertySet) {
+            isValidForRepairs = stack.isDamageable();
+        } else if (instance == additionPropertySet)
+            isValidForRepairs = RepairMaterialRegistry.getInstance().isRepairMaterial(stack);
+        return original.call(instance, stack) || isValidForRepairs;
+    }
+
     @Inject(method = "method_64654", at = @At("TAIL"))
     private void repairItemLogic(CallbackInfo ci) {
+        repairMaterialCost = 0;
         ItemStack repairBase = this.getSlot(1).getStack();
         ItemStack repairMaterial = this.getSlot(2).getStack();
         ItemStack outputStack = repairBase.copy();
@@ -80,6 +102,7 @@ public abstract class SmithingScreenHandlerMixin extends ForgingScreenHandler {
             this.getSlot(1).getStack().decrement(1);
             this.getSlot(2).getStack().decrement(repairMaterialCost);
             repairMaterialCost = 0;
+            this.quickMove(player, 2);
             ci.cancel();
         }
     }
