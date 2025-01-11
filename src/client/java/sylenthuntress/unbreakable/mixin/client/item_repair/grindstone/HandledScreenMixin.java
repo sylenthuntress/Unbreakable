@@ -30,11 +30,11 @@ public abstract class HandledScreenMixin {
             if (repairCost > 0) {
                 int textColor = 8453920;
                 Text text;
-                if (!grindstoneScreen.getScreenHandler().getSlot(2).hasStack())
+                if (!grindstoneScreen.getScreenHandler().getSlot(0).hasStack())
                     text = null;
                 else {
                     text = Text.translatable("unbreakable.container.repair.cost", repairCost);
-                    if (!grindstoneScreen.getScreenHandler().getSlot(2).canTakeItems(grindstoneScreen.getScreenHandler().player())) {
+                    if (!grindstoneScreen.getScreenHandler().getSlot(0).getStack().isEmpty()) {
                         textColor = 16736352;
                     }
                 }

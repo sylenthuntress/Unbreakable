@@ -57,13 +57,13 @@ public class AnvilScreenHandlerMixin {
     private int scaleWithShatterLevel(int original, @Local(ordinal = 0) ItemStack inputStack, @Local(ordinal = 2) ItemStack secondInputStack, @Local(ordinal = 1) ItemStack outputStack) {
         int oldShatterLevel = inputStack.getOrDefault(ModComponents.SHATTER_LEVEL, 0);
         int newShatterLevel = outputStack.getOrDefault(ModComponents.SHATTER_LEVEL, 0);
-        if (scaledWithShatterLevel != newShatterLevel && Unbreakable.CONFIG.anvilRepair.COST.SHATTER_SCALING() && oldShatterLevel > newShatterLevel) {
-            long initialRepairCost = (long) inputStack.getOrDefault(DataComponentTypes.REPAIR_COST, 0) + (long) secondInputStack.getOrDefault(DataComponentTypes.REPAIR_COST, 0) + 1;
-            if (Unbreakable.CONFIG.anvilRepair.COST.ENCHANTMENT_SCALING())
-                for (RegistryEntry<Enchantment> enchantment : inputStack.getEnchantments().getEnchantments())
-                    initialRepairCost += ItemShatterHelper.getEnchantmentLevel(enchantment.getKey().orElseThrow(), inputStack);
-            original += (int) initialRepairCost;
-        }
+        long initialRepairCost = 0;
+        if (scaledWithShatterLevel != newShatterLevel && Unbreakable.CONFIG.anvilRepair.COST.SHATTER_SCALING() && oldShatterLevel > newShatterLevel)
+            initialRepairCost = (long) inputStack.getOrDefault(DataComponentTypes.REPAIR_COST, 0) + (long) secondInputStack.getOrDefault(DataComponentTypes.REPAIR_COST, 0) + 1;
+        if (Unbreakable.CONFIG.anvilRepair.COST.ENCHANTMENT_SCALING())
+            for (RegistryEntry<Enchantment> enchantment : inputStack.getEnchantments().getEnchantments())
+                initialRepairCost += ItemShatterHelper.getEnchantmentLevel(enchantment.getKey().orElseThrow(), inputStack);
+        original += (int) initialRepairCost;
         scaledWithShatterLevel = newShatterLevel;
         return original;
     }

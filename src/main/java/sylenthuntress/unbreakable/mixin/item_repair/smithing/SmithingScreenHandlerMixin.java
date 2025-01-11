@@ -37,6 +37,8 @@ public abstract class SmithingScreenHandlerMixin extends ForgingScreenHandler {
     private RecipePropertySet additionPropertySet;
     @Unique
     private int repairMaterialCost = 0;
+    @Unique
+    int scaledWithShatterLevel = -1;
 
     public SmithingScreenHandlerMixin(@Nullable ScreenHandlerType<?> type, int syncId, PlayerInventory playerInventory, ScreenHandlerContext context, ForgingSlotsManager forgingSlotsManager) {
         super(type, syncId, playerInventory, context, forgingSlotsManager);
@@ -75,7 +77,7 @@ public abstract class SmithingScreenHandlerMixin extends ForgingScreenHandler {
         ItemStack repairMaterial = this.getSlot(2).getStack();
         ItemStack outputStack = repairBase.copy();
         if (Unbreakable.CONFIG.smithingRepair.ALLOW() && repairBase.isDamaged() && repairBase.canRepairWith(repairMaterial)) {
-            int repairFactor = calculateRepairFactor(outputStack);
+            int repairFactor = calculateRepairFactor(outputStack, repairBase);
             int materialCost = 0;
             while (repairFactor > 0 && materialCost < repairMaterial.getCount()) {
                 outputStack.setDamage(outputStack.getDamage() - repairFactor);
@@ -83,7 +85,7 @@ public abstract class SmithingScreenHandlerMixin extends ForgingScreenHandler {
                     outputStack.set(ModComponents.SMITHING_DEGRADATION, Math.min(20, outputStack.getOrDefault(ModComponents.SMITHING_DEGRADATION, 0) + 1));
                 if (Unbreakable.CONFIG.grindingRepair.COST.SMITHING_DECREMENTS_DEGRADATION())
                     outputStack.set(ModComponents.GRINDING_DEGRADATION, Math.max(0, outputStack.getOrDefault(ModComponents.GRINDING_DEGRADATION, 0) - 2));
-                repairFactor = calculateRepairFactor(outputStack);
+                repairFactor = calculateRepairFactor(outputStack, repairBase);
                 materialCost++;
             }
             repairMaterialCost = materialCost;
@@ -92,10 +94,10 @@ public abstract class SmithingScreenHandlerMixin extends ForgingScreenHandler {
     }
 
     @Unique
-    private int calculateRepairFactor(ItemStack stack) {
-        int repairFactor = (int) Math.round(Math.min(stack.getDamage(), stack.getMaxDamage() / 4) * ((21 - stack.getOrDefault(ModComponents.SMITHING_DEGRADATION, 0)) * 0.05));
-        repairFactor = (int) (repairFactor * Unbreakable.CONFIG.smithingRepair.COST.MULTIPLIER());
-        return repairFactor;
+    private int calculateRepairFactor(ItemStack outputStack, ItemStack inputStack) {
+        long repairFactor = Math.round(Math.min(outputStack.getDamage(), outputStack.getMaxDamage() / 4) * ((21 - outputStack.getOrDefault(ModComponents.SMITHING_DEGRADATION, 0)) * 0.05));
+        repairFactor = (long) (repairFactor * Unbreakable.CONFIG.smithingRepair.COST.MULTIPLIER());
+        return (int) repairFactor;
     }
 
     @Inject(method = "onTakeOutput", at = @At("HEAD"), cancellable = true)

@@ -1,7 +1,10 @@
 package sylenthuntress.unbreakable.mixin.item_repair.grindstone;
 
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.screen.GrindstoneScreenHandler;
 import net.minecraft.screen.Property;
 import net.minecraft.screen.ScreenHandler;
@@ -15,6 +18,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import sylenthuntress.unbreakable.access.GrindstoneScreenHandlerAccess;
+import sylenthuntress.unbreakable.util.ItemShatterHelper;
 import sylenthuntress.unbreakable.util.ModComponents;
 import sylenthuntress.unbreakable.util.Unbreakable;
 
@@ -36,6 +40,26 @@ public abstract class GrindstoneScreenHandlerMixin extends ScreenHandler impleme
     }
 
     @Unique
+    private int scaledWithShatterLevel = -1;
+
+    @Unique
+    private int calculateRepairCost(long repairCost, ItemStack outputStack, ItemStack inputStack) {
+        if (Unbreakable.CONFIG.grindingRepair.COST.ENCHANTMENT_SCALING())
+            for (RegistryEntry<Enchantment> enchantment : outputStack.getEnchantments().getEnchantments())
+                repairCost += ItemShatterHelper.getEnchantmentLevel(enchantment.getKey().orElseThrow(), outputStack);
+        if (Unbreakable.CONFIG.grindingRepair.COST.SHATTER_SCALING()) {
+            int oldShatterLevel = inputStack.getOrDefault(ModComponents.SHATTER_LEVEL, 0);
+            int newShatterLevel = outputStack.getOrDefault(ModComponents.SHATTER_LEVEL, 0);
+            if (scaledWithShatterLevel != newShatterLevel && Unbreakable.CONFIG.anvilRepair.COST.SHATTER_SCALING() && oldShatterLevel > newShatterLevel)
+                repairCost = (long) inputStack.getOrDefault(DataComponentTypes.REPAIR_COST, 0) + (long) outputStack.getOrDefault(DataComponentTypes.REPAIR_COST, 0) + 1;
+            scaledWithShatterLevel = newShatterLevel;
+        }
+        repairCost *= (long) (1 + ((41 - outputStack.getOrDefault(ModComponents.GRINDING_DEGRADATION, 0)) * 0.05));
+        repairCost *= (long) Unbreakable.CONFIG.grindingRepair.COST.MULTIPLIER();
+        return (int) repairCost;
+    }
+
+    @Unique
     private void setRepairCost(int repairCost) {
         this.repairCost.set(repairCost);
     }
@@ -50,7 +74,7 @@ public abstract class GrindstoneScreenHandlerMixin extends ScreenHandler impleme
             if (!inputStack.isEmpty()
                     && this.getSlot(1).getStack().isEmpty()
                     && experienceLevels > 0) {
-                int repairFactor = calculateRepairFactor(outputStack);
+                int repairFactor = Math.min(outputStack.getDamage(), outputStack.getMaxDamage() / 6);
                 while (outputStack.isDamaged() && experienceLevels > 0) {
                     experienceLevels--;
                     outputStack.setDamage(outputStack.getDamage() - repairFactor);
@@ -58,18 +82,13 @@ public abstract class GrindstoneScreenHandlerMixin extends ScreenHandler impleme
                         outputStack.set(ModComponents.GRINDING_DEGRADATION, Math.min(40, outputStack.getOrDefault(ModComponents.GRINDING_DEGRADATION, 0) + 2));
                     if (Unbreakable.CONFIG.smithingRepair.COST.GRINDING_DECREMENTS_DEGRADATION())
                         outputStack.set(ModComponents.SMITHING_DEGRADATION, Math.max(0, outputStack.getOrDefault(ModComponents.SMITHING_DEGRADATION, 0) - 1));
-                    calculateRepairFactor(outputStack);
+                    repairFactor = Math.min(outputStack.getDamage(), outputStack.getMaxDamage() / 6);
                 }
-                this.result.setStack(0, outputStack);
-                setRepairCost(player().experienceLevel - experienceLevels);
+                setRepairCost(calculateRepairCost((player().experienceLevel - experienceLevels), outputStack, inputStack));
+                if (repairCost.get() < player().experienceLevel)
+                    this.result.setStack(0, outputStack);
+                else this.result.setStack(0, ItemStack.EMPTY);
             }
         }
-    }
-
-    @Unique
-    private int calculateRepairFactor(ItemStack stack) {
-        int repairFactor = (int) Math.round(Math.min(stack.getDamage(), stack.getMaxDamage() / 6) * ((41 - stack.getOrDefault(ModComponents.GRINDING_DEGRADATION, 0)) * 0.05));
-        repairFactor = (int) (repairFactor * Unbreakable.CONFIG.grindingRepair.COST.MULTIPLIER());
-        return repairFactor;
     }
 }

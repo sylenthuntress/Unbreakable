@@ -246,5 +246,11 @@ public class UnbreakableConfigModel {
         public boolean SMITHING_DECREMENTS_DEGRADATION = true;
         @Comment(UnbreakableConfigComments.ANVILS_CLEAR_DEGRADATION)
         public boolean ANVILS_CLEAR_DEGRADATION = true;
+        @Comment(UnbreakableConfigComments.SHATTER_SCALING)
+        public boolean SHATTER_SCALING = false;
+        @Comment(UnbreakableConfigComments.ENCHANTMENT_SCALING)
+        public boolean ENCHANTMENT_SCALING = false;
+        @Comment(UnbreakableConfigComments.REPAIR_SCALING)
+        public boolean REPAIR_SCALING = false;
     }
 }
