@@ -87,5 +87,9 @@
     }
   ],
   "tag.item.unbreakable.retains_breaking": "Vanilla kırılımını tutar",
-  "tag.item.unbreakable.shatter_blacklist": "Parçalanamaz"
+  "tag.item.unbreakable.shatter_blacklist": "Parçalanamaz",
+  "unbreakable.shatter.cant_use_item": "%s is too shattered to use!",
+  "unbreakable.numbers.null": " ",
+  "tag.item.unbreakable.prevent_use_when_shattered": "Can't be used when shattered",
+  "unbreakable.container.repair.cost": "Repair Cost: %s"
 }
