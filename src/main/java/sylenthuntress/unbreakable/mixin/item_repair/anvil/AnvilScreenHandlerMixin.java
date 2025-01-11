@@ -53,7 +53,7 @@ public class AnvilScreenHandlerMixin {
         return (int) repairCost;
     }
 
-    @ModifyVariable(method = "updateResult", at = @At(value = "INVOKE", target = "Ljava/lang/Math;min(II)I"), ordinal = 0)
+    @ModifyVariable(method = "updateResult", at = @At(value = "INVOKE", target = "Ljava/lang/Math;min(II)I", ordinal = 1), ordinal = 0)
     private int scaleWithShatterLevel(int original, @Local(ordinal = 0) ItemStack inputStack, @Local(ordinal = 2) ItemStack secondInputStack, @Local(ordinal = 1) ItemStack outputStack) {
         int oldShatterLevel = inputStack.getOrDefault(ModComponents.SHATTER_LEVEL, 0);
         int newShatterLevel = outputStack.getOrDefault(ModComponents.SHATTER_LEVEL, 0);

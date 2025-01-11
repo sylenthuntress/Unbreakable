@@ -20,11 +20,12 @@ public class GrindstoneScreenHandlerOutputSlotMixin {
 
     @Unique
     public int unbreakable$getRepairCost(GrindstoneScreenHandler instance) {
-        return ((GrindstoneScreenHandlerAccess) (Object) instance).unbreakable$getRepairCost();
+        return ((GrindstoneScreenHandlerAccess) instance).unbreakable$getRepairCost();
     }
 
     @Inject(method = "onTakeItem(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/item/ItemStack;)V", at = @At("HEAD"))
     public void onTakeItem(PlayerEntity player, ItemStack stack, CallbackInfo ci) {
-        player.addExperienceLevels(-unbreakable$getRepairCost(this.field_16780));
+        if (!player.isCreative())
+            player.addExperienceLevels(-unbreakable$getRepairCost(this.field_16780));
     }
 }

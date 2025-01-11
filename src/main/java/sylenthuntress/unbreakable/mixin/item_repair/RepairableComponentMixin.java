@@ -7,12 +7,12 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import sylenthuntress.unbreakable.util.RepairMaterialRegistry;
+import sylenthuntress.unbreakable.util.RepairHelper;
 
 @Mixin(RepairableComponent.class)
 public abstract class RepairableComponentMixin {
     @Inject(method = "<init>", at = @At("TAIL"))
     private void registerRepairMaterials(RegistryEntryList<Item> items, CallbackInfo ci) {
-        RepairMaterialRegistry.getInstance().addRepairMaterial(items);
+        RepairHelper.getRegistryInstance().addRepairMaterial(items);
     }
 }

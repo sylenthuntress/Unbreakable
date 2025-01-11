@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import sylenthuntress.unbreakable.util.RepairMaterialRegistry;
+import sylenthuntress.unbreakable.util.RepairHelper;
 
 @Mixin(ItemStack.class)
 public abstract class ItemStackMixin implements ComponentHolder {
@@ -18,7 +18,7 @@ public abstract class ItemStackMixin implements ComponentHolder {
     private <T> void unregisterRepairMaterials(ComponentType<? extends T> type, CallbackInfoReturnable<T> cir) {
         if (type.equals(DataComponentTypes.REPAIRABLE)) {
             RepairableComponent repairableComponent = this.get(DataComponentTypes.REPAIRABLE);
-            RepairMaterialRegistry.getInstance().removeRepairMaterial(repairableComponent.items());
+            RepairHelper.getRegistryInstance().removeRepairMaterial(repairableComponent.items());
         }
     }
 
@@ -26,7 +26,7 @@ public abstract class ItemStackMixin implements ComponentHolder {
     private void unregisterRepairMaterials(int amount, CallbackInfo ci) {
         if (this.contains(DataComponentTypes.REPAIRABLE)) {
             RepairableComponent repairableComponent = this.get(DataComponentTypes.REPAIRABLE);
-            RepairMaterialRegistry.getInstance().removeRepairMaterial(repairableComponent.items());
+            RepairHelper.getRegistryInstance().removeRepairMaterial(repairableComponent.items());
         }
     }
 }
