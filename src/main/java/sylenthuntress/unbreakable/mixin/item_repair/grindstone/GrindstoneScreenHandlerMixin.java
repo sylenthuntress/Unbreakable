@@ -85,7 +85,7 @@ public abstract class GrindstoneScreenHandlerMixin extends ScreenHandler impleme
                     repairFactor = Math.min(outputStack.getDamage(), outputStack.getMaxDamage() / 6);
                 }
                 setRepairCost(calculateRepairCost((player().experienceLevel - experienceLevels), outputStack, inputStack));
-                if (repairCost.get() < player().experienceLevel)
+                if (repairCost.get() <= player().experienceLevel)
                     this.result.setStack(0, outputStack);
                 else this.result.setStack(0, ItemStack.EMPTY);
             }
