@@ -1,5 +1,3 @@
-import org.apache.commons.io.FileUtils
-
 plugins {
     id 'fabric-loom' version '1.8-SNAPSHOT'
     id 'maven-publish'
@@ -8,7 +6,7 @@ plugins {
 
 publishMods {
     file = remapJar.archiveFile
-    changelog = FileUtils.readFileToString(files("CHANGELOG.md").singleFile, "UTF-8")
+    changelog = project.file("CHANGELOG.MD").toString()
     type = STABLE
     modLoaders.add("fabric")
 
@@ -28,7 +26,7 @@ publishMods {
         optional("modmenu")
     }
     github {
-        repository = "https://github.com/sylenthuntress/Unbreakable"
+        repository = "sylenthuntress/Unbreakable"
         accessToken = providers.environmentVariable("GITHUB_TOKEN")
         commitish = "main"
     }
