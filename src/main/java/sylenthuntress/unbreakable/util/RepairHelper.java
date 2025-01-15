@@ -39,7 +39,7 @@ public class RepairHelper {
         repairMaterials.add(items);
     }
 
-    public static int calculateRepairFactor(int repairConstant, ItemStack outputStack, ItemStack inputStack, boolean scaledWithShatterLevel, int repairStation) {
+    public static int calculateRepairFactor(int repairConstant, ItemStack outputStack, ItemStack inputStack, boolean scaledWithShatterLevel, RepairStations repairStation) {
         return Math.min(
                 outputStack.getDamage(),
                 outputStack.getMaxDamage() /
@@ -53,19 +53,19 @@ public class RepairHelper {
         );
     }
 
-    private static int calculateRepairConstant(double repairConstant, ItemStack outputStack, ItemStack inputStack, boolean scaledWithShatterLevel, int repairStation) {
+    private static int calculateRepairConstant(double repairConstant, ItemStack outputStack, ItemStack inputStack, boolean scaledWithShatterLevel, RepairStations repairStation) {
         boolean shatterScaling = false;
         boolean enchantmentScaling = false;
         boolean degradeRepairFactor = false;
         float costMultiplier = 1;
         switch (repairStation) {
-            case (RepairStations.SMITHING_TABLE) -> {
+            case RepairStations.SMITHING_TABLE -> {
                 shatterScaling = Unbreakable.CONFIG.smithingRepair.COST.SHATTER_SCALING();
                 enchantmentScaling = Unbreakable.CONFIG.smithingRepair.COST.ENCHANTMENT_SCALING();
                 degradeRepairFactor = Unbreakable.CONFIG.smithingRepair.COST.DEGRADE_REPAIR_FACTOR();
                 costMultiplier = Unbreakable.CONFIG.smithingRepair.COST.MULTIPLIER();
             }
-            case (RepairStations.GRINDSTONE) -> {
+            case RepairStations.GRINDSTONE -> {
                 shatterScaling = Unbreakable.CONFIG.grindingRepair.COST.SHATTER_SCALING();
                 enchantmentScaling = Unbreakable.CONFIG.grindingRepair.COST.ENCHANTMENT_SCALING();
                 degradeRepairFactor = Unbreakable.CONFIG.grindingRepair.COST.DEGRADE_REPAIR_FACTOR();
@@ -75,7 +75,7 @@ public class RepairHelper {
         int oldShatterLevel = inputStack.getOrDefault(ModComponents.SHATTER_LEVEL, 0);
         int newShatterLevel = outputStack.getOrDefault(ModComponents.SHATTER_LEVEL, 0);
         if (!scaledWithShatterLevel && shatterScaling && oldShatterLevel > newShatterLevel)
-            repairConstant = inputStack.getOrDefault(DataComponentTypes.REPAIR_COST, 0) + outputStack.getOrDefault(DataComponentTypes.REPAIR_COST, 0) + 1;
+            repairConstant += inputStack.getOrDefault(DataComponentTypes.REPAIR_COST, 0) + outputStack.getOrDefault(DataComponentTypes.REPAIR_COST, 0);
         if (enchantmentScaling)
             for (RegistryEntry<Enchantment> enchantment : outputStack.getEnchantments().getEnchantments())
                 repairConstant += ItemShatterHelper.getEnchantmentLevel(enchantment.getKey().orElseThrow(), outputStack);
@@ -87,9 +87,7 @@ public class RepairHelper {
         return (int) Math.round(repairConstant);
     }
 
-    public abstract static class RepairStations {
-        public static final int ANVIL = 1;
-        public static final int SMITHING_TABLE = 2;
-        public static final int GRINDSTONE = 3;
+    public enum RepairStations {
+        ANVIL, SMITHING_TABLE, GRINDSTONE
     }
 }
