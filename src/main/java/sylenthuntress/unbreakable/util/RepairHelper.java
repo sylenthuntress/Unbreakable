@@ -39,10 +39,6 @@ public class RepairHelper {
         repairMaterials.add(items);
     }
 
-    public void removeRepairMaterial(RegistryEntryList<Item> items) {
-        repairMaterials.remove(items);
-    }
-
     public static int calculateRepairFactor(int repairConstant, ItemStack outputStack, ItemStack inputStack, boolean scaledWithShatterLevel, int repairStation) {
         return Math.min(
                 outputStack.getDamage(),
