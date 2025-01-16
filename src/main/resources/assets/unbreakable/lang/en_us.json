@@ -96,6 +96,8 @@
   "tag.item.unbreakable.retains_breaking": "Retains vanilla breaking",
   "tag.item.unbreakable.shatter_blacklist": "Can't shatter",
   "tag.item.unbreakable.prevent_use_when_shattered": "Can't be used when shattered",
+  "tag.item.unbreakable.exclude_modifier": "Has normal durability",
+  "tag.item.unbreakable.golden_equipment": "Golden Equipment",
   "unbreakable.container.repair.levelCost": "Level Cost: %s",
   "unbreakable.container.repair.materialCost": "Material Cost: %s"
 }
