@@ -9,6 +9,7 @@ publishMods {
     changelog = project.file("CHANGELOG.MD").toString()
     type = STABLE
     modLoaders.add("fabric")
+    version = "v" + project.version + "+" + stonecutter.current.version
 
     curseforge {
         projectId = "1153034"
@@ -32,7 +33,7 @@ publishMods {
     }
 }
 
-version = project.mod_version + "+" + stonecutter.current.version
+version = project.mod_version
 group = project.maven_group
 
 base {
