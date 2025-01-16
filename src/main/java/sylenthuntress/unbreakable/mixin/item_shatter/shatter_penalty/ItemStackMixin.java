@@ -45,8 +45,8 @@ public abstract class ItemStackMixin implements ComponentHolder {
     @ModifyExpressionValue(method = "calculateDamage", at = @At(value = "INVOKE", target = "Lnet/minecraft/enchantment/EnchantmentHelper;getItemDamage(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/item/ItemStack;I)I"))
     private int applyShatterPenalty(int original) {
         double penaltyMultiplier = 1;
-        if (ItemShatterHelper.shouldPreventUse(this.copy()))
+        if (ItemShatterHelper.isShattered((ItemStack) (Object) this))
             penaltyMultiplier = 2 - ItemShatterHelper.calculateShatterPenalty((ItemStack) (Object) this);
-        return (int) (original * penaltyMultiplier);
+        return (int) (Math.ceil(original * penaltyMultiplier));
     }
 }
