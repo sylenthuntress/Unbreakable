@@ -6,7 +6,7 @@ plugins {
 
 publishMods {
     file = remapJar.archiveFile
-    changelog = project.file("CHANGELOG.MD").toString()
+    changelog = "Unbreakable v" + project.version + "+" + stonecutter.current.version + "\n\n" + project.file("CHANGELOG.MD").toString()
     type = STABLE
     modLoaders.add("fabric")
     version = "v" + project.version + "+" + stonecutter.current.version
