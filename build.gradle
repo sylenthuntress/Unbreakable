@@ -77,7 +77,12 @@ processResources {
     inputs.property "version", project.version
 
     filesMatching("fabric.mod.json") {
-        expand "minecraft_version": stonecutter.current.version, "version": project.version
+        expand "version": project.version,
+                "minecraft_version": stonecutter.current.version,
+                "loader_version": property('loader_version'),
+                "fabric_version": property('fabric_version'),
+                "owo_version": property('owo_version'),
+                "modmenu_version": property('modmenu_version')
     }
 }
 
