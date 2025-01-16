@@ -19,19 +19,15 @@
       "sylenthuntress.unbreakable.util.Unbreakable"
     ],
     "client": [
-      "sylenthuntress.unbreakable.util.UnbreakableClient"
+      "sylenthuntress.unbreakable.client.UnbreakableClient"
     ]
   },
   "mixins": [
-    "unbreakable.mixins.json",
-    {
-      "config": "unbreakable.client.mixins.json",
-      "environment": "client"
-    }
+    "unbreakable.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.16.7",
-    "minecraft": "~1.21.4",
+    "minecraft": "~${minecraft_version}",
     "java": ">=21",
     "fabric-api": "*"
   },

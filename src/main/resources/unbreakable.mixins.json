@@ -24,6 +24,14 @@
     "item_shatter.shatter_penalty.RangedWeaponItemMixin",
     "item_shatter.shatter_penalty.TridentEntityMixin"
   ],
+  "client": [
+    "client.item_repair.anvil.AnvilScreenMixin",
+    "client.item_repair.grindstone.HandledScreenMixin",
+    "client.item_repair.grindstone.SmithingScreenMixin",
+    "client.item_shatter.BrokenPropertyMixin",
+    "client.item_shatter.ItemMixin",
+    "client.item_shatter.ItemStackMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   }

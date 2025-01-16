@@ -1,4 +1,4 @@
-package sylenthuntress.unbreakable.event.shatter_penalty;
+package sylenthuntress.unbreakable.client.event.shatter_penalty;
 
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.minecraft.entity.player.PlayerEntity;
@@ -7,7 +7,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.world.World;
-import sylenthuntress.unbreakable.util.ClientItemShatterHelper;
+import sylenthuntress.unbreakable.client.ClientItemShatterHelper;
 import sylenthuntress.unbreakable.util.ItemShatterHelper;
 import sylenthuntress.unbreakable.util.Unbreakable;
 

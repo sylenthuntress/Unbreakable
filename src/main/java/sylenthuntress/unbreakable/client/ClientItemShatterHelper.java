@@ -1,4 +1,4 @@
-package sylenthuntress.unbreakable.util;
+package sylenthuntress.unbreakable.client;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;

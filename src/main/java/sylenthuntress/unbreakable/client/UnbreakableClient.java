@@ -1,10 +1,10 @@
-package sylenthuntress.unbreakable.util;
+package sylenthuntress.unbreakable.client;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.event.player.*;
-import sylenthuntress.unbreakable.event.DisplayShatterTooltip;
-import sylenthuntress.unbreakable.event.shatter_penalty.*;
+import sylenthuntress.unbreakable.client.event.DisplayShatterTooltip;
+import sylenthuntress.unbreakable.client.event.shatter_penalty.*;
 
 
 public class UnbreakableClient implements ClientModInitializer {

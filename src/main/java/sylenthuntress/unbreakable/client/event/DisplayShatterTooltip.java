@@ -1,4 +1,4 @@
-package sylenthuntress.unbreakable.event;
+package sylenthuntress.unbreakable.client.event;
 
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.minecraft.client.MinecraftClient;
