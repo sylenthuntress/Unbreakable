@@ -3,6 +3,7 @@ package sylenthuntress.unbreakable.config;
 public abstract class UnbreakableConfigComments {
     // Formatting
     public final static String INVERT = "Whether to invert the above list";
+
     // Client-side
     public final static String clientOnly = " (Client-only)";
     public final static String shatteredItemBarColor = "Color for the item bar when shattered" + clientOnly;
@@ -14,7 +15,9 @@ public abstract class UnbreakableConfigComments {
     public final static String DISPLAY_TEXT_AT_MAX = "Display \"MAX\" if level is max" + clientOnly;
     public final static String ROMAN_NUMERALS = "Separate shattered item tooltip from the rest of an item's tooltips" + clientOnly;
     public final static String INDEX_OVERRIDE = "\n! [ UNSTABLE ] !\nOverrides the display index for the shattered item tooltip" + clientOnly;
+
     // Item Durability
+    public final static String DAMAGE_ITEM_ENTITIES = "Whether to damage item entities instead of discarding them";
     // -> Durability Modifier
     public final static String DurabilityModifier_MULTIPLIER = "The base durability multiplier for all items";
     public final static String DurabilityModifier_LIST = "The list of items with modified durability";
@@ -28,6 +31,7 @@ public abstract class UnbreakableConfigComments {
     public final static String PROJECTILE = "Dynamically damage projectile weapons based on projectile power";
     public final static String ELYTRA = "Dynamically damage elytra based on flight speed";
     public final static String DYNAMIC_MULTIPLIERS = "Multipliers for dynamic durability loss";
+
     // Shattered Items
     public final static String breakItems = "Whether to break items like normal at their maximum shatter level";
     public final static String maxShatterLevel = "The maximum shatter level an item can reach";
@@ -42,6 +46,7 @@ public abstract class UnbreakableConfigComments {
     // --> Stat Penalties
     public final static String STAT_MINIMUM = "The minimum effectiveness for a penalized stat";
     public final static String PENALTIES = "Which stats to penalize for shattered items";
+
     // Item Repairing
     public final static String allowRepairingShattered = "Whether repairing items should decrease their shatter level";
     public final static String TOO_EXPENSIVE = "Whether to prevent items from being repaired at 40+ level cost";
@@ -58,6 +63,7 @@ public abstract class UnbreakableConfigComments {
     public final static String SMITHING_DECREMENTS_DEGRADATION = "Whether repairing items using a smithing table decreases degradation from the above option";
     public final static String GRINDING_DECREMENTS_DEGRADATION = "Whether repairing items using a grindstone decreases degradation from the above option";
     public final static String ANVILS_CLEAR_DEGRADATION = "Repairing items with an anvil will reset the effectiveness of this repair method";
+
     // Enchantments
     public final static String disableBindingWhenShattered = "Whether curse of binding should work on shattered items";
     public final static String shatterCursedItems = "Whether curse of vanishing should shatter items instead of deleting them";

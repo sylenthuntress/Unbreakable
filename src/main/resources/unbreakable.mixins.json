@@ -4,6 +4,7 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "enchantment.EnchantmentHelperMixin",
+    "item_damage.ItemEntityMixin",
     "item_damage.ItemStackMixin",
     "item_damage.LivingEntityMixin",
     "item_damage.PlayerEntityMixin",

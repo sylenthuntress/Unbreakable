@@ -15,6 +15,7 @@ import java.util.List;
 @Modmenu(modId = Unbreakable.MOD_ID)
 @Config(name = "unbreakable-config", wrapperName = "UnbreakableConfig")
 public class UnbreakableConfigModel {
+    // Client config
     @SectionHeader("clientSection")
     @Sync(value = Option.SyncMode.NONE)
     @Comment(UnbreakableConfigComments.shatteredItemBarColor)
@@ -23,47 +24,70 @@ public class UnbreakableConfigModel {
     @Sync(value = Option.SyncMode.NONE)
     @Expanded
     public ShatterTooltip shatterTooltip = new ShatterTooltip();
+
+    // Item damage config
     @SectionHeader("damageSection")
+    @Comment(UnbreakableConfigComments.DAMAGE_ITEM_ENTITIES)
+    public boolean damageItemEntities = true;
+
     @RangeConstraint(min = 0.1F, max = 2.0F, decimalPlaces = 1)
     @Nest
     @Expanded
     public DurabilityModifier durabilityModifier = new DurabilityModifier();
+
     @Nest
     public BonusDamage bonusDamageOnBreak = new BonusDamage();
+
     @Nest
     public DynamicDamage dynamicDamage = new DynamicDamage();
+
+
+    // Item shatter config
     @SectionHeader("shatterSection")
     @Comment(UnbreakableConfigComments.breakItems)
     public boolean breakItems = false;
+
     @PredicateConstraint("shatterLevelConstraint")
     @Comment(UnbreakableConfigComments.maxShatterLevel)
     public int maxShatterLevel = 3;
+
     @PredicateConstraint("shatterLevelConstraint")
     @Comment(UnbreakableConfigComments.enchantmentScaling)
     public int enchantmentScaling = 1;
+
     @RangeConstraint(min = 0.0F, max = 3.0F, decimalPlaces = 1)
     @Comment(UnbreakableConfigComments.negativeDurabilityMultiplier)
     public float negativeDurabilityMultiplier = 1;
+
     @Nest
     public ShatterBlacklist shatterBlacklist = new ShatterBlacklist();
     @Nest
     public ShatterPenalties shatterPenalties = new ShatterPenalties();
+
+    // Item repair config
     @SectionHeader("repairSection")
     @Comment(UnbreakableConfigComments.allowRepairingShattered)
     public boolean allowRepairingShattered = true;
+
     @Nest
     public AnvilRepair anvilRepair = new AnvilRepair();
+
     @Nest
     @Comment(UnbreakableConfigComments.SMITHING_REPAIR)
     public SmithingRepair smithingRepair = new SmithingRepair();
+
     @Nest
     @Comment(UnbreakableConfigComments.GRINDSTONE_REPAIR)
     public GrindingRepair grindingRepair = new GrindingRepair();
+
+    // Enchantments config
     @SectionHeader("enchantmentSection")
     @Comment(UnbreakableConfigComments.disableBindingWhenShattered)
     public boolean disableBindingWhenShattered = true;
+
     @Comment(UnbreakableConfigComments.shatterCursedItems)
     public boolean shatterCursedItems = true;
+
     @Comment(UnbreakableConfigComments.exclusiveMending)
     public boolean exclusiveMending = true;
 
