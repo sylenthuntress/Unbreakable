@@ -1,57 +1,97 @@
+import me.modmuss50.mpp.ReleaseType
+
 plugins {
     id 'fabric-loom' version '1.8-SNAPSHOT'
     id 'maven-publish'
     id "me.modmuss50.mod-publish-plugin" version "0.8.3"
 }
 
-publishMods {
-    file = remapJar.archiveFile
-    changelog = "# Unbreakable v" + project.version + "+" + stonecutter.current.version + "\n\n" + project.file("CHANGELOG.MD").toString()
-    type = STABLE
-    modLoaders.add("fabric")
-    version = "v" + project.version + "+" + stonecutter.current.version
-
-    curseforge {
-        projectId = "1153034"
-        projectSlug = "durability-rework"
-        accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
-        minecraftVersions.add(stonecutter.current.version)
-        requires("fabric-api", "owo-lib")
-        optional("modmenu")
+configurations {
+    commonJava {
+        canBeResolved = true
     }
-    modrinth {
-        projectId = "IR8T4xSw"
-        accessToken = providers.environmentVariable("MODRINTH_TOKEN")
-        minecraftVersions.add(stonecutter.current.version)
-        requires("fabric-api", "owo-lib")
-        optional("modmenu")
-    }
-    github {
-        repository = "sylenthuntress/Unbreakable"
-        accessToken = providers.environmentVariable("GITHUB_TOKEN")
-        commitish = "main"
+    commonResources {
+        canBeResolved = true
     }
 }
 
-version = project.mod_version
-group = project.maven_group
+def secretProperties = new Properties()
+def secretPropertiesFile = rootProject.file("secret.properties")
+if (secretPropertiesFile.exists()) {
+    secretProperties.load(secretPropertiesFile.newInputStream())
+}
 
-base {
-    archivesName = project.archives_base_name
+publishMods {
+    def modrinthToken = secretProperties.getProperty("MODRINTH_TOKEN")
+    def curseforgeToken = secretProperties.getProperty("CURSEFORGE_TOKEN")
+    def githubToken = secretProperties.getProperty("GITHUB_TOKEN")
+
+    file = remapJar.archiveFile
+
+    displayName = project.mod_name
+    version = "v" + project.version + "+" + project.minecraft_version
+    type = ReleaseType.valueOf(project.stability)
+    changelog = "# " + project.mod_name + " v" + project.version + "+" + project.minecraft_version +
+            "\n\n" + project.file("CHANGELOG.md").toString()
+
+    modLoaders.add("fabric")
+
+
+    curseforge {
+        accessToken = curseforgeToken
+        projectId = project.curseforge_id
+        projectSlug = project.curseforge_slug
+        minecraftVersions.add(project.minecraft_version)
+
+        requires("fabric-api")
+        requires("owo-lib")
+        optional("modmenu")
+
+        clientRequired = true
+        serverRequired = true
+    }
+
+    modrinth {
+        accessToken = modrinthToken
+        projectId = project.modrinth_id
+        minecraftVersions.add(project.minecraft_version)
+
+        requires("fabric-api")
+        requires("owo-lib")
+        optional("modmenu")
+    }
+
+    github {
+        accessToken = githubToken
+        repository = project.github_repo
+        tagName = "release/v" + project.version + "+" + project.minecraft_version
+        commitish = "main"
+        allowEmptyFiles = true
+    }
 }
 
 loom {
-    mods {
-        "unbreaking" {
-            sourceSet sourceSets.main
+    def aw = project.file("src/main/resources/${mod_id}.accesswidener")
+    if (aw.exists()) {
+        accessWidenerPath.set(aw)
+    }
+    mixin {
+        defaultRefmapName.set("${mod_id}.refmap.json")
+    }
+    runs {
+        client {
+            client()
+            setConfigName('Minecraft Client')
+            ideConfigGenerated(true)
+            runDir('runs/client')
+        }
+        server {
+            server()
+            setConfigName('Minecraft Server')
+            ideConfigGenerated(true)
+            runDir('runs/server')
         }
     }
-
-    runConfigs.all {
-        ideConfigGenerated true // Run configurations are not created for subprojects by default
-        runDir "../../run" // Use a shared run folder and create separate worlds
-    }
-
 }
 
 repositories {
@@ -64,27 +104,45 @@ repositories {
 }
 
 dependencies {
-    minecraft "com.mojang:minecraft:${stonecutter.current.version}"
-    mappings "net.fabricmc:yarn:${property('yarn_mappings')}:v2"
-    modImplementation "net.fabricmc:fabric-loader:${property('loader_version')}"
-    modImplementation("net.fabricmc.fabric-api:fabric-api:${property('fabric_version')}")
+    minecraft "com.mojang:minecraft:${minecraft_version}"
+    mappings "net.fabricmc:yarn:${yarn_mappings}:v2"
+    modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
+    annotationProcessor group: 'io.github.llamalad7', name: 'mixinextras-common', version: '0.3.5'
     annotationProcessor modImplementation("io.wispforest:owo-lib:${property('owo_version')}")
     modImplementation("com.terraformersmc:modmenu:${property('modmenu_version')}")
     include "io.wispforest:owo-sentinel:${property('owo_version')}"
 }
 
 processResources {
-    inputs.property "minecraft_version", stonecutter.current.version
-    inputs.property "version", project.version
+    var expandProps = [
+            'version'              : version,
+            'stability'            : stability,
+            'group'                : project.group,
+            'minecraft_version'    : minecraft_version,
+            'owo_version'          : owo_version,
+            'modmenu_version'      : modmenu_version,
+            'yarn_mappings'        : yarn_mappings,
+            'fabric_version'       : fabric_version,
+            'fabric_loader_version': fabric_loader_version,
+            'mod_name'             : mod_name,
+            'mod_author'           : mod_author,
+            'mod_id'               : mod_id,
+            'license'              : license,
+            'description'          : project.description,
+            'java_version'         : java_version,
+            'curseforge_slug'      : curseforge_slug,
+            'curseforge_id'        : curseforge_id,
+            'modrinth_slug'        : modrinth_slug,
+            'modrinth_id'          : modrinth_id,
+            'github_repo'          : github_repo,
+            'discord_invite'       : discord_invite
+    ]
 
-    filesMatching("fabric.mod.json") {
-        expand "version": project.version,
-                "minecraft_version": stonecutter.current.version,
-                "loader_version": property('loader_version'),
-                "fabric_version": property('fabric_version'),
-                "owo_version": property('owo_version'),
-                "modmenu_version": property('modmenu_version')
+    filesMatching(['pack.mcmeta', 'fabric.mod.json', '*.mixins.json']) {
+        expand expandProps
     }
+    inputs.properties(expandProps)
 }
 
 tasks.withType(JavaCompile).configureEach {
@@ -98,6 +156,11 @@ java {
     targetCompatibility = JavaVersion.VERSION_21
 }
 
+base {
+    archivesName = project.archives_base_name
+    version = project.version + "+" + project.minecraft_version
+}
+
 jar {
     from("LICENSE") {
         rename { "${it}_${project.base.archivesName.get()}" }
@@ -108,7 +171,7 @@ jar {
 publishing {
     publications {
         create("mavenJava", MavenPublication) {
-            artifactId = project.archives_base_name
+            artifactId = project.base.archivesName.get()
             from components.java
         }
     }

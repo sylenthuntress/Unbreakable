@@ -1,18 +1,21 @@
 {
   "schemaVersion": 1,
-  "id": "unbreakable",
-  "version": "${version}",
-  "name": "Unbreakable",
-  "description": "Overhauls and improves the base durability system!",
+  "id": "${mod_id}",
+  "version": "${version}+${minecraft_version}",
+  "name": "${mod_name}",
+  "description": "${mod_description}",
   "authors": [
-    "SylentHuntress\n\n"
+    "${mod_author}\n\n"
+  ],
+  "contributors": [
+    "Hexasan\n\n"
   ],
   "contact": {
-    "homepage": "https://modrinth.com/mod/durability-rework",
-    "sources": "https://github.com/sylenthuntress/Unbreakable"
+    "homepage": "https://modrinth.com/mod/${modrinth_slug}",
+    "sources": "https://github.com/${github_repo}"
   },
-  "license": "CC0-1.0",
-  "icon": "assets/unbreakable/icon.png",
+  "license": "${license}",
+  "icon": "${mod_id}.png",
   "environment": "*",
   "entrypoints": {
     "main": [
@@ -23,7 +26,7 @@
     ]
   },
   "mixins": [
-    "unbreakable.mixins.json"
+    "${mod_id}.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=${loader_version}",
@@ -38,7 +41,7 @@
   "custom": {
     "modmenu": {
       "links": {
-        "unbreakable.discord": "https://discord.gg/gYWwjRfNH7"
+        "unbreakable.discord": "${discord_invite}"
       },
       "update_checker": true
     }
