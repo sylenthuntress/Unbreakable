@@ -27,6 +27,9 @@ public class UnbreakableConfigModel {
 
     // Item damage config
     @SectionHeader("damageSection")
+    @Comment(UnbreakableConfigComments.DAMAGE_SHIELD_COOLDOWN)
+    public boolean damageShieldCooldown = true;
+
     @Comment(UnbreakableConfigComments.DAMAGE_ITEM_ENTITIES)
     public boolean damageItemEntities = true;
 

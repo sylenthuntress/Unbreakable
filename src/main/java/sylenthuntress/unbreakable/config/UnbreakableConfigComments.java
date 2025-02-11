@@ -17,6 +17,7 @@ public abstract class UnbreakableConfigComments {
     public final static String INDEX_OVERRIDE = "\n! [ UNSTABLE ] !\nOverrides the display index for the shattered item tooltip" + clientOnly;
 
     // Item Durability
+    public final static String DAMAGE_SHIELD_COOLDOWN = "Whether to enable the half-second cooldown for damaging shields, in case of entities which lack a hit cooldown like slimes";
     public final static String DAMAGE_ITEM_ENTITIES = "Whether to damage item entities instead of discarding them";
     // -> Durability Modifier
     public final static String DurabilityModifier_MULTIPLIER = "The base durability multiplier for all items";

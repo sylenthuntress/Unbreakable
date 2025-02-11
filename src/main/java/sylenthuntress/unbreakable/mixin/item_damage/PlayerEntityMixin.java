@@ -1,6 +1,7 @@
 package sylenthuntress.unbreakable.mixin.item_damage;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.entity.Entity;
@@ -136,5 +137,20 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         }
 
         original.call(livingTarget, source, amount);
+    }
+
+    @Unique
+    private int unbreakable$lastAgeSignature = 0;
+
+    @WrapMethod(
+            method = "damageShield"
+    )
+    private void unbreakable$preventShieldDamageSpam(float amount, Operation<Void> original) {
+        if (!Unbreakable.CONFIG.damageShieldCooldown()
+                || unbreakable$lastAgeSignature == 0
+                || this.age > unbreakable$lastAgeSignature + 10) {
+            original.call(amount);
+            unbreakable$lastAgeSignature = this.age;
+        }
     }
 }

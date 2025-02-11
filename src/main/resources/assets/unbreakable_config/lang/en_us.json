@@ -10,6 +10,7 @@
   "text.config.unbreakable-config.option.shatterTooltip.DISPLAY_TEXT_AT_MAX": "Display \"MAX\" if level is max",
   "text.config.unbreakable-config.option.shatterTooltip.ROMAN_NUMERALS": "Display §7shatterLevel§r as roman numerals",
   "text.config.unbreakable-config.section.damageSection": "Item Durability",
+  "text.config.unbreakable-config.option.damageShieldCooldown": "Fix a vanilla bug involving slimes\ndamaging shields every tick",
   "text.config.unbreakable-config.option.damageItemEntities": "Damage item entities in fire/cactus/etc\ninstead of destroying them",
   "text.config.unbreakable-config.category.durabilityModifier": "Durability Tweaks",
   "text.config.unbreakable-config.option.durabilityModifier.MULTIPLIER": "Durability multiplier",
