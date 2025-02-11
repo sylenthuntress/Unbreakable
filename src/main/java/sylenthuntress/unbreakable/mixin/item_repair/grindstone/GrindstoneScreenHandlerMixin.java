@@ -56,7 +56,7 @@ public abstract class GrindstoneScreenHandlerMixin extends ScreenHandler impleme
         final ItemStack inputStack = this.getSlot(0).getStack();
         final ItemStack outputStack = inputStack.copy();
 
-        if (!inputStack.isEmpty()
+        if (inputStack.isEmpty()
                 || !this.getSlot(1).getStack().isEmpty()
                 || experienceLevels <= 0) {
             return;

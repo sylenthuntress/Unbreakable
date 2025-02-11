@@ -8,6 +8,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.RecipePropertySet;
 import net.minecraft.screen.*;
 import net.minecraft.screen.slot.ForgingSlotsManager;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -194,6 +196,13 @@ public abstract class SmithingScreenHandlerMixin extends ForgingScreenHandler im
         this.quickMove(player, 2);
 
         unbreakable$setRepairMaterialCost(0);
+
+        player.playSoundToPlayer(
+                SoundEvents.BLOCK_ANVIL_USE,
+                SoundCategory.BLOCKS,
+                1.0F,
+                player.getWorld().random.nextFloat() * 0.1F + 0.9F
+        );
 
         ci.cancel();
     }
