@@ -11,8 +11,11 @@ import sylenthuntress.unbreakable.util.RepairHelper;
 
 @Mixin(RepairableComponent.class)
 public abstract class RepairableComponentMixin {
-    @Inject(method = "<init>", at = @At("TAIL"))
-    private void registerRepairMaterials(RegistryEntryList<Item> items, CallbackInfo ci) {
-        RepairHelper.getRegistryInstance().addRepairMaterial(items);
+    @Inject(
+            method = "<init>",
+            at = @At("TAIL")
+    )
+    private void unbreakable$registerRepairMaterials(RegistryEntryList<Item> items, CallbackInfo ci) {
+        RepairHelper.addRepairMaterial(items);
     }
 }

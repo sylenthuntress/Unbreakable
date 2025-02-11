@@ -1,34 +1,34 @@
-package sylenthuntress.unbreakable.util;
+package sylenthuntress.unbreakable.registry;
 
 import net.minecraft.component.ComponentType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.dynamic.Codecs;
+import sylenthuntress.unbreakable.Unbreakable;
 
-public class ModComponents {
+public class UnbreakableComponents {
     public static final ComponentType<Integer> SHATTER_LEVEL = Registry.register(
             Registries.DATA_COMPONENT_TYPE,
-            Identifier.of(Unbreakable.MOD_ID, "shatter_level"),
+            Unbreakable.modIdentifier("shatter_level"),
             ComponentType.<Integer>builder().codec(Codecs.rangedInt(0, 255)).build()
     );
     public static final ComponentType<Integer> MAX_SHATTER_LEVEL = Registry.register(
             Registries.DATA_COMPONENT_TYPE,
-            Identifier.of(Unbreakable.MOD_ID, "max_shatter_level"),
+            Unbreakable.modIdentifier("max_shatter_level"),
             ComponentType.<Integer>builder().codec(Codecs.rangedInt(0, 255)).build()
     );
     public static final ComponentType<Integer> SMITHING_DEGRADATION = Registry.register(
             Registries.DATA_COMPONENT_TYPE,
-            Identifier.of(Unbreakable.MOD_ID, "smithing_degradation"),
+            Unbreakable.modIdentifier("smithing_degradation"),
             ComponentType.<Integer>builder().codec(Codecs.rangedInt(0, 20)).build()
     );
     public static final ComponentType<Integer> GRINDING_DEGRADATION = Registry.register(
             Registries.DATA_COMPONENT_TYPE,
-            Identifier.of(Unbreakable.MOD_ID, "grinding_degradation"),
+            Unbreakable.modIdentifier("grinding_degradation"),
             ComponentType.<Integer>builder().codec(Codecs.rangedInt(0, 40)).build()
     );
 
-    protected static void initialize() {
+    public static void initialize() {
 
     }
 }

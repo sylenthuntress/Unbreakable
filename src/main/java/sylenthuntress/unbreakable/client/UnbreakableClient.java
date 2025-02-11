@@ -10,7 +10,7 @@ import sylenthuntress.unbreakable.client.event.shatter_penalty.*;
 public class UnbreakableClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
-        // FabricLoader.getInstance().getModContainer(Unbreakable.MOD_ID).ifPresent(container -> ResourceManagerHelper.registerBuiltinResourcePack(Identifier.of(Unbreakable.MOD_ID, "shattered_textures"), container, Text.translatable("resourcePack.unbreakable.shattered_textures.name"), ResourcePackActivationType.DEFAULT_ENABLED));
+        // FabricLoader.getInstance().getModContainer(Unbreakable.MOD_ID).ifPresent(container -> ResourceManagerHelper.registerBuiltinResourcePack(Unbreakable.modIdentifier("shattered_textures"), container, Text.translatable("resourcePack.unbreakable.shattered_textures.name"), ResourcePackActivationType.DEFAULT_ENABLED));
         ItemTooltipCallback.EVENT.register(new DisplayShatterTooltip());
         UseItemCallback.EVENT.register(new PreventItemUseEvent());
         UseBlockCallback.EVENT.register(new PreventBlockUseEvent());

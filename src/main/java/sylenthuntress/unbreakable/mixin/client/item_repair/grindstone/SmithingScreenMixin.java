@@ -29,9 +29,25 @@ public abstract class SmithingScreenMixin extends ForgingScreen<SmithingScreenHa
         return ((SmithingScreenHandlerAccess) instance).unbreakable$getRepairCost();
     }
 
-    @WrapOperation(method = "drawBackground", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/ingame/InventoryScreen;drawEntity(Lnet/minecraft/client/gui/DrawContext;FFFLorg/joml/Vector3f;Lorg/joml/Quaternionf;Lorg/joml/Quaternionf;Lnet/minecraft/entity/LivingEntity;)V"))
-    private void cancelArmorStandWhenRepairing(DrawContext context, float x, float y, float size, Vector3f vector3f, Quaternionf quaternionf, Quaternionf quaternionf2, LivingEntity entity, Operation<Void> original) {
-        if (unbreakable$getRepairCost(this.getScreenHandler()) == 0)
+    @WrapOperation(
+            method = "drawBackground",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/screen/ingame/InventoryScreen;drawEntity(Lnet/minecraft/client/gui/DrawContext;FFFLorg/joml/Vector3f;Lorg/joml/Quaternionf;Lorg/joml/Quaternionf;Lnet/minecraft/entity/LivingEntity;)V"
+            )
+    )
+    private void unbreakable$cancelArmorStandWhenRepairing(
+            DrawContext context,
+            float x,
+            float y,
+            float size,
+            Vector3f vector3f,
+            Quaternionf quaternionf,
+            Quaternionf quaternionf2,
+            LivingEntity entity,
+            Operation<Void> original) {
+        if (unbreakable$getRepairCost(this.getScreenHandler()) == 0) {
             original.call(context, x, y, size, vector3f, quaternionf, quaternionf2, entity);
+        }
     }
 }

@@ -11,8 +11,8 @@ import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import sylenthuntress.unbreakable.Unbreakable;
 import sylenthuntress.unbreakable.util.ItemShatterHelper;
-import sylenthuntress.unbreakable.util.Unbreakable;
 
 
 @Mixin(PlayerEntity.class)
@@ -28,13 +28,22 @@ public abstract class PlayerEntityMixin extends Entity {
     @Shadow
     public abstract @NotNull ItemStack getWeaponStack();
 
-    @ModifyExpressionValue(method = "updateTurtleHelmet", at = @At(value = "CONSTANT", args = "intValue=200"))
-    int applyShatterPenalty(int original) {
+    @ModifyExpressionValue(
+            method = "updateTurtleHelmet",
+            at = @At(
+                    value = "CONSTANT",
+                    args = "intValue=200")
+    )
+    int unbreakable$applyArmorEffectsShatterPenalty(int original) {
         ItemStack stack = getEquippedStack(EquipmentSlot.HEAD);
-        double penaltyMultiplier = 1;
-        if (ItemShatterHelper.isShattered(stack) && !ItemShatterHelper.isInList$shatterBlacklist(stack.getRegistryEntry()) && Unbreakable.CONFIG.shatterPenalties.ARMOR_EFFECTS())
-            penaltyMultiplier = ItemShatterHelper.calculateShatterPenalty(stack);
-        return (int) (original * penaltyMultiplier);
+
+        if (!ItemShatterHelper.isShattered(stack)
+                || ItemShatterHelper.isInList$shatterBlacklist(stack.getRegistryEntry())
+                || !Unbreakable.CONFIG.shatterPenalties.ARMOR_EFFECTS()) {
+            return original;
+        }
+
+        return Math.round(original * ItemShatterHelper.calculateShatterPenalty(stack));
     }
 
 }

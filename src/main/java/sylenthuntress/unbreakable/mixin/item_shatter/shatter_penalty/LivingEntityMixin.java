@@ -20,11 +20,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import sylenthuntress.unbreakable.Unbreakable;
+import sylenthuntress.unbreakable.registry.UnbreakableComponents;
 import sylenthuntress.unbreakable.util.ItemShatterHelper;
-import sylenthuntress.unbreakable.util.ModComponents;
-import sylenthuntress.unbreakable.util.Unbreakable;
 
-import java.util.List;
 import java.util.Map;
 
 @Mixin(LivingEntity.class)
@@ -33,13 +32,14 @@ public abstract class LivingEntityMixin extends Entity {
         super(type, world);
     }
 
-    @Shadow
-    public static boolean canGlideWith(ItemStack stack, EquipmentSlot slot) {
-        return true;
-    }
-
-    @ModifyExpressionValue(method = "canGlideWith", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;willBreakNextUse()Z"))
-    private static boolean canGlideWith$applyShatterPenalty(boolean original, ItemStack stack) {
+    @ModifyExpressionValue(
+            method = "canGlideWith",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/item/ItemStack;willBreakNextUse()Z"
+            )
+    )
+    private static boolean unbreakable$preventUseWhenShattered(boolean original, ItemStack stack) {
         return original && !ItemShatterHelper.shouldPreventUse(stack);
     }
 
@@ -53,73 +53,143 @@ public abstract class LivingEntityMixin extends Entity {
     @Shadow
     public abstract ItemStack getEquippedStack(EquipmentSlot slot);
 
-    @Shadow
-    protected abstract boolean isArmorSlot(EquipmentSlot slot);
-
     @Unique
     ItemStack sharedItemStack;
 
-    @ModifyExpressionValue(method = "blockedByShield", at = @At(value = "CONSTANT", args = {"floatValue=0.0F", "ordinal=2"}))
-    public float blockedByShield$applyShatterPenalty(float original) {
-        ItemStack stack = this.getBlockingItem();
-        float penaltyMultiplier = 0;
-        if (ItemShatterHelper.isShattered(stack) && !ItemShatterHelper.isInList$shatterBlacklist(stack.getRegistryEntry()) && Unbreakable.CONFIG.shatterPenalties.SHIELD_ARC())
-            penaltyMultiplier += 1 - ItemShatterHelper.calculateShatterPenalty(stack);
-        return original + (-1 * penaltyMultiplier);
+    @ModifyExpressionValue(
+            method = "blockedByShield",
+            at = @At(
+                    value = "CONSTANT",
+                    args = {
+                            "floatValue=0.0F",
+                            "ordinal=2"
+                    }
+            )
+    )
+    private float unbreakable$applyShieldArcShatterPenalty(float original) {
+        final ItemStack stack = this.getBlockingItem();
+
+        if (!ItemShatterHelper.isShattered(stack)
+                || ItemShatterHelper.isInList$shatterBlacklist(stack.getRegistryEntry())
+                || !Unbreakable.CONFIG.shatterPenalties.SHIELD_ARC()) {
+            return original;
+        }
+
+        return original + -1 * (1 - ItemShatterHelper.calculateShatterPenalty(stack));
     }
 
-    @ModifyExpressionValue(method = "calcGlidingVelocity", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getEffectiveGravity()D"))
-    public double calcGlidingVelocity$gravity$applyShatterPenalty(double original) {
+    @ModifyExpressionValue(
+            method = "calcGlidingVelocity",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/entity/LivingEntity;getEffectiveGravity()D"
+            )
+    )
+    private double unbreakable$applyGlidingGravityShatterPenalty(double original) {
+        if (!Unbreakable.CONFIG.shatterPenalties.GLIDING_VELOCITY()) {
+            return original;
+        }
+
         double penaltyMultiplier = 1;
         int shatterLevelRecord = 0;
-        List<EquipmentSlot> list = EquipmentSlot.VALUES.stream().filter((slot) -> canGlideWith(this.getEquippedStack(slot), slot)).toList();
-        if (Unbreakable.CONFIG.shatterPenalties.GLIDING_VELOCITY()) for (EquipmentSlot slot : list) {
-            ItemStack stack = this.getEquippedStack(slot);
-            if (stack.getOrDefault(ModComponents.SHATTER_LEVEL, 0) <= shatterLevelRecord) continue;
-            shatterLevelRecord = stack.getOrDefault(ModComponents.SHATTER_LEVEL, 0);
+
+        for (EquipmentSlot slot : EquipmentSlot.VALUES) {
+            final ItemStack stack = this.getEquippedStack(slot);
+
+            if (!LivingEntity.canGlideWith(stack, slot)
+                    || stack.getOrDefault(UnbreakableComponents.SHATTER_LEVEL, 0) <= shatterLevelRecord) {
+                continue;
+            }
+
+            shatterLevelRecord = stack.getOrDefault(UnbreakableComponents.SHATTER_LEVEL, 0);
             penaltyMultiplier = 3 - (ItemShatterHelper.calculateShatterPenalty(stack) * 2);
         }
+
         return original * penaltyMultiplier;
     }
 
-    @ModifyExpressionValue(method = "calcGlidingVelocity", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/Vec3d;horizontalLength()D"))
-    public double calcGlidingVelocity$horizontalLength$applyShatterPenalty(double original) {
+    @ModifyExpressionValue(
+            method = "calcGlidingVelocity",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/util/math/Vec3d;horizontalLength()D"
+            )
+    )
+    private double unbreakable$applyGlidingVelocityShatterPenalty(double original) {
+        if (!Unbreakable.CONFIG.shatterPenalties.GLIDING_VELOCITY()) {
+            return original;
+        }
+
         double penaltyMultiplier = 1;
         int shatterLevelRecord = 0;
-        List<EquipmentSlot> list = EquipmentSlot.VALUES.stream().filter((slot) -> canGlideWith(this.getEquippedStack(slot), slot)).toList();
-        if (Unbreakable.CONFIG.shatterPenalties.GLIDING_VELOCITY()) for (EquipmentSlot slot : list) {
-            ItemStack stack = this.getEquippedStack(slot);
-            if (stack.getOrDefault(ModComponents.SHATTER_LEVEL, 0) <= shatterLevelRecord) continue;
-            shatterLevelRecord = stack.getOrDefault(ModComponents.SHATTER_LEVEL, 0);
+
+        for (EquipmentSlot slot : EquipmentSlot.VALUES) {
+            final ItemStack stack = this.getEquippedStack(slot);
+
+            if (!LivingEntity.canGlideWith(stack, slot)
+                    || stack.getOrDefault(UnbreakableComponents.SHATTER_LEVEL, 0) <= shatterLevelRecord) {
+                continue;
+            }
+
+            shatterLevelRecord = stack.getOrDefault(UnbreakableComponents.SHATTER_LEVEL, 0);
             penaltyMultiplier = Math.max(ItemShatterHelper.calculateShatterPenalty(stack), 0.1);
         }
+
         return original * penaltyMultiplier;
     }
 
     @Shadow
     public abstract double getAttributeBaseValue(RegistryEntry<EntityAttribute> attribute);
 
-    @Inject(method = "getEquipmentChanges", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;applyAttributeModifiers(Lnet/minecraft/entity/EquipmentSlot;Ljava/util/function/BiConsumer;)V"))
-    void applyShatterPenalty(CallbackInfoReturnable<Map<EquipmentSlot, ItemStack>> cir, @Local ItemStack itemStack) {
+    @Inject(
+            method = "getEquipmentChanges",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/item/ItemStack;applyAttributeModifiers(Lnet/minecraft/entity/EquipmentSlot;Ljava/util/function/BiConsumer;)V"
+            )
+    )
+    private void unbreakable$saveItemStack(CallbackInfoReturnable<Map<EquipmentSlot, ItemStack>> cir, @Local ItemStack itemStack) {
         sharedItemStack = itemStack;
     }
 
-    @Inject(method = "method_61423", at = @At("HEAD"))
-    void applyShatterPenalty(RegistryEntry<EntityAttribute> attribute, EntityAttributeModifier modifier, CallbackInfo ci, @Local(argsOnly = true) LocalRef<EntityAttributeModifier> newModifier) {
-        if (sharedItemStack != null) {
-            ItemStack itemStack = sharedItemStack;
-            if (ItemShatterHelper.isShattered(itemStack)) {
-                double penaltyMultiplier = ItemShatterHelper.calculateShatterPenalty(itemStack);
-                double newModifierValue;
-                if (modifier.value() >= 0) {
-                    newModifierValue = modifier.value() * penaltyMultiplier;
-                    newModifier.set(new EntityAttributeModifier(modifier.id(), newModifierValue, modifier.operation()));
-                } else {
-                    newModifierValue = modifier.value() + this.getAttributeBaseValue(attribute);
-                    newModifierValue = newModifierValue - (newModifierValue * penaltyMultiplier);
-                    newModifier.set(new EntityAttributeModifier(modifier.id(), modifier.value() - newModifierValue, modifier.operation()));
-                }
-            }
+    @Inject(
+            method = "method_61423",
+            at = @At("HEAD")
+    )
+    private void unbreakable$applyAttributeShatterPenalty(
+            RegistryEntry<EntityAttribute> attribute,
+            EntityAttributeModifier modifier,
+            CallbackInfo ci,
+            @Local(argsOnly = true) LocalRef<EntityAttributeModifier> newModifier) {
+        final ItemStack stack = sharedItemStack;
+        if (stack == null || !ItemShatterHelper.isShattered(stack)) {
+            return;
+        }
+
+        double penaltyMultiplier = ItemShatterHelper.calculateShatterPenalty(stack);
+        double newModifierValue;
+
+        if (modifier.value() >= 0) {
+            newModifierValue = modifier.value() * penaltyMultiplier;
+
+            newModifier.set(
+                    new EntityAttributeModifier(
+                            modifier.id(),
+                            newModifierValue,
+                            modifier.operation()
+                    )
+            );
+        } else {
+            newModifierValue = modifier.value() + this.getAttributeBaseValue(attribute);
+            newModifierValue = newModifierValue - (newModifierValue * penaltyMultiplier);
+
+            newModifier.set(
+                    new EntityAttributeModifier(
+                            modifier.id(),
+                            modifier.value() - newModifierValue,
+                            modifier.operation()
+                    )
+            );
         }
     }
 }

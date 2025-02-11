@@ -19,13 +19,13 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import sylenthuntress.unbreakable.Unbreakable;
 import sylenthuntress.unbreakable.util.ItemShatterHelper;
-import sylenthuntress.unbreakable.util.Unbreakable;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntity {
     @Unique
-    boolean doBonus;
+    boolean unbreakable$doBonus;
 
     protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
@@ -37,38 +37,96 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     @Shadow
     public abstract SoundCategory getSoundCategory();
 
-    @WrapOperation(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;sidedDamage(Lnet/minecraft/entity/damage/DamageSource;F)Z"))
-    boolean dynamicItemDamageOnAttack(Entity instanceTarget, DamageSource source, float amount, Operation<Boolean> original) {
-        doBonus = false;
-        PlayerEntity attacker = (PlayerEntity) (Object) this;
-        ItemStack stack = getWeaponStack();
+    @WrapOperation(
+            method = "attack",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/entity/Entity;sidedDamage(Lnet/minecraft/entity/damage/DamageSource;F)Z"
+            )
+    )
+    private boolean unbreakable$dynamicItemDamageOnAttack(
+            Entity instanceTarget,
+            DamageSource source,
+            float amount,
+            Operation<Boolean> original) {
+        unbreakable$doBonus = false;
+        final PlayerEntity attacker = (PlayerEntity) (Object) this;
+        final ItemStack stack = getWeaponStack();
+
         if (stack.isDamageable() && instanceTarget instanceof LivingEntity livingTarget && livingTarget.canTakeDamage()) {
-            float itemDamage = Unbreakable.CONFIG.dynamicDamage.COMBAT() ? amount * Math.max(1, 1 + (livingTarget.getArmor() * 0.1F)) : 0;
+            float itemDamage = Unbreakable.CONFIG.dynamicDamage.COMBAT()
+                    ? amount * Math.max(
+                    1, 1 + (livingTarget.getArmor() * 0.1F))
+                    : 0;
+
             if (Unbreakable.CONFIG.bonusDamageOnBreak.DO_BONUS() && !ItemShatterHelper.isShattered(stack)) {
                 ItemStack dummyStack = stack.copy();
                 dummyStack.damage(Math.round(itemDamage), attacker);
                 dummyStack.postDamageEntity(livingTarget, attacker);
-                if (ItemShatterHelper.isShattered(dummyStack))
-                    doBonus = true;
+
+                if (ItemShatterHelper.isShattered(dummyStack)) {
+                    unbreakable$doBonus = true;
+                }
             }
+
             stack.damage(Math.round(itemDamage), attacker, EquipmentSlot.MAINHAND);
         }
-        if (doBonus) {
+
+        if (unbreakable$doBonus) {
             amount *= Unbreakable.CONFIG.bonusDamageOnBreak.BONUS_ATTACK_MULTIPLIER();
-            this.getWorld().playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.BLOCK_GLASS_BREAK, this.getSoundCategory(), amount, 0.5F);
-            this.getWorld().playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.BLOCK_ANVIL_PLACE, this.getSoundCategory(), amount * -0.7F, 2F);
+
+            this.getWorld().playSound(
+                    null,
+                    this.getX(),
+                    this.getY(),
+                    this.getZ(),
+                    SoundEvents.BLOCK_GLASS_BREAK,
+                    this.getSoundCategory(),
+                    amount,
+                    0.5F
+            );
+            this.getWorld().playSound(
+                    null,
+                    this.getX(),
+                    this.getY(),
+                    this.getZ(),
+                    SoundEvents.BLOCK_ANVIL_PLACE,
+                    this.getSoundCategory(),
+                    amount * -0.7F,
+                    2F
+            );
         }
+
         return original.call(instanceTarget, source, amount);
     }
 
-    @ModifyExpressionValue(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;getKnockbackAgainst(Lnet/minecraft/entity/Entity;Lnet/minecraft/entity/damage/DamageSource;)F"))
-    float doBonusKnockback(float original) {
-        return doBonus ? original + Unbreakable.CONFIG.bonusDamageOnBreak.BONUS_KNOCKBACK() : original;
+    @ModifyExpressionValue(
+            method = "attack",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/entity/player/PlayerEntity;getKnockbackAgainst(Lnet/minecraft/entity/Entity;Lnet/minecraft/entity/damage/DamageSource;)F"
+            )
+    )
+    private float unbreakable$doBonusKnockback(float original) {
+        return unbreakable$doBonus
+                ? original + Unbreakable.CONFIG.bonusDamageOnBreak.BONUS_KNOCKBACK()
+                : original;
     }
 
-    @WrapOperation(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;serverDamage(Lnet/minecraft/entity/damage/DamageSource;F)V"))
-    void doBonusOnSweep(LivingEntity livingTarget, DamageSource source, float amount, Operation<Void> original) {
-        if (doBonus) {
+    @WrapOperation(
+            method = "attack",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/entity/LivingEntity;serverDamage(Lnet/minecraft/entity/damage/DamageSource;F)V"
+            )
+    )
+    private void unbreakable$doBonusOnSweep(
+            LivingEntity livingTarget,
+            DamageSource source,
+            float amount,
+            Operation<Void> original) {
+
+        if (unbreakable$doBonus) {
             livingTarget.takeKnockback(
                     0.4F * Unbreakable.CONFIG.bonusDamageOnBreak.BONUS_KNOCKBACK(),
                     MathHelper.sin(this.getYaw() * (float) (Math.PI / 180.0)),
@@ -76,6 +134,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
             );
             amount *= Unbreakable.CONFIG.bonusDamageOnBreak.BONUS_ATTACK_MULTIPLIER();
         }
+
         original.call(livingTarget, source, amount);
     }
 }

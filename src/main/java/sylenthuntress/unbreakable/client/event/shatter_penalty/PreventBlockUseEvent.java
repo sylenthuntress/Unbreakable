@@ -7,18 +7,23 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.world.World;
+import sylenthuntress.unbreakable.Unbreakable;
 import sylenthuntress.unbreakable.client.ClientItemShatterHelper;
 import sylenthuntress.unbreakable.util.ItemShatterHelper;
-import sylenthuntress.unbreakable.util.Unbreakable;
 
 public class PreventBlockUseEvent implements UseBlockCallback {
     @Override
     public ActionResult interact(PlayerEntity player, World world, Hand hand, BlockHitResult blockHitResult) {
         ItemStack stack = player.getStackInHand(hand);
-        if (Unbreakable.CONFIG.shatterPenalties.BLOCK_USE() && !player.isInCreativeMode() && !player.isSpectator() && ItemShatterHelper.shouldPreventUse(stack)) {
+
+        if (Unbreakable.CONFIG.shatterPenalties.BLOCK_USE()
+                && !player.isInCreativeMode()
+                && !player.isSpectator()
+                && ItemShatterHelper.shouldPreventUse(stack)) {
             ClientItemShatterHelper.sendMessageCantUseItem(stack);
             return ActionResult.FAIL;
         }
+
         return ActionResult.PASS;
     }
 }

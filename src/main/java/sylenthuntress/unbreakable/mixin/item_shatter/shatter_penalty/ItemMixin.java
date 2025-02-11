@@ -6,16 +6,20 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import sylenthuntress.unbreakable.Unbreakable;
 import sylenthuntress.unbreakable.util.ItemShatterHelper;
-import sylenthuntress.unbreakable.util.Unbreakable;
 
 @Mixin(Item.class)
 public abstract class ItemMixin implements ComponentHolder {
-    @ModifyReturnValue(method = "getMiningSpeed", at = @At("RETURN"))
+    @ModifyReturnValue(
+            method = "getMiningSpeed",
+            at = @At("RETURN")
+    )
     public float getMiningSpeed$applyShatterPenalty(float original, ItemStack stack) {
-        if (Unbreakable.CONFIG.shatterPenalties.MINING_SPEED()) {
-            return original * ItemShatterHelper.calculateShatterPenalty(stack);
+        if (!Unbreakable.CONFIG.shatterPenalties.MINING_SPEED()) {
+            return original;
         }
-        return original;
+
+        return original * ItemShatterHelper.calculateShatterPenalty(stack);
     }
 }

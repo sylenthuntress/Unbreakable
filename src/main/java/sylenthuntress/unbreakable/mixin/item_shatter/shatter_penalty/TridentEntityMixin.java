@@ -9,8 +9,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import sylenthuntress.unbreakable.Unbreakable;
 import sylenthuntress.unbreakable.util.ItemShatterHelper;
-import sylenthuntress.unbreakable.util.Unbreakable;
 
 
 @Mixin(TridentEntity.class)
@@ -22,13 +22,24 @@ public abstract class TridentEntityMixin extends Entity {
     @Shadow
     public abstract ItemStack getWeaponStack();
 
-    @ModifyVariable(method = "onEntityHit", at = @At(value = "LOAD", ordinal = 0), ordinal = 0)
-    private float onEntityHit$applyShatterPenalty(float original) {
+    @ModifyVariable(
+            method = "onEntityHit",
+            at = @At(
+                    value = "LOAD",
+                    ordinal = 0
+            ),
+            ordinal = 0
+    )
+    private float unbreakable$applyShatterDamagePenalty(float original) {
         ItemStack stack = this.getWeaponStack();
-        float penaltyMultiplier = 1;
-        if (stack != null && ItemShatterHelper.isShattered(stack) && !ItemShatterHelper.isInList$shatterBlacklist(stack.getRegistryEntry()) && Unbreakable.CONFIG.shatterPenalties.ATTACK_DAMAGE()) {
-            penaltyMultiplier = ItemShatterHelper.calculateShatterPenalty(stack);
+
+        if (stack == null
+                || !ItemShatterHelper.isShattered(stack)
+                || ItemShatterHelper.isInList$shatterBlacklist(stack.getRegistryEntry())
+                || !Unbreakable.CONFIG.shatterPenalties.ATTACK_DAMAGE()) {
+            return original;
         }
-        return original * penaltyMultiplier;
+
+        return original * ItemShatterHelper.calculateShatterPenalty(stack);
     }
 }

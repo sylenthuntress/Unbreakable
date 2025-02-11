@@ -9,14 +9,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import sylenthuntress.unbreakable.Unbreakable;
 import sylenthuntress.unbreakable.util.ItemShatterHelper;
-import sylenthuntress.unbreakable.util.Unbreakable;
 
 import java.util.function.Consumer;
 
@@ -24,10 +23,7 @@ import java.util.function.Consumer;
 @Mixin(ItemStack.class)
 public abstract class ItemStackMixin implements ComponentHolder {
     @Unique
-    private RegistryEntry<EntityAttribute> savedTooltipAttribute;
-
-    @Shadow
-    public abstract ItemStack copy();
+    private RegistryEntry<EntityAttribute> unbreakable$savedTooltipAttribute;
 
     // Updates the tooltip for shattered items
     @Inject(
@@ -35,18 +31,39 @@ public abstract class ItemStackMixin implements ComponentHolder {
             at = @At(
                     value = "HEAD"
             ))
-    private void saveTooltipAttribute(Consumer<Text> textConsumer, PlayerEntity player, RegistryEntry<EntityAttribute> attribute, EntityAttributeModifier modifier, CallbackInfo ci) {
-        this.savedTooltipAttribute = attribute;
+    private void unbreakable$saveTooltipAttribute(
+            Consumer<Text> textConsumer,
+            PlayerEntity player,
+            RegistryEntry<EntityAttribute> attribute,
+            EntityAttributeModifier modifier,
+            CallbackInfo ci) {
+        this.unbreakable$savedTooltipAttribute = attribute;
     }
 
-    @ModifyVariable(method = "appendAttributeModifierTooltip", at = @At(value = "STORE", ordinal = 0), ordinal = 0)
-    private double updateAttributeTooltip(double original) {
-        ItemStack stack = this.copy();
-        double penaltyMultiplier = 1;
-        if ((original >= 0 && (savedTooltipAttribute != EntityAttributes.ATTACK_DAMAGE && savedTooltipAttribute != EntityAttributes.ATTACK_SPEED)) && (savedTooltipAttribute == EntityAttributes.ARMOR && Unbreakable.CONFIG.shatterPenalties.ARMOR()) || (savedTooltipAttribute == EntityAttributes.ARMOR_TOUGHNESS && Unbreakable.CONFIG.shatterPenalties.ARMOR_TOUGHNESS()) || (savedTooltipAttribute == EntityAttributes.KNOCKBACK_RESISTANCE && Unbreakable.CONFIG.shatterPenalties.KNOCKBACK_RESISTANCE())) {
-            penaltyMultiplier = ItemShatterHelper.calculateShatterPenalty(stack);
+    @ModifyVariable(
+            method = "appendAttributeModifierTooltip",
+            at = @At(
+                    value = "STORE",
+                    ordinal = 0
+            ),
+            ordinal = 0
+    )
+    private double unbreakable$updateAttributeTooltip(double original) {
+        final ItemStack stack = (ItemStack) (Object) this;
+
+        if ((original >= 0)
+                || unbreakable$savedTooltipAttribute == EntityAttributes.ATTACK_DAMAGE
+                || unbreakable$savedTooltipAttribute == EntityAttributes.ATTACK_SPEED
+                || unbreakable$savedTooltipAttribute != EntityAttributes.ARMOR
+                || !Unbreakable.CONFIG.shatterPenalties.ARMOR()
+                && (unbreakable$savedTooltipAttribute != EntityAttributes.ARMOR_TOUGHNESS
+                || !Unbreakable.CONFIG.shatterPenalties.ARMOR_TOUGHNESS())
+                && (unbreakable$savedTooltipAttribute != EntityAttributes.KNOCKBACK_RESISTANCE
+                || !Unbreakable.CONFIG.shatterPenalties.KNOCKBACK_RESISTANCE())) {
+            return original;
         }
-        return original * penaltyMultiplier;
+
+        return original * ItemShatterHelper.calculateShatterPenalty(stack);
     }
 
     @ModifyVariable(
@@ -57,13 +74,14 @@ public abstract class ItemStackMixin implements ComponentHolder {
             ),
             ordinal = 0
     )
-    private double updateAttackDamageTooltip(double original) {
-        ItemStack stack = this.copy();
-        double penaltyMultiplier = 1;
-        if (Unbreakable.CONFIG.shatterPenalties.ATTACK_DAMAGE()) {
-            penaltyMultiplier = ItemShatterHelper.calculateShatterPenalty(stack);
+    private double unbreakable$updateAttackDamageTooltip(double original) {
+        final ItemStack stack = (ItemStack) (Object) this;
+
+        if (!Unbreakable.CONFIG.shatterPenalties.ATTACK_DAMAGE()) {
+            return original;
         }
-        return original * penaltyMultiplier;
+
+        return original * ItemShatterHelper.calculateShatterPenalty(stack);
     }
 
     @ModifyVariable(
@@ -74,12 +92,13 @@ public abstract class ItemStackMixin implements ComponentHolder {
             ),
             ordinal = 0
     )
-    private double updateAttackSpeedTooltip(double original) {
-        ItemStack stack = this.copy();
-        double penaltyMultiplier = 1;
-        if (Unbreakable.CONFIG.shatterPenalties.ATTACK_SPEED()) {
-            penaltyMultiplier = ItemShatterHelper.calculateShatterPenalty(stack);
+    private double unbreakable$updateAttackSpeedTooltip(double original) {
+        final ItemStack stack = (ItemStack) (Object) this;
+
+        if (!Unbreakable.CONFIG.shatterPenalties.ATTACK_SPEED()) {
+            return original;
         }
-        return original * penaltyMultiplier;
+
+        return original * ItemShatterHelper.calculateShatterPenalty(stack);
     }
 }

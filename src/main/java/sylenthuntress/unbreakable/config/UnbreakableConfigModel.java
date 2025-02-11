@@ -4,12 +4,13 @@ import blue.endless.jankson.Comment;
 import io.wispforest.owo.config.Option;
 import io.wispforest.owo.config.annotation.*;
 import io.wispforest.owo.ui.core.Color;
-import sylenthuntress.unbreakable.util.Unbreakable;
+import sylenthuntress.unbreakable.Unbreakable;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
+@SuppressWarnings("unused")
 @Sync(value = Option.SyncMode.OVERRIDE_CLIENT)
 @Modmenu(modId = Unbreakable.MOD_ID)
 @Config(name = "unbreakable-config", wrapperName = "UnbreakableConfig")

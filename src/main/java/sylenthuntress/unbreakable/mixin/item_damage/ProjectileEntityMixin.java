@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
-import sylenthuntress.unbreakable.util.Unbreakable;
+import sylenthuntress.unbreakable.Unbreakable;
 
 @Mixin(ProjectileEntity.class)
 public abstract class ProjectileEntityMixin {
@@ -27,16 +27,37 @@ public abstract class ProjectileEntityMixin {
     @Nullable
     public abstract Entity getOwner();
 
-    @ModifyArgs(method = "setVelocity(DDDFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/projectile/ProjectileEntity;calculateVelocity(DDDFF)Lnet/minecraft/util/math/Vec3d;"))
-    public void setProjectilePower(Args args) {
+    @ModifyArgs(
+            method = "setVelocity(DDDFF)V",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/entity/projectile/ProjectileEntity;calculateVelocity(DDDFF)Lnet/minecraft/util/math/Vec3d;"
+            )
+    )
+    public void unbreakable$setProjectilePower(Args args) {
         projectilePower = args.get(3);
     }
 
-    @Inject(method = "triggerProjectileSpawned", at = @At("TAIL"))
-    public void damageItemOnShoot(ServerWorld world, ItemStack projectileStack, CallbackInfo ci) {
-        if (Unbreakable.CONFIG.dynamicDamage.PROJECTILE() && this.getOwner() instanceof PlayerEntity player) {
-            ItemStack projectileItemStack = player.getActiveItem();
-            projectileItemStack.damage((int) (Math.ceil(projectilePower * 2) * Unbreakable.CONFIG.dynamicDamage.PROJECTILE_MULTIPLIER()), player, player.getActiveHand() == Hand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
+    @Inject(
+            method = "triggerProjectileSpawned",
+            at = @At("TAIL"))
+    public void unbreakable$damageItemOnShoot(ServerWorld world, ItemStack projectileStack, CallbackInfo ci) {
+        final Entity owner = this.getOwner();
+        if (!Unbreakable.CONFIG.dynamicDamage.PROJECTILE()
+                || owner == null
+                || owner.isPlayer()) {
+            return;
         }
+
+        final PlayerEntity player = (PlayerEntity) owner;
+        final ItemStack projectileItemStack = player.getActiveItem();
+        projectileItemStack.damage(
+                (int) (Math.ceil(projectilePower * 2)
+                        * Unbreakable.CONFIG.dynamicDamage.PROJECTILE_MULTIPLIER()),
+                player,
+                player.getActiveHand() == Hand.MAIN_HAND
+                        ? EquipmentSlot.MAINHAND
+                        : EquipmentSlot.OFFHAND
+        );
     }
 }

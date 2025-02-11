@@ -10,8 +10,14 @@ import sylenthuntress.unbreakable.util.ItemShatterHelper;
 
 @Mixin(BrokenProperty.class)
 public class BrokenPropertyMixin {
-    @ModifyExpressionValue(method = "getValue", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;willBreakNextUse()Z"))
-    private boolean willBreakNextUse$preventItemBreak(boolean original, ItemStack stack) {
+    @ModifyExpressionValue(
+            method = "getValue",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/item/ItemStack;willBreakNextUse()Z"
+            )
+    )
+    private boolean unbreakable$willBreakNextUse$preventItemBreak(boolean original, ItemStack stack) {
         return original || ItemShatterHelper.isShattered(stack);
     }
 }
