@@ -80,35 +80,17 @@ public class RepairHelper {
     }
 
     public enum RepairStation {
-        SMITHING_TABLE("smithing_table", 0, Blocks.SMITHING_TABLE),
-        GRINDSTONE("grindstone", 1, Blocks.GRINDSTONE);
+        SMITHING_TABLE(0),
+        GRINDSTONE(1);
 
-        private final Identifier name;
         private final int id;
-        private final List<Block> blocks;
 
-        RepairStation(final String name, final int id, final List<Block> blocks) {
-            this.name = Unbreakable.modIdentifier(name);
+        RepairStation(final int id) {
             this.id = id;
-            this.blocks = blocks;
         }
 
-        RepairStation(final String name, final int id, final Block blocks) {
-            this(name, id, List.of(blocks));
-        }
-
-        public static RepairStation getFromBlock(BlockState blockState) {
-            Block block = blockState.getBlock();
-            
-            for (var entry : RepairStation.values()) {
-                if (entry.blocks.contains(block)) return entry;
-            }
-
-            return null;
-        }
-
-        public List<Block> getBlocks() {
-            return this.blocks;
+        public int getId() {
+            return this.id;
         }
     }
 }
