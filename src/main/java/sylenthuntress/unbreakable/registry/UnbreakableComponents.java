@@ -7,26 +7,30 @@ import net.minecraft.util.dynamic.Codecs;
 import sylenthuntress.unbreakable.Unbreakable;
 
 public class UnbreakableComponents {
-    public static final ComponentType<Integer> SHATTER_LEVEL = Registry.register(
-            Registries.DATA_COMPONENT_TYPE,
-            Unbreakable.modIdentifier("shatter_level"),
-            ComponentType.<Integer>builder().codec(Codecs.rangedInt(0, 255)).build()
+    public static final ComponentType<Integer> SHATTER_LEVEL = register(
+            "shatter_level",
+            255
     );
-    public static final ComponentType<Integer> MAX_SHATTER_LEVEL = Registry.register(
-            Registries.DATA_COMPONENT_TYPE,
-            Unbreakable.modIdentifier("max_shatter_level"),
-            ComponentType.<Integer>builder().codec(Codecs.rangedInt(0, 255)).build()
+    public static final ComponentType<Integer> MAX_SHATTER_LEVEL = register(
+            "max_shatter_level",
+            255
     );
-    public static final ComponentType<Integer> SMITHING_DEGRADATION = Registry.register(
-            Registries.DATA_COMPONENT_TYPE,
-            Unbreakable.modIdentifier("smithing_degradation"),
-            ComponentType.<Integer>builder().codec(Codecs.rangedInt(0, 20)).build()
+    public static final ComponentType<Integer> SMITHING_DEGRADATION = register(
+            "smithing_degradation",
+            20
     );
-    public static final ComponentType<Integer> GRINDING_DEGRADATION = Registry.register(
-            Registries.DATA_COMPONENT_TYPE,
-            Unbreakable.modIdentifier("grinding_degradation"),
-            ComponentType.<Integer>builder().codec(Codecs.rangedInt(0, 40)).build()
+    public static final ComponentType<Integer> GRINDING_DEGRADATION = register(
+            "grinding_degradation",
+            40
     );
+
+    private static ComponentType<Integer> register(String id, int max) {
+        return Registry.register(
+                Registries.DATA_COMPONENT_TYPE,
+                Unbreakable.modIdentifier(id),
+                ComponentType.<Integer>builder().codec(Codecs.rangedInt(0, max)).build()
+        );
+    }
 
     public static void initialize() {
 
