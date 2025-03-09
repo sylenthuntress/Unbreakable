@@ -24,11 +24,11 @@ import sylenthuntress.unbreakable.Unbreakable;
 import sylenthuntress.unbreakable.util.ItemShatterHelper;
 
 @Mixin(PlayerEntity.class)
-public abstract class PlayerEntityMixin extends LivingEntity {
+public abstract class Mixin_PlayerEntity extends LivingEntity {
     @Unique
     boolean unbreakable$doBonus;
 
-    protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
+    protected Mixin_PlayerEntity(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
     }
 

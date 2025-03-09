@@ -9,7 +9,7 @@ import sylenthuntress.unbreakable.util.ItemShatterHelper;
 
 
 @Mixin(BrokenProperty.class)
-public class BrokenPropertyMixin {
+public class Mixin_BrokenProperty {
     @ModifyExpressionValue(
             method = "getValue",
             at = @At(

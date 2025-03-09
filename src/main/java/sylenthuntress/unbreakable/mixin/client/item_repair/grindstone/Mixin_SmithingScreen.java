@@ -18,9 +18,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import sylenthuntress.unbreakable.access.SmithingScreenHandlerAccess;
 
 @Mixin(SmithingScreen.class)
-public abstract class SmithingScreenMixin extends ForgingScreen<SmithingScreenHandler> {
+public abstract class Mixin_SmithingScreen extends ForgingScreen<SmithingScreenHandler> {
 
-    public SmithingScreenMixin(SmithingScreenHandler handler, PlayerInventory playerInventory, Text title, Identifier texture) {
+    public Mixin_SmithingScreen(SmithingScreenHandler handler, PlayerInventory playerInventory, Text title, Identifier texture) {
         super(handler, playerInventory, title, texture);
     }
 

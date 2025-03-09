@@ -21,7 +21,7 @@ import java.util.function.Consumer;
 
 
 @Mixin(ItemStack.class)
-public abstract class ItemStackMixin implements ComponentHolder {
+public abstract class Mixin_ItemStack implements ComponentHolder {
     @Unique
     private RegistryEntry<EntityAttribute> unbreakable$savedTooltipAttribute;
 

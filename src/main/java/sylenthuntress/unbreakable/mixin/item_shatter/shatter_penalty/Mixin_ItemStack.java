@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import sylenthuntress.unbreakable.util.ItemShatterHelper;
 
 @Mixin(ItemStack.class)
-public abstract class ItemStackMixin implements ComponentHolder {
+public abstract class Mixin_ItemStack implements ComponentHolder {
 
     @Shadow
     public abstract Item getItem();

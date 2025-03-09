@@ -27,8 +27,8 @@ import sylenthuntress.unbreakable.util.ItemShatterHelper;
 import java.util.Map;
 
 @Mixin(LivingEntity.class)
-public abstract class LivingEntityMixin extends Entity {
-    public LivingEntityMixin(EntityType<?> type, World world) {
+public abstract class Mixin_LivingEntity extends Entity {
+    public Mixin_LivingEntity(EntityType<?> type, World world) {
         super(type, world);
     }
 

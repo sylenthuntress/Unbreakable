@@ -12,7 +12,7 @@ import sylenthuntress.unbreakable.util.ItemShatterHelper;
 
 
 @Mixin(ItemStack.class)
-public abstract class ItemStackMixin {
+public abstract class Mixin_ItemStack {
     @Shadow
     public abstract RegistryEntry<Item> getRegistryEntry();
 

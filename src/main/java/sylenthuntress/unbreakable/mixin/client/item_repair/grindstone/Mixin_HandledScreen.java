@@ -17,7 +17,7 @@ import sylenthuntress.unbreakable.access.GrindstoneScreenHandlerAccess;
 import sylenthuntress.unbreakable.access.SmithingScreenHandlerAccess;
 
 @Mixin(HandledScreen.class)
-public abstract class HandledScreenMixin {
+public abstract class Mixin_HandledScreen {
     @Shadow
     protected int backgroundWidth;
 

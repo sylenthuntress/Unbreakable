@@ -19,7 +19,7 @@ import java.util.List;
 
 
 @Mixin(RangedWeaponItem.class)
-public class RangedWeaponItemMixin {
+public class Mixin_RangedWeaponItem {
     @Unique
     private ItemStack savedItemStack;
 

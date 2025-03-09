@@ -14,7 +14,7 @@ import sylenthuntress.unbreakable.util.ItemShatterHelper;
 
 
 @Mixin(FishingBobberEntity.class)
-public abstract class FishingBobberEntityMixin {
+public abstract class Mixin_FishingBobberEntity {
     @ModifyVariable(
             method = "<init>(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/world/World;II)V",
             at = @At("STORE")

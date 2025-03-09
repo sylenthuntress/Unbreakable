@@ -1,22 +1,22 @@
 package sylenthuntress.unbreakable.mixin.item_shatter.shatter_penalty;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import net.minecraft.component.ComponentHolder;
-import net.minecraft.item.Item;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import sylenthuntress.unbreakable.Unbreakable;
 import sylenthuntress.unbreakable.util.ItemShatterHelper;
 
-@Mixin(Item.class)
-public abstract class ItemMixin implements ComponentHolder {
+@Mixin(EnchantmentHelper.class)
+public abstract class Mixin_EnchantmentHelper {
     @ModifyReturnValue(
-            method = "getMiningSpeed",
+            method = "getTridentSpinAttackStrength",
             at = @At("RETURN")
     )
-    public float getMiningSpeed$applyShatterPenalty(float original, ItemStack stack) {
-        if (!Unbreakable.CONFIG.shatterPenalties.MINING_SPEED()) {
+    private static float unbreakable$applyRiptideShatterPenalty(float original, ItemStack stack) {
+        if (!ItemShatterHelper.isShattered(stack)
+                || !Unbreakable.CONFIG.shatterPenalties.RIPTIDE()) {
             return original;
         }
 

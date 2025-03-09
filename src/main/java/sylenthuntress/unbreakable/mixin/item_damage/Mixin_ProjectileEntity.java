@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 import sylenthuntress.unbreakable.Unbreakable;
 
 @Mixin(ProjectileEntity.class)
-public abstract class ProjectileEntityMixin {
+public abstract class Mixin_ProjectileEntity {
     @Unique
     float projectilePower;
 

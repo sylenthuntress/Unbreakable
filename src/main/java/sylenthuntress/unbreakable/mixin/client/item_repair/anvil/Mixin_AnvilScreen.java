@@ -8,7 +8,7 @@ import sylenthuntress.unbreakable.Unbreakable;
 
 
 @Mixin(AnvilScreen.class)
-public class AnvilScreenMixin {
+public class Mixin_AnvilScreen {
     // Disables the "Too Expensive!" text in anvils
     @ModifyExpressionValue(
             method = "drawForeground",

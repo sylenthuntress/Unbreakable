@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import sylenthuntress.unbreakable.util.RepairHelper;
 
 @Mixin(RepairableComponent.class)
-public abstract class RepairableComponentMixin {
+public abstract class Mixin_RepairableComponent {
     @Inject(
             method = "<init>",
             at = @At("TAIL")

@@ -28,7 +28,7 @@ import sylenthuntress.unbreakable.util.RepairHelper;
 import java.util.function.Predicate;
 
 @Mixin(SmithingScreenHandler.class)
-public abstract class SmithingScreenHandlerMixin extends ForgingScreenHandler implements SmithingScreenHandlerAccess {
+public abstract class Mixin_SmithingScreenHandler extends ForgingScreenHandler implements SmithingScreenHandlerAccess {
     @Shadow
     @Final
     private RecipePropertySet basePropertySet;
@@ -40,7 +40,7 @@ public abstract class SmithingScreenHandlerMixin extends ForgingScreenHandler im
     @Unique
     private int unbreakable$scaledWithShatterLevel = -1;
 
-    public SmithingScreenHandlerMixin(@Nullable ScreenHandlerType<?> type, int syncId, PlayerInventory playerInventory, ScreenHandlerContext context, ForgingSlotsManager forgingSlotsManager) {
+    public Mixin_SmithingScreenHandler(@Nullable ScreenHandlerType<?> type, int syncId, PlayerInventory playerInventory, ScreenHandlerContext context, ForgingSlotsManager forgingSlotsManager) {
         super(type, syncId, playerInventory, context, forgingSlotsManager);
     }
 

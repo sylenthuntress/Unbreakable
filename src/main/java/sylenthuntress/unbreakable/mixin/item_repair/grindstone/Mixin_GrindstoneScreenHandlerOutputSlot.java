@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import sylenthuntress.unbreakable.access.GrindstoneScreenHandlerAccess;
 
 @Mixin(targets = "net.minecraft.screen.GrindstoneScreenHandler$4")
-public class GrindstoneScreenHandlerOutputSlotMixin {
+public class Mixin_GrindstoneScreenHandlerOutputSlot {
     @Shadow
     @Final
     GrindstoneScreenHandler field_16780;

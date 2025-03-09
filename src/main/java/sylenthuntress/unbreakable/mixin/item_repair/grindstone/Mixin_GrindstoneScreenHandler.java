@@ -20,14 +20,14 @@ import sylenthuntress.unbreakable.registry.UnbreakableComponents;
 import sylenthuntress.unbreakable.util.RepairHelper;
 
 @Mixin(GrindstoneScreenHandler.class)
-public abstract class GrindstoneScreenHandlerMixin extends ScreenHandler implements GrindstoneScreenHandlerAccess {
+public abstract class Mixin_GrindstoneScreenHandler extends ScreenHandler implements GrindstoneScreenHandlerAccess {
     @Unique
     protected Property repairCost = Property.create();
     @Shadow
     @Final
     private Inventory result;
 
-    protected GrindstoneScreenHandlerMixin(@Nullable ScreenHandlerType<?> type, int syncId) {
+    protected Mixin_GrindstoneScreenHandler(@Nullable ScreenHandlerType<?> type, int syncId) {
         super(type, syncId);
     }
 

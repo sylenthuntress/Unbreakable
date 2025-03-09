@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 import sylenthuntress.unbreakable.Unbreakable;
 
 @Mixin(LivingEntity.class)
-public abstract class LivingEntityMixin {
+public abstract class Mixin_LivingEntity {
     @Unique
     int unbreakable$cachedDamage;
 

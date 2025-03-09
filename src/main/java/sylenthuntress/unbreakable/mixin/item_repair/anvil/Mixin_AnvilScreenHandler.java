@@ -20,7 +20,7 @@ import sylenthuntress.unbreakable.registry.UnbreakableComponents;
 import sylenthuntress.unbreakable.util.ItemShatterHelper;
 
 @Mixin(AnvilScreenHandler.class)
-public class AnvilScreenHandlerMixin {
+public class Mixin_AnvilScreenHandler {
     @Mutable
     @Final
     @Shadow
@@ -28,7 +28,7 @@ public class AnvilScreenHandlerMixin {
     @Unique
     int unbreakable$scaledWithShatterLevel = -1;
 
-    public AnvilScreenHandlerMixin(Property levelCost) {
+    public Mixin_AnvilScreenHandler(Property levelCost) {
         this.levelCost = levelCost;
     }
 

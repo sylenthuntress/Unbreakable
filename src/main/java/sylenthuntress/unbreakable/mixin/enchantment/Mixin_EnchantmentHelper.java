@@ -11,7 +11,7 @@ import sylenthuntress.unbreakable.Unbreakable;
 import sylenthuntress.unbreakable.util.ItemShatterHelper;
 
 @Mixin(EnchantmentHelper.class)
-public class EnchantmentHelperMixin {
+public class Mixin_EnchantmentHelper {
     @ModifyReturnValue(
             method = "hasAnyEnchantmentsWith",
             at = @At("RETURN")

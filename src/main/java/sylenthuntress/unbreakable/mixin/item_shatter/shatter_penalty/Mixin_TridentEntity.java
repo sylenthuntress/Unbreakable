@@ -14,8 +14,8 @@ import sylenthuntress.unbreakable.util.ItemShatterHelper;
 
 
 @Mixin(TridentEntity.class)
-public abstract class TridentEntityMixin extends Entity {
-    public TridentEntityMixin(EntityType<?> type, World world) {
+public abstract class Mixin_TridentEntity extends Entity {
+    public Mixin_TridentEntity(EntityType<?> type, World world) {
         super(type, world);
     }
 

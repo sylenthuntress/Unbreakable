@@ -15,8 +15,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import sylenthuntress.unbreakable.Unbreakable;
 
 @Mixin(ItemEntity.class)
-public abstract class ItemEntityMixin extends Entity {
-    public ItemEntityMixin(EntityType<?> type, World world) {
+public abstract class Mixin_ItemEntity extends Entity {
+    public Mixin_ItemEntity(EntityType<?> type, World world) {
         super(type, world);
     }
 

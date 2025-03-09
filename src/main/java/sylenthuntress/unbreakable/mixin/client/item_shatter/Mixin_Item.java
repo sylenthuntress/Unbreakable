@@ -13,7 +13,7 @@ import sylenthuntress.unbreakable.util.ItemShatterHelper;
 
 
 @Mixin(Item.class)
-public abstract class ItemMixin implements ComponentHolder {
+public abstract class Mixin_Item implements ComponentHolder {
     @ModifyReturnValue(
             method = "getItemBarStep",
             at = @At("RETURN")

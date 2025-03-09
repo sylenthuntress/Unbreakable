@@ -26,7 +26,7 @@ import java.util.function.Consumer;
 
 @SuppressWarnings("ConstantValue")
 @Mixin(ItemStack.class)
-public abstract class ItemStackMixin implements ComponentHolder {
+public abstract class Mixin_ItemStack implements ComponentHolder {
     @Unique
     boolean incrementedShatterLevel;
 

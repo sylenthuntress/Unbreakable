@@ -18,11 +18,11 @@ import sylenthuntress.unbreakable.util.ItemShatterHelper;
 
 
 @Mixin(ProjectileEntity.class)
-public abstract class ProjectileEntityMixin extends Entity {
+public abstract class Mixin_ProjectileEntity extends Entity {
     @Unique
     private static ItemStack savedProjectileStack;
 
-    public ProjectileEntityMixin(EntityType<?> type, World world) {
+    public Mixin_ProjectileEntity(EntityType<?> type, World world) {
         super(type, world);
     }
 
