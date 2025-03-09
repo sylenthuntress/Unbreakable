@@ -96,5 +96,17 @@ public class RepairHelper {
         RepairStation(final String name, final int id, final Block blocks) {
             this(name, id, List.of(blocks));
         }
+
+        public static RepairStation getFromBlock(Block block) {
+            for (var entry : RepairStation.values()) {
+                if (entry.blocks.contains(block)) return entry;
+            }
+
+            return null;
+        }
+
+        public List<Block> getBlocks() {
+            return this.blocks;
+        }
     }
 }
