@@ -5,6 +5,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.tooltip.TooltipType;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableTextContent;
 import sylenthuntress.unbreakable.Unbreakable;
@@ -52,30 +53,26 @@ public class DisplayShatterTooltip implements ItemTooltipCallback {
     }
 
     public void displayTooltip(List<Text> lines, ItemStack stack, int tooltipIndex, int shatterLevel, boolean advancedToolTips) {
-        if (Unbreakable.CONFIG.shatterTooltip.DISPLAY_TOOLTIP_DESC()) {
-            lines.add(
-                    tooltipIndex,
-                    Text.translatable(
-                            "unbreakable.shatter.info",
-                            shatterLevel
-                    )
+        MutableText levelText = Text.translatable("unbreakable.shatter.level");
+        if (ItemShatterHelper.isMaxShatterLevel(stack) && Unbreakable.CONFIG.shatterTooltip.DISPLAY_TEXT_AT_MAX()) {
+            levelText.append(Text.translatable("unbreakable.numbers.max"));
+        } else if (shatterLevel > 1 || Unbreakable.CONFIG.shatterTooltip.DISPLAY_LEVEL_AT_ONE()) {
+            levelText.append(NumberHelper.toRomanOrArabic(shatterLevel,
+                    "unbreakable.roman_numeral.",
+                    Unbreakable.CONFIG.shatterTooltip.ROMAN_NUMERALS())
             );
+        } else levelText.append(Text.translatable("unbreakable.numbers.null"));
+
+        lines.add(tooltipIndex, levelText);
+        tooltipIndex += 1;
+
+        if (Unbreakable.CONFIG.shatterTooltip.DISPLAY_TOOLTIP_DESC()) {
+            lines.add(tooltipIndex, Text.translatable("unbreakable.shatter.info", shatterLevel));
         }
 
-        lines.add(
-                tooltipIndex,
-                Text.translatable("unbreakable.shatter.level").append(
-                        ItemShatterHelper.isMaxShatterLevel(stack) && Unbreakable.CONFIG.shatterTooltip.DISPLAY_TEXT_AT_MAX() ? Text.translatable("unbreakable.numbers.max") : (Unbreakable.CONFIG.shatterTooltip.DISPLAY_LEVEL_AT_ONE() || shatterLevel > 1 ? NumberHelper.toRomanOrArabic(
-                                shatterLevel, "unbreakable.roman_numeral.",
-                                Unbreakable.CONFIG.shatterTooltip.ROMAN_NUMERALS()
-                        ) : Text.translatable("unbreakable.numbers.null"))
-                )
-        );
-
-        if ((advancedToolTips && lines.size() > 2
-                || lines.size() > 4)
+        if ((advancedToolTips && lines.size() > 2 || lines.size() > 4)
                 && Unbreakable.CONFIG.shatterTooltip.SEPARATE_TOOLTIP()) {
-            lines.add(tooltipIndex, Text.of(" "));
+            lines.add(tooltipIndex, Text.empty());
         }
     }
 }
