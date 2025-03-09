@@ -97,7 +97,9 @@ public class RepairHelper {
             this(name, id, List.of(blocks));
         }
 
-        public static RepairStation getFromBlock(Block block) {
+        public static RepairStation getFromBlock(BlockState blockState) {
+            Block block = blockState.getBlock();
+            
             for (var entry : RepairStation.values()) {
                 if (entry.blocks.contains(block)) return entry;
             }
