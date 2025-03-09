@@ -8,6 +8,7 @@ import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableTextContent;
+import net.minecraft.util.Formatting;
 import sylenthuntress.unbreakable.Unbreakable;
 import sylenthuntress.unbreakable.registry.UnbreakableComponents;
 import sylenthuntress.unbreakable.util.ItemShatterHelper;
@@ -19,8 +20,7 @@ import java.util.List;
 public class DisplayShatterTooltip implements ItemTooltipCallback {
     @Override
     public void getTooltip(ItemStack stack, Item.TooltipContext context, TooltipType type, List<Text> lines) {
-        if (!ItemShatterHelper.isShattered(stack)
-                || !Unbreakable.CONFIG.shatterTooltip.DISPLAY_TOOLTIP()) {
+        if (!ItemShatterHelper.isShattered(stack) || !Unbreakable.CONFIG.shatterTooltip.DISPLAY_TOOLTIP()) {
             return;
         }
 
@@ -38,10 +38,7 @@ public class DisplayShatterTooltip implements ItemTooltipCallback {
 
         if (advancedToolTips) {
             for (Text text : lines) {
-                if (!(text.getContent() instanceof TranslatableTextContent translatableContent)) {
-                    continue;
-                }
-                if (translatableContent.getKey().equalsIgnoreCase("item.durability")) {
+                if (text.getContent() instanceof TranslatableTextContent content && content.getKey().equals("item.durability")) {
                     tooltipIndex = lines.indexOf(text);
                 }
             }
@@ -53,7 +50,13 @@ public class DisplayShatterTooltip implements ItemTooltipCallback {
     }
 
     public void displayTooltip(List<Text> lines, ItemStack stack, int tooltipIndex, int shatterLevel, boolean advancedToolTips) {
-        MutableText levelText = Text.translatable("unbreakable.shatter.level");
+        if ((advancedToolTips && lines.size() > 2 || lines.size() > 4)
+                && Unbreakable.CONFIG.shatterTooltip.SEPARATE_TOOLTIP()) {
+            lines.add(tooltipIndex, Text.empty());
+            tooltipIndex += 1;
+        }
+
+        MutableText levelText = Text.translatable("unbreakable.shatter.level").formatted(Formatting.DARK_RED);
         if (ItemShatterHelper.isMaxShatterLevel(stack) && Unbreakable.CONFIG.shatterTooltip.DISPLAY_TEXT_AT_MAX()) {
             levelText.append(Text.translatable("unbreakable.numbers.max"));
         } else if (shatterLevel > 1 || Unbreakable.CONFIG.shatterTooltip.DISPLAY_LEVEL_AT_ONE()) {
@@ -67,12 +70,10 @@ public class DisplayShatterTooltip implements ItemTooltipCallback {
         tooltipIndex += 1;
 
         if (Unbreakable.CONFIG.shatterTooltip.DISPLAY_TOOLTIP_DESC()) {
-            lines.add(tooltipIndex, Text.translatable("unbreakable.shatter.info", shatterLevel));
-        }
-
-        if ((advancedToolTips && lines.size() > 2 || lines.size() > 4)
-                && Unbreakable.CONFIG.shatterTooltip.SEPARATE_TOOLTIP()) {
-            lines.add(tooltipIndex, Text.empty());
+            lines.add(tooltipIndex,
+                    Text.translatable("unbreakable.shatter.info", shatterLevel)
+                            .formatted(Formatting.GRAY, Formatting.ITALIC)
+            );
         }
     }
 }
