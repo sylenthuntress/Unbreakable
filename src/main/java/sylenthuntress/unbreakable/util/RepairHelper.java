@@ -75,6 +75,21 @@ public class RepairHelper {
     }
 
     public enum RepairStations {
-        SMITHING_TABLE, GRINDSTONE
+        SMITHING_TABLE("smithing_table", 0, Blocks.SMITHING_TABLE),
+        GRINDSTONE("grindstone", 1, Blocks.GRINDSTONE);
+
+        private final Identifier name;
+        private final int id;
+        private final List<Block> blocks;
+
+        RepairStations(final String name, final int id, final List<Block> blocks) {
+            this.name = Unbreakable.modIdentifier(name);
+            this.id = id;
+            this.blocks = blocks;
+        }
+
+        RepairStations(final String name, final int id, final Block blocks) {
+            this(name, id, List.of(blocks));
+        }
     }
 }
