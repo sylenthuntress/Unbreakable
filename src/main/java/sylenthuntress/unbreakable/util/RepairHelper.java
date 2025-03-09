@@ -64,10 +64,12 @@ public class RepairHelper {
         }
         int oldShatterLevel = inputStack.getOrDefault(UnbreakableComponents.SHATTER_LEVEL, 0);
         int newShatterLevel = outputStack.getOrDefault(UnbreakableComponents.SHATTER_LEVEL, 0);
-        if (!scaledWithShatterLevel && shatterScaling && oldShatterLevel > newShatterLevel)
-            repairConstant += inputStack.getOrDefault(DataComponentTypes.REPAIR_COST, 0) + outputStack.getOrDefault(DataComponentTypes.REPAIR_COST, 0);
-        if (enchantmentScaling)
-            for (RegistryEntry<Enchantment> enchantment : outputStack.getEnchantments().getEnchantments())
+        if (!scaledWithShatterLevel && shatterScaling && oldShatterLevel > newShatterLevel) {
+            repairConstant += inputStack.getOrDefault(DataComponentTypes.REPAIR_COST, 0)
+                    + outputStack.getOrDefault(DataComponentTypes.REPAIR_COST, 0);
+        }
+        if (enchantmentScaling) {
+            for (RegistryEntry<Enchantment> enchantment : outputStack.getEnchantments().getEnchantments()) {
                 repairConstant += ItemShatterHelper.getEnchantmentLevel(enchantment.getKey().orElseThrow(), outputStack);
         if (degradeRepairFactor)
             if (repairStation == RepairStation.GRINDSTONE)
