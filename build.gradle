@@ -25,14 +25,15 @@ publishMods {
     def modrinthToken = secretProperties.getProperty("MODRINTH_TOKEN")
     def curseforgeToken = secretProperties.getProperty("CURSEFORGE_TOKEN")
     def githubToken = secretProperties.getProperty("GITHUB_TOKEN")
+    def fullVersion = "v" + project.version + "+" + project.minecraft_version
 
     file = remapJar.archiveFile
 
-    displayName = project.mod_name
-    version = "v" + project.version + "+" + project.minecraft_version
+    displayName = project.mod_name + " " + fullVersion
+    version = fullVersion
     type = ReleaseType.valueOf(project.stability)
-    changelog = "# " + project.mod_name + " v" + project.version + "+" + project.minecraft_version +
-            "\n\n" + project.file("CHANGELOG.md").toString()
+    changelog = "# Version " + fullVersion +
+            "\n\n" + project.file("CHANGELOG.md").getText()
 
     modLoaders.add("fabric")
 
@@ -65,7 +66,8 @@ publishMods {
         accessToken = githubToken
         repository = project.github_repo
         tagName = "release/v" + project.version + "+" + project.minecraft_version
-        commitish = "main"
+        commitish = "master"
+
         allowEmptyFiles = true
     }
 }
