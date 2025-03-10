@@ -18,6 +18,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import sylenthuntress.unbreakable.Unbreakable;
 import sylenthuntress.unbreakable.registry.UnbreakableComponents;
 import sylenthuntress.unbreakable.util.ItemShatterHelper;
+import sylenthuntress.unbreakable.util.RepairHelper;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Mixin(AnvilScreenHandler.class)
 public class Mixin_AnvilScreenHandler {
@@ -119,14 +123,17 @@ public class Mixin_AnvilScreenHandler {
         return original;
     }
 
+    @SuppressWarnings("SuspiciousMethodCalls")
     @Inject(method = "onTakeOutput", at = @At("HEAD"))
     void unbreakable$clearDegradation(PlayerEntity player, ItemStack stack, CallbackInfo ci) {
+        var degradationMap = new HashMap<>(stack.getOrDefault(UnbreakableComponents.DEGRADATION, Map.of()));
         if (Unbreakable.CONFIG.smithingRepair.COST.ANVILS_CLEAR_DEGRADATION()) {
-            stack.set(UnbreakableComponents.SMITHING_DEGRADATION, 0);
+            degradationMap.remove(RepairHelper.RepairStation.SMITHING_TABLE.getName().toString());
         }
         if (Unbreakable.CONFIG.grindingRepair.COST.ANVILS_CLEAR_DEGRADATION()) {
-            stack.set(UnbreakableComponents.GRINDING_DEGRADATION, 0);
+            degradationMap.remove(RepairHelper.RepairStation.GRINDSTONE.getName().toString());
         }
+        stack.set(UnbreakableComponents.DEGRADATION, degradationMap);
     }
 
     @ModifyExpressionValue(method = "updateResult", at = @At(value = "CONSTANT", args = "intValue=4"))

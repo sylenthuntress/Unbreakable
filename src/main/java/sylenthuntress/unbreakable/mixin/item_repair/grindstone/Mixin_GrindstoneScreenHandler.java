@@ -19,6 +19,9 @@ import sylenthuntress.unbreakable.access.GrindstoneScreenHandlerAccess;
 import sylenthuntress.unbreakable.registry.UnbreakableComponents;
 import sylenthuntress.unbreakable.util.RepairHelper;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Mixin(GrindstoneScreenHandler.class)
 public abstract class Mixin_GrindstoneScreenHandler extends ScreenHandler implements GrindstoneScreenHandlerAccess {
     @Unique
@@ -67,7 +70,7 @@ public abstract class Mixin_GrindstoneScreenHandler extends ScreenHandler implem
                 outputStack,
                 inputStack,
                 newShatterLevel == outputStack.getOrDefault(UnbreakableComponents.SHATTER_LEVEL, 0),
-                RepairHelper.RepairStations.GRINDSTONE
+                RepairHelper.RepairStation.GRINDSTONE
         );
 
         newShatterLevel = outputStack.getOrDefault(UnbreakableComponents.SHATTER_LEVEL, 0);
@@ -76,28 +79,20 @@ public abstract class Mixin_GrindstoneScreenHandler extends ScreenHandler implem
             experienceLevels--;
             outputStack.setDamage(outputStack.getDamage() - repairFactor);
 
-            if (Unbreakable.CONFIG.grindingRepair.COST.DEGRADE_REPAIR_FACTOR()) {
-                outputStack.set(
-                        UnbreakableComponents.GRINDING_DEGRADATION,
-                        Math.min(40,
-                                outputStack.getOrDefault(
-                                        UnbreakableComponents.GRINDING_DEGRADATION,
-                                        0
-                                ) + 2
-                        )
+            var degradationMap = new HashMap<>(outputStack.getOrDefault(UnbreakableComponents.DEGRADATION, Map.of()));
+            if (Unbreakable.CONFIG.smithingRepair.COST.DEGRADE_REPAIR_FACTOR()) {
+                int newDegradation = Math.min(40,
+                        degradationMap.getOrDefault(RepairHelper.RepairStation.SMITHING_TABLE.getName().toString(), 0) + 2
                 );
+                degradationMap.put(RepairHelper.RepairStation.SMITHING_TABLE.getName().toString(), newDegradation);
             }
-            if (Unbreakable.CONFIG.smithingRepair.COST.GRINDING_DECREMENTS_DEGRADATION()) {
-                outputStack.set(
-                        UnbreakableComponents.SMITHING_DEGRADATION,
-                        Math.max(0,
-                                outputStack.getOrDefault(
-                                        UnbreakableComponents.SMITHING_DEGRADATION,
-                                        0
-                                ) - 1
-                        )
+            if (Unbreakable.CONFIG.grindingRepair.COST.SMITHING_DECREMENTS_DEGRADATION()) {
+                int newDegradation = Math.max(0,
+                        degradationMap.getOrDefault(RepairHelper.RepairStation.GRINDSTONE.getName().toString(), 0) - 1
                 );
+                degradationMap.put(RepairHelper.RepairStation.GRINDSTONE.getName().toString(), newDegradation);
             }
+            outputStack.set(UnbreakableComponents.DEGRADATION, degradationMap);
 
             repairFactor = RepairHelper.calculateRepairFactor(
                     6,
@@ -107,7 +102,7 @@ public abstract class Mixin_GrindstoneScreenHandler extends ScreenHandler implem
                             UnbreakableComponents.SHATTER_LEVEL,
                             0
                     ),
-                    RepairHelper.RepairStations.GRINDSTONE
+                    RepairHelper.RepairStation.GRINDSTONE
             );
             newShatterLevel = outputStack.getOrDefault(UnbreakableComponents.SHATTER_LEVEL, 0);
         }

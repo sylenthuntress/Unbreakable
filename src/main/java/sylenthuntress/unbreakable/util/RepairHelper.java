@@ -1,7 +1,5 @@
 package sylenthuntress.unbreakable.util;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.Item;
@@ -13,7 +11,9 @@ import sylenthuntress.unbreakable.Unbreakable;
 import sylenthuntress.unbreakable.registry.UnbreakableComponents;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class RepairHelper {
     protected static List<RegistryEntryList<Item>> repairMaterials = new ArrayList<>();
@@ -48,6 +48,7 @@ public class RepairHelper {
         boolean enchantmentScaling = false;
         boolean degradeRepairFactor = false;
         float costMultiplier = 1;
+
         switch (repairStation) {
             case RepairStation.SMITHING_TABLE -> {
                 shatterScaling = Unbreakable.CONFIG.smithingRepair.COST.SHATTER_SCALING();
@@ -62,8 +63,10 @@ public class RepairHelper {
                 costMultiplier = Unbreakable.CONFIG.grindingRepair.COST.MULTIPLIER();
             }
         }
+
         int oldShatterLevel = inputStack.getOrDefault(UnbreakableComponents.SHATTER_LEVEL, 0);
         int newShatterLevel = outputStack.getOrDefault(UnbreakableComponents.SHATTER_LEVEL, 0);
+
         if (!scaledWithShatterLevel && shatterScaling && oldShatterLevel > newShatterLevel) {
             repairConstant += inputStack.getOrDefault(DataComponentTypes.REPAIR_COST, 0)
                     + outputStack.getOrDefault(DataComponentTypes.REPAIR_COST, 0);
@@ -71,26 +74,35 @@ public class RepairHelper {
         if (enchantmentScaling) {
             for (RegistryEntry<Enchantment> enchantment : outputStack.getEnchantments().getEnchantments()) {
                 repairConstant += ItemShatterHelper.getEnchantmentLevel(enchantment.getKey().orElseThrow(), outputStack);
-        if (degradeRepairFactor)
-            if (repairStation == RepairStation.GRINDSTONE)
-                repairConstant /= 1 + (outputStack.getOrDefault(UnbreakableComponents.DEGRADATION_GRINDING, 0) * 0.1);
-            else repairConstant /= 1 + (outputStack.getOrDefault(UnbreakableComponents.DEGRADATION_SMITHING, 0) * 0.1);
+            }
+        }
+        if (degradeRepairFactor) {
+            var degradationMap = new HashMap<>(outputStack.getOrDefault(UnbreakableComponents.DEGRADATION, Map.of()));
+            repairConstant *= 1 + degradationMap.getOrDefault(repairStation.getName().toString(), 0) * 0.1F;
+        }
+
         repairConstant *= costMultiplier;
         return (int) Math.round(repairConstant);
     }
 
     public enum RepairStation {
-        SMITHING_TABLE(0),
-        GRINDSTONE(1);
+        SMITHING_TABLE("smithing_table", 0),
+        GRINDSTONE("grindstone", 1);
 
+        private final Identifier name;
         private final int id;
 
-        RepairStation(final int id) {
+        RepairStation(final String name, final int id) {
+            this.name = Identifier.of(name);
             this.id = id;
         }
 
+        public Identifier getName() {
+            return this.name;
+        }
+
         public int getId() {
-            return this.id;
+            return id;
         }
     }
 }

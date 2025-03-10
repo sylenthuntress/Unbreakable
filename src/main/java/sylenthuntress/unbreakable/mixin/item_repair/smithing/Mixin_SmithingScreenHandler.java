@@ -25,6 +25,8 @@ import sylenthuntress.unbreakable.access.SmithingScreenHandlerAccess;
 import sylenthuntress.unbreakable.registry.UnbreakableComponents;
 import sylenthuntress.unbreakable.util.RepairHelper;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Predicate;
 
 @Mixin(SmithingScreenHandler.class)
@@ -128,7 +130,7 @@ public abstract class Mixin_SmithingScreenHandler extends ForgingScreenHandler i
                 outputStack,
                 repairBase,
                 unbreakable$scaledWithShatterLevel == outputStack.getOrDefault(UnbreakableComponents.SHATTER_LEVEL, 0),
-                RepairHelper.RepairStations.SMITHING_TABLE
+                RepairHelper.RepairStation.SMITHING_TABLE
         );
         unbreakable$scaledWithShatterLevel = outputStack.getOrDefault(UnbreakableComponents.SHATTER_LEVEL, 0);
         int materialCost = 0;
@@ -137,28 +139,20 @@ public abstract class Mixin_SmithingScreenHandler extends ForgingScreenHandler i
         while (repairFactor > 0 && materialCost < repairMaterial.getCount()) {
             outputStack.setDamage(outputStack.getDamage() - repairFactor);
 
+            var degradationMap = new HashMap<>(outputStack.getOrDefault(UnbreakableComponents.DEGRADATION, Map.of()));
             if (Unbreakable.CONFIG.smithingRepair.COST.DEGRADE_REPAIR_FACTOR()) {
-                outputStack.set(
-                        UnbreakableComponents.SMITHING_DEGRADATION,
-                        Math.min(20,
-                                outputStack.getOrDefault(
-                                        UnbreakableComponents.SMITHING_DEGRADATION,
-                                        0
-                                ) + 1
-                        )
+                int newDegradation = Math.min(20,
+                        degradationMap.getOrDefault(RepairHelper.RepairStation.SMITHING_TABLE.getName().toString(), 0) + 1
                 );
+                degradationMap.put(RepairHelper.RepairStation.SMITHING_TABLE.getName().toString(), newDegradation);
             }
             if (Unbreakable.CONFIG.grindingRepair.COST.SMITHING_DECREMENTS_DEGRADATION()) {
-                outputStack.set(
-                        UnbreakableComponents.GRINDING_DEGRADATION,
-                        Math.max(0,
-                                outputStack.getOrDefault(
-                                        UnbreakableComponents.GRINDING_DEGRADATION,
-                                        0
-                                ) - 2
-                        )
+                int newDegradation = Math.max(0,
+                        degradationMap.getOrDefault(RepairHelper.RepairStation.GRINDSTONE.getName().toString(), 0) - 2
                 );
+                degradationMap.put(RepairHelper.RepairStation.GRINDSTONE.getName().toString(), newDegradation);
             }
+            outputStack.set(UnbreakableComponents.DEGRADATION, degradationMap);
 
             repairFactor = RepairHelper.calculateRepairFactor(
                     4,
@@ -168,7 +162,7 @@ public abstract class Mixin_SmithingScreenHandler extends ForgingScreenHandler i
                             UnbreakableComponents.SHATTER_LEVEL,
                             0
                     ),
-                    RepairHelper.RepairStations.SMITHING_TABLE
+                    RepairHelper.RepairStation.SMITHING_TABLE
             );
             unbreakable$scaledWithShatterLevel = outputStack.getOrDefault(UnbreakableComponents.SHATTER_LEVEL, 0);
             materialCost++;
