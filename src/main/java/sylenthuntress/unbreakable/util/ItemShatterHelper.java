@@ -64,11 +64,18 @@ public abstract class ItemShatterHelper {
     }
 
     public static boolean shouldPreventUse(ItemStack stack) {
+        if (!ConfigHelper.isInList$shatterPreventsUse(stack.getRegistryEntry())) {
+            return false;
+        }
+
         final int shatterLevel = stack.getOrDefault(UnbreakableComponents.SHATTER_LEVEL, 0);
-        return ConfigHelper.isInList$shatterPreventsUse(stack.getRegistryEntry())
-                && (Unbreakable.CONFIG.shatterPenalties.THRESHOLD() == -1
-                && shatterLevel == ItemShatterHelper.getMaxShatterLevel(stack)
-                || Unbreakable.CONFIG.shatterPenalties.THRESHOLD() != -1
-                && shatterLevel >= Unbreakable.CONFIG.shatterPenalties.THRESHOLD());
+
+        if (Unbreakable.CONFIG.shatterPenalties.THRESHOLD() == -1 && shatterLevel == ItemShatterHelper.getMaxShatterLevel(stack))
+            return true;
+        else if (Unbreakable.CONFIG.shatterPenalties.THRESHOLD() != -1) {
+            return shatterLevel >= Unbreakable.CONFIG.shatterPenalties.THRESHOLD();
+        } else {
+            return false;
+        }
     }
 }
