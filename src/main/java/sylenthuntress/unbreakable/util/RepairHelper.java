@@ -86,23 +86,17 @@ public class RepairHelper {
     }
 
     public enum RepairStation {
-        SMITHING_TABLE("smithing_table", 0),
-        GRINDSTONE("grindstone", 1);
+        SMITHING_TABLE("smithing_table"),
+        GRINDSTONE("grindstone");
 
         private final Identifier name;
-        private final int id;
 
-        RepairStation(final String name, final int id) {
+        RepairStation(final String name) {
             this.name = Identifier.of(name);
-            this.id = id;
         }
 
         public Identifier getName() {
             return this.name;
-        }
-
-        public int getId() {
-            return id;
         }
     }
 }
