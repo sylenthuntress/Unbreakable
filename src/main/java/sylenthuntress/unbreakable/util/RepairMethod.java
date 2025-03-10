@@ -1,4 +1,4 @@
-package sylenthuntress.unbreakable;
+package sylenthuntress.unbreakable.util;
 
 import net.minecraft.util.Identifier;
 

@@ -6,7 +6,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryEntryList;
-import sylenthuntress.unbreakable.RepairMethod;
 import sylenthuntress.unbreakable.Unbreakable;
 import sylenthuntress.unbreakable.registry.UnbreakableComponents;
 

@@ -15,10 +15,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import sylenthuntress.unbreakable.RepairMethod;
 import sylenthuntress.unbreakable.Unbreakable;
 import sylenthuntress.unbreakable.registry.UnbreakableComponents;
 import sylenthuntress.unbreakable.util.ItemShatterHelper;
+import sylenthuntress.unbreakable.util.RepairMethod;
 
 import java.util.HashMap;
 import java.util.Map;
