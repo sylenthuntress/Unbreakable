@@ -123,7 +123,6 @@ public class Mixin_AnvilScreenHandler {
         return original;
     }
 
-    @SuppressWarnings("SuspiciousMethodCalls")
     @Inject(method = "onTakeOutput", at = @At("HEAD"))
     void unbreakable$clearDegradation(PlayerEntity player, ItemStack stack, CallbackInfo ci) {
         var degradationMap = new HashMap<>(stack.getOrDefault(UnbreakableComponents.DEGRADATION, Map.of()));
