@@ -36,11 +36,15 @@ public abstract class ShatterHelper {
             }
         } else if (damage > maxDamage && shatterLevel == 0) {
             shatterLevel++;
-            breakCallback.accept(stack.getItem());
+            if (breakCallback != null) {
+                breakCallback.accept(stack.getItem());
+            }
         } else if (damage > maxDamage * (Unbreakable.CONFIG.negativeDurabilityMultiplier() + 1) && !ShatterHelper.isMaxShatterLevel(stack)) {
             shatterLevel++;
             damage = maxDamage + 1;
-            breakCallback.accept(stack.getItem());
+            if (breakCallback != null) {
+                breakCallback.accept(stack.getItem());
+            }
         }
 
         stack.set(UnbreakableComponents.SHATTER_LEVEL, Math.min(shatterLevel, maxShatterLevel));
