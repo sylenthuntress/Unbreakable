@@ -9,7 +9,7 @@ import sylenthuntress.unbreakable.Unbreakable;
 
 import java.util.Map;
 
-public class UnbreakableComponents {
+public abstract class UnbreakableComponents {
     public static final ComponentType<Integer> SHATTER_LEVEL = register("shatter_level");
     public static final ComponentType<Integer> MAX_SHATTER_LEVEL = register("max_shatter_level");
 

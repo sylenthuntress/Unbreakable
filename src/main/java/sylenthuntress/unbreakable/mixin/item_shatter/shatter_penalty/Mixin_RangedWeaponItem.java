@@ -42,9 +42,11 @@ public class Mixin_RangedWeaponItem {
     public void unbreakable$applyShatterDamagePenalty(Args args) {
         ItemStack stack = savedItemStack;
 
-        if (!ShatterHelper.isShattered(stack)
-                || ConfigHelper.isInList$shatterBlacklist(stack.getRegistryEntry())
-                || !Unbreakable.CONFIG.shatterPenalties.PROJECTILES()) {
+        if (!ShatterHelper.isShattered(stack)) {
+            return;
+        } else if (ConfigHelper.isInList$shatterBlacklist(stack.getRegistryEntry())) {
+            return;
+        } else if (!Unbreakable.CONFIG.shatterPenalties.PROJECTILES()) {
             return;
         }
 

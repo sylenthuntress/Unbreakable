@@ -18,11 +18,11 @@ public class PreventEntityUseEvent implements UseEntityCallback {
     public ActionResult interact(PlayerEntity player, World world, Hand hand, Entity entity, @Nullable EntityHitResult entityHitResult) {
         ItemStack stack = player.getStackInHand(hand);
 
-        if (Unbreakable.CONFIG.shatterPenalties.ENTITY_USE()
-                && !player.isInCreativeMode()
-                && !player.isSpectator()
-                && ShatterHelper.shouldPreventUse(stack)) {
-            player.stopUsingItem();
+        boolean configDisableInteraction = Unbreakable.CONFIG.shatterPenalties.ENTITY_USE();
+        boolean playerIsCheating = !(player.isInCreativeMode() && player.isSpectator());
+        boolean shouldPreventUsingStack = ShatterHelper.shouldPreventUse(stack);
+
+        if (configDisableInteraction && playerIsCheating && shouldPreventUsingStack) {
             ClientItemShatterHelper.sendMessageCantUseItem(stack);
             return ActionResult.FAIL;
         }

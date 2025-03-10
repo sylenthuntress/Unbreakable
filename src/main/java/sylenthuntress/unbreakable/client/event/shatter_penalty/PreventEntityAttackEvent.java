@@ -18,10 +18,11 @@ public class PreventEntityAttackEvent implements AttackEntityCallback {
     public ActionResult interact(PlayerEntity player, World world, Hand hand, Entity entity, @Nullable EntityHitResult entityHitResult) {
         ItemStack stack = player.getStackInHand(hand);
 
-        if (Unbreakable.CONFIG.shatterPenalties.ENTITY_HIT()
-                && !player.isInCreativeMode()
-                && !player.isSpectator()
-                && ShatterHelper.shouldPreventUse(stack)) {
+        boolean configDisableInteraction = Unbreakable.CONFIG.shatterPenalties.ENTITY_HIT();
+        boolean playerIsCheating = !(player.isInCreativeMode() && player.isSpectator());
+        boolean shouldPreventUsingStack = ShatterHelper.shouldPreventUse(stack);
+
+        if (configDisableInteraction && playerIsCheating && shouldPreventUsingStack) {
             ClientItemShatterHelper.sendMessageCantUseItem(stack);
             return ActionResult.FAIL;
         }

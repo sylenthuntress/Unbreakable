@@ -12,12 +12,7 @@ import sylenthuntress.unbreakable.Unbreakable;
 
 public class DynamicMiningDamageEvent implements PlayerBlockBreakEvents.After {
     @Override
-    public void afterBlockBreak(
-            World world,
-            PlayerEntity player,
-            BlockPos pos,
-            BlockState block,
-            @Nullable BlockEntity blockEntity) {
+    public void afterBlockBreak(World world, PlayerEntity player, BlockPos pos, BlockState block, @Nullable BlockEntity blockEntity) {
         if (!Unbreakable.CONFIG.dynamicDamage.MINING()) {
             return;
         }
@@ -31,9 +26,7 @@ public class DynamicMiningDamageEvent implements PlayerBlockBreakEvents.After {
         }
 
         player.getMainHandStack().damage(
-                Math.round(
-                        itemDamage * Unbreakable.CONFIG.dynamicDamage.MINING_MULTIPLIER()
-                ),
+                Math.round(itemDamage * Unbreakable.CONFIG.dynamicDamage.MINING_MULTIPLIER()),
                 player,
                 EquipmentSlot.MAINHAND
         );

@@ -16,10 +16,11 @@ public class PreventBlockUseEvent implements UseBlockCallback {
     public ActionResult interact(PlayerEntity player, World world, Hand hand, BlockHitResult blockHitResult) {
         ItemStack stack = player.getStackInHand(hand);
 
-        if (Unbreakable.CONFIG.shatterPenalties.BLOCK_USE()
-                && !player.isInCreativeMode()
-                && !player.isSpectator()
-                && ShatterHelper.shouldPreventUse(stack)) {
+        boolean configDisableInteraction = Unbreakable.CONFIG.shatterPenalties.BLOCK_USE();
+        boolean playerIsCheating = !(player.isInCreativeMode() && player.isSpectator());
+        boolean shouldPreventUsingStack = ShatterHelper.shouldPreventUse(stack);
+
+        if (configDisableInteraction && playerIsCheating && shouldPreventUsingStack) {
             ClientItemShatterHelper.sendMessageCantUseItem(stack);
             return ActionResult.FAIL;
         }

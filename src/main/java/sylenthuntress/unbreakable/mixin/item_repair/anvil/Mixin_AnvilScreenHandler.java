@@ -17,8 +17,8 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import sylenthuntress.unbreakable.Unbreakable;
 import sylenthuntress.unbreakable.registry.UnbreakableComponents;
-import sylenthuntress.unbreakable.util.ShatterHelper;
 import sylenthuntress.unbreakable.util.RepairMethod;
+import sylenthuntress.unbreakable.util.ShatterHelper;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -126,12 +126,17 @@ public class Mixin_AnvilScreenHandler {
     @Inject(method = "onTakeOutput", at = @At("HEAD"))
     void unbreakable$clearDegradation(PlayerEntity player, ItemStack stack, CallbackInfo ci) {
         var degradationMap = new HashMap<>(stack.getOrDefault(UnbreakableComponents.DEGRADATION, Map.of()));
+
         if (Unbreakable.CONFIG.smithingRepair.COST.ANVILS_CLEAR_DEGRADATION()) {
             degradationMap.remove(RepairMethod.SMITHING_TABLE.getAsString());
         }
         if (Unbreakable.CONFIG.grindingRepair.COST.ANVILS_CLEAR_DEGRADATION()) {
             degradationMap.remove(RepairMethod.GRINDSTONE.getAsString());
         }
+        if (Unbreakable.CONFIG.grindingRepair.COST.ANVILS_CLEAR_DEGRADATION()) {
+            degradationMap.remove(RepairMethod.MENDING.getAsString());
+        }
+
         stack.set(UnbreakableComponents.DEGRADATION, degradationMap);
     }
 

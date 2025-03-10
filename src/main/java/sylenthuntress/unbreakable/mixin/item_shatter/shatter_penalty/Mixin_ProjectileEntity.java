@@ -54,10 +54,13 @@ public abstract class Mixin_ProjectileEntity extends Entity {
     public void unbreakable$applyProjectileShatterPenalty(Args args) {
         final ItemStack stack = savedProjectileStack;
 
-        if (stack == null
-                || !ShatterHelper.isShattered(stack)
-                || ConfigHelper.isInList$shatterBlacklist(stack.getRegistryEntry())
-                || !Unbreakable.CONFIG.shatterPenalties.PROJECTILES()) {
+        if (stack == null) {
+            return;
+        } else if (!ShatterHelper.isShattered(stack)) {
+            return;
+        } else if (ConfigHelper.isInList$shatterBlacklist(stack.getRegistryEntry())) {
+            return;
+        } else if (!Unbreakable.CONFIG.shatterPenalties.PROJECTILES()) {
             return;
         }
 

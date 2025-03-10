@@ -60,9 +60,7 @@ public abstract class Mixin_GrindstoneScreenHandler extends ScreenHandler implem
         final ItemStack inputStack = this.getSlot(0).getStack();
         final ItemStack outputStack = inputStack.copy();
 
-        if (inputStack.isEmpty()
-                || !this.getSlot(1).getStack().isEmpty()
-                || experienceLevels <= 0) {
+        if (inputStack.isEmpty() || !this.getSlot(1).getStack().isEmpty() || experienceLevels <= 0) {
             return;
         }
 

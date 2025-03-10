@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class RepairHelper {
+public abstract class RepairHelper {
     protected static List<RegistryEntryList<Item>> repairMaterials = new ArrayList<>();
 
     public static boolean isRepairMaterial(ItemStack stack) {

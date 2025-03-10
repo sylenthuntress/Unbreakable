@@ -44,16 +44,7 @@ public abstract class Mixin_ItemEntity extends Entity {
         World world = this.getWorld();
 
         if (world instanceof ServerWorld serverWorld) {
-            stack.damage(
-                    1,
-                    serverWorld,
-                    null,
-                    item -> playSound(
-                            SoundEvents.ENTITY_ITEM_BREAK,
-                            1,
-                            1
-                    )
-            );
+            stack.damage(1, serverWorld, null, item -> playSound(SoundEvents.ENTITY_ITEM_BREAK, 1, 1));
         }
     }
 }

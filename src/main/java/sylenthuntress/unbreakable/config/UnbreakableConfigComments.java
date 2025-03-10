@@ -50,9 +50,10 @@ public abstract class UnbreakableConfigComments {
 
     // Item Repairing
     public final static String allowRepairingShattered = "Whether repairing items should decrease their shatter level";
-    public final static String TOO_EXPENSIVE = "Whether to prevent items from being repaired at 40+ level cost";
+    public final static String CLEAR_MENDING_DEGRADATION = "Whether this method of repair resets mending effectiveness";
     public final static String COST_MULTIPLIER = "Repair cost multiplier";
     // -> Anvil Repairing
+    public final static String TOO_EXPENSIVE = "Whether to prevent items from being repaired at 40+ level cost";
     public final static String SHATTER_SCALING = "Whether to scale repair cost when repairing stacks of shattered";
     public final static String ENCHANTMENT_SCALING = "Whether to scale repair cost based on the item's enchantments";
     public final static String REPAIR_SCALING = "Whether to scale repair cost based on prior anvil uses";

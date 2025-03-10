@@ -70,9 +70,11 @@ public abstract class Mixin_LivingEntity extends Entity {
     private float unbreakable$applyShieldArcShatterPenalty(float original) {
         final ItemStack stack = this.getBlockingItem();
 
-        if (!ShatterHelper.isShattered(stack)
-                || ConfigHelper.isInList$shatterBlacklist(stack.getRegistryEntry())
-                || !Unbreakable.CONFIG.shatterPenalties.SHIELD_ARC()) {
+        if (!ShatterHelper.isShattered(stack)) {
+            return original;
+        } else if (ConfigHelper.isInList$shatterBlacklist(stack.getRegistryEntry())) {
+            return original;
+        } else if (!Unbreakable.CONFIG.shatterPenalties.SHIELD_ARC()) {
             return original;
         }
 
@@ -127,8 +129,9 @@ public abstract class Mixin_LivingEntity extends Entity {
         for (EquipmentSlot slot : EquipmentSlot.VALUES) {
             final ItemStack stack = this.getEquippedStack(slot);
 
-            if (!LivingEntity.canGlideWith(stack, slot)
-                    || stack.getOrDefault(UnbreakableComponents.SHATTER_LEVEL, 0) <= shatterLevelRecord) {
+            if (!LivingEntity.canGlideWith(stack, slot)) {
+                continue;
+            } else if (stack.getOrDefault(UnbreakableComponents.SHATTER_LEVEL, 0) <= shatterLevelRecord) {
                 continue;
             }
 
@@ -157,11 +160,9 @@ public abstract class Mixin_LivingEntity extends Entity {
             method = "method_61423",
             at = @At("HEAD")
     )
-    private void unbreakable$applyAttributeShatterPenalty(
-            RegistryEntry<EntityAttribute> attribute,
-            EntityAttributeModifier modifier,
-            CallbackInfo ci,
-            @Local(argsOnly = true) LocalRef<EntityAttributeModifier> newModifier) {
+    private void unbreakable$applyAttributeShatterPenalty(RegistryEntry<EntityAttribute> attribute, EntityAttributeModifier modifier,
+                                                          CallbackInfo ci,
+                                                          @Local(argsOnly = true) LocalRef<EntityAttributeModifier> newModifier) {
         final ItemStack stack = sharedItemStack;
         if (stack == null || !ShatterHelper.isShattered(stack)) {
             return;
@@ -173,24 +174,13 @@ public abstract class Mixin_LivingEntity extends Entity {
         if (modifier.value() >= 0) {
             newModifierValue = modifier.value() * penaltyMultiplier;
 
-            newModifier.set(
-                    new EntityAttributeModifier(
-                            modifier.id(),
-                            newModifierValue,
-                            modifier.operation()
-                    )
+            newModifier.set(new EntityAttributeModifier(modifier.id(), newModifierValue, modifier.operation())
             );
         } else {
             newModifierValue = modifier.value() + this.getAttributeBaseValue(attribute);
             newModifierValue = newModifierValue - (newModifierValue * penaltyMultiplier);
 
-            newModifier.set(
-                    new EntityAttributeModifier(
-                            modifier.id(),
-                            modifier.value() - newModifierValue,
-                            modifier.operation()
-                    )
-            );
+            newModifier.set(new EntityAttributeModifier(modifier.id(), modifier.value() - newModifierValue, modifier.operation()));
         }
     }
 }

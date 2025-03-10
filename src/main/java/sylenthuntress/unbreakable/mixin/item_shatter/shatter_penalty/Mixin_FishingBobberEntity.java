@@ -26,9 +26,11 @@ public abstract class Mixin_FishingBobberEntity {
             stack = thrower.getOffHandStack();
         }
 
-        if (!ShatterHelper.isShattered(stack)
-                || ConfigHelper.isInList$shatterBlacklist(stack.getRegistryEntry())
-                || !Unbreakable.CONFIG.shatterPenalties.PROJECTILES()) {
+        if (!ShatterHelper.isShattered(stack)) {
+            return original;
+        } else if (ConfigHelper.isInList$shatterBlacklist(stack.getRegistryEntry())) {
+            return original;
+        } else if (!Unbreakable.CONFIG.shatterPenalties.PROJECTILES()) {
             return original;
         }
 
@@ -44,12 +46,14 @@ public abstract class Mixin_FishingBobberEntity {
             )
     )
     private float unbreakable$applyFishingLuckShatteredPenalty(float original, ItemStack stack) {
-        if (!ShatterHelper.isShattered(stack)
-                || ConfigHelper.isInList$shatterBlacklist(stack.getRegistryEntry())
-                || !Unbreakable.CONFIG.shatterPenalties.FISHING_LUCK()) {
+        if (!ShatterHelper.isShattered(stack)) {
+            return original;
+        } else if (ConfigHelper.isInList$shatterBlacklist(stack.getRegistryEntry())) {
+            return original;
+        } else if (!Unbreakable.CONFIG.shatterPenalties.FISHING_LUCK()) {
             return original;
         }
 
-        return Math.round(original * ShatterHelper.calculateShatterPenalty(stack));
+        return original * ShatterHelper.calculateShatterPenalty(stack);
     }
 }

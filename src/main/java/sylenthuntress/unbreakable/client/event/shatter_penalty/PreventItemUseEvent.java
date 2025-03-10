@@ -15,11 +15,11 @@ public class PreventItemUseEvent implements UseItemCallback {
     public ActionResult interact(PlayerEntity player, World world, Hand hand) {
         ItemStack stack = player.getStackInHand(hand);
 
-        if (Unbreakable.CONFIG.shatterPenalties.ITEM_USE()
-                && !player.isInCreativeMode()
-                && !player.isSpectator()
-                && ShatterHelper.shouldPreventUse(stack)) {
-            player.stopUsingItem();
+        boolean configDisableInteraction = Unbreakable.CONFIG.shatterPenalties.ITEM_USE();
+        boolean playerIsCheating = !(player.isInCreativeMode() && player.isSpectator());
+        boolean shouldPreventUsingStack = ShatterHelper.shouldPreventUse(stack);
+
+        if (configDisableInteraction && playerIsCheating && shouldPreventUsingStack) {
             ClientItemShatterHelper.sendMessageCantUseItem(stack);
             return ActionResult.FAIL;
         }

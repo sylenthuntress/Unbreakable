@@ -34,10 +34,13 @@ public abstract class Mixin_TridentEntity extends Entity {
     private float unbreakable$applyShatterDamagePenalty(float original) {
         ItemStack stack = this.getWeaponStack();
 
-        if (stack == null
-                || !ShatterHelper.isShattered(stack)
-                || ConfigHelper.isInList$shatterBlacklist(stack.getRegistryEntry())
-                || !Unbreakable.CONFIG.shatterPenalties.ATTACK_DAMAGE()) {
+        if (stack == null) {
+            return original;
+        } else if (!ShatterHelper.isShattered(stack)) {
+            return original;
+        } else if (ConfigHelper.isInList$shatterBlacklist(stack.getRegistryEntry())) {
+            return original;
+        } else if (!Unbreakable.CONFIG.shatterPenalties.ATTACK_DAMAGE()) {
             return original;
         }
 

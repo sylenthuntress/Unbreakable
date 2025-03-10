@@ -11,21 +11,22 @@ import net.minecraft.text.TranslatableTextContent;
 import net.minecraft.util.Formatting;
 import sylenthuntress.unbreakable.Unbreakable;
 import sylenthuntress.unbreakable.registry.UnbreakableComponents;
-import sylenthuntress.unbreakable.util.ShatterHelper;
 import sylenthuntress.unbreakable.util.NumberHelper;
+import sylenthuntress.unbreakable.util.ShatterHelper;
 
 import java.util.List;
 
 
 public class DisplayShatterTooltip implements ItemTooltipCallback {
+    private static final MinecraftClient client = MinecraftClient.getInstance();
+
     @Override
     public void getTooltip(ItemStack stack, Item.TooltipContext context, TooltipType type, List<Text> lines) {
         if (!ShatterHelper.isShattered(stack) || !Unbreakable.CONFIG.shatterTooltip.DISPLAY_TOOLTIP()) {
             return;
         }
 
-        boolean advancedToolTips = !Unbreakable.CONFIG.shatterTooltip.INDEX_OVERRIDE()
-                && MinecraftClient.getInstance().options.advancedItemTooltips;
+        boolean advancedToolTips = !Unbreakable.CONFIG.shatterTooltip.INDEX_OVERRIDE() && client.options.advancedItemTooltips;
 
         int shatterLevel = stack.getOrDefault(UnbreakableComponents.SHATTER_LEVEL, 0);
         int tooltipIndex = getTooltipIndex(lines, advancedToolTips);

@@ -16,14 +16,11 @@ public class Mixin_EnchantmentHelper {
             method = "hasAnyEnchantmentsWith",
             at = @At("RETURN")
     )
-    private static boolean unbreakable$disableBindingWhenShattered(
-            boolean original,
-            ItemStack itemStack,
-            ComponentType<?> componentType) {
-        return original
-                && (componentType != EnchantmentEffectComponentTypes.PREVENT_ARMOR_CHANGE
-                || !ShatterHelper.isShattered(itemStack)
-                || !Unbreakable.CONFIG.disableBindingWhenShattered()
-        );
+    private static boolean unbreakable$disableBindingWhenShattered(boolean original, ItemStack itemStack, ComponentType<?> componentType) {
+        boolean componentIsBinding = componentType == EnchantmentEffectComponentTypes.PREVENT_ARMOR_CHANGE;
+        boolean stackIsShattered = ShatterHelper.isShattered(itemStack);
+        boolean configEnabled = Unbreakable.CONFIG.disableBindingWhenShattered();
+
+        return original && componentIsBinding && stackIsShattered && configEnabled;
     }
 }

@@ -38,9 +38,11 @@ public abstract class Mixin_PlayerEntity extends Entity {
     int unbreakable$applyArmorEffectsShatterPenalty(int original) {
         ItemStack stack = getEquippedStack(EquipmentSlot.HEAD);
 
-        if (!ShatterHelper.isShattered(stack)
-                || ConfigHelper.isInList$shatterBlacklist(stack.getRegistryEntry())
-                || !Unbreakable.CONFIG.shatterPenalties.ARMOR_EFFECTS()) {
+        if (!ShatterHelper.isShattered(stack)) {
+            return original;
+        } else if (ConfigHelper.isInList$shatterBlacklist(stack.getRegistryEntry())) {
+            return original;
+        } else if (!Unbreakable.CONFIG.shatterPenalties.ARMOR_EFFECTS()) {
             return original;
         }
 

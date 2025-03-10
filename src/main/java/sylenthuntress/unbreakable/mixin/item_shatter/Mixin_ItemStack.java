@@ -36,81 +36,40 @@ public abstract class Mixin_ItemStack implements ComponentHolder {
     public abstract Item getItem();
 
     @Shadow
-    public abstract int getMaxDamage();
-
-    @Shadow
-    public abstract int getDamage();
-
-    @Shadow
     public abstract RegistryEntry<Item> getRegistryEntry();
 
-    // Prevents items from breaking at normal values
     @ModifyReturnValue(
-            method = "shouldBreak",
+            method = {
+                    "shouldBreak",
+                    "willBreakNextUse"
+            },
             at = @At(value = "RETURN")
     )
     private boolean unbreakable$preventItemBreak(boolean original) {
-        return unbreakable$preventItemBreakCondition(original);
-    }
+        boolean itemIsBreakable = this.isIn(UnbreakableTags.BREAKABLE_ITEMS);
+        boolean itemCanBreak = Unbreakable.CONFIG.breakItems() && ShatterHelper.isMaxShatterLevel((ItemStack) (Object) this);
+        boolean noNegativeDurability = Unbreakable.CONFIG.negativeDurabilityMultiplier() == 0.0;
 
-    @ModifyReturnValue(
-            method = "willBreakNextUse",
-            at = @At(value = "RETURN")
-    )
-    private boolean unbreakable$itemWontBreak(boolean original) {
-        return unbreakable$preventItemBreakCondition(original);
-    }
-
-    @Unique
-    private boolean unbreakable$preventItemBreakCondition(boolean original) {
-        return (Unbreakable.CONFIG.negativeDurabilityMultiplier() == 0.0
-                || (Unbreakable.CONFIG.breakItems()
-                && ShatterHelper.isMaxShatterLevel((ItemStack) (Object) this)
-                && (this.getDamage() >= this.getMaxDamage() * (Unbreakable.CONFIG.negativeDurabilityMultiplier() + 1)))
-                || this.isIn(UnbreakableTags.BREAKABLE_ITEMS)) && original;
-    }
-
-    // Allows items to enter negative durability (twice their normal MAX_DAMAGE)
-    @Unique
-    private int unbreakable$disableDamageCap(int original) {
-        if (Unbreakable.CONFIG.negativeDurabilityMultiplier() == 0.0
-                || ConfigHelper.isInList$shatterBlacklist(this.getRegistryEntry())) {
-            return original;
-        }
-        return (int) (original * (Unbreakable.CONFIG.negativeDurabilityMultiplier() + 1) + 1);
+        return original && (itemIsBreakable || itemCanBreak || noNegativeDurability);
     }
 
     @ModifyExpressionValue(
-            method = "setDamage",
+            method = {
+                    "setDamage",
+                    "getDamage",
+                    "damage(ILnet/minecraft/entity/player/PlayerEntity;)V"
+            },
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/item/ItemStack;getMaxDamage()I"
             )
     )
     private int unbreakable$disableSetDamageCap(int original) {
-        return this.unbreakable$disableDamageCap(original);
-    }
-
-    @ModifyExpressionValue(
-            method = "getDamage",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/item/ItemStack;getMaxDamage()I"
-            )
-    )
-    private int unbreakable$disableGetDamageCap(int original) {
-        return this.unbreakable$disableDamageCap(original);
-    }
-
-    @ModifyExpressionValue(
-            method = "damage(ILnet/minecraft/entity/player/PlayerEntity;)V",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/item/ItemStack;getMaxDamage()I"
-            )
-    )
-    private int unbreakable$disableApplyDamageCap(int original) {
-        return this.unbreakable$disableDamageCap(original);
+        if (Unbreakable.CONFIG.negativeDurabilityMultiplier() == 0.0F || ConfigHelper.isInList$shatterBlacklist(this.getRegistryEntry())) {
+            return original;
+        } else {
+            return Math.round(original * (Unbreakable.CONFIG.negativeDurabilityMultiplier() + 1) + 1);
+        }
     }
 
     @Unique

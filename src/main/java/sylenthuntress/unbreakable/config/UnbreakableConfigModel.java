@@ -101,6 +101,8 @@ public class UnbreakableConfigModel {
     public static class AnvilRepair {
         @Comment(UnbreakableConfigComments.ALLOW_REPAIR)
         public boolean ALLOW = true;
+        @Comment(UnbreakableConfigComments.CLEAR_MENDING_DEGRADATION)
+        public boolean CLEARS_MENDING_DEGRADATION = true;
         @Comment(UnbreakableConfigComments.TOO_EXPENSIVE)
         public boolean TOO_EXPENSIVE = false;
         @Nest
@@ -111,6 +113,8 @@ public class UnbreakableConfigModel {
     public static class SmithingRepair {
         @Comment(UnbreakableConfigComments.ALLOW_REPAIR)
         public boolean ALLOW = true;
+        @Comment(UnbreakableConfigComments.CLEAR_MENDING_DEGRADATION)
+        public boolean CLEARS_MENDING_DEGRADATION = true;
         @Nest
         @Expanded
         public SmithingRepairCost COST = new SmithingRepairCost();
@@ -119,6 +123,8 @@ public class UnbreakableConfigModel {
     public static class GrindingRepair {
         @Comment(UnbreakableConfigComments.ALLOW_REPAIR)
         public boolean ALLOW = true;
+        @Comment(UnbreakableConfigComments.CLEAR_MENDING_DEGRADATION)
+        public boolean CLEARS_MENDING_DEGRADATION = true;
         @Nest
         @Expanded
         public GrindingRepairCost COST = new GrindingRepairCost();
