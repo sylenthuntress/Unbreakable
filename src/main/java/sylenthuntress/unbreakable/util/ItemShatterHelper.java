@@ -1,8 +1,10 @@
 package sylenthuntress.unbreakable.util;
 
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.ItemEnchantmentsComponent;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -10,12 +12,49 @@ import sylenthuntress.unbreakable.Unbreakable;
 import sylenthuntress.unbreakable.config.util.ConfigHelper;
 import sylenthuntress.unbreakable.registry.UnbreakableComponents;
 
+import java.util.function.Consumer;
+
 public abstract class ItemShatterHelper {
+    public static void applyShatter(ItemStack stack, int damage, Consumer<Item> breakCallback) {
+        if (ItemShatterHelper.getMaxShatterLevel(stack) == 0) {
+            return;
+        } else if (ConfigHelper.isInList$shatterBlacklist(stack.getRegistryEntry())) {
+            return;
+        }
+
+        int shatterLevel = stack.getOrDefault(UnbreakableComponents.SHATTER_LEVEL, 0);
+        int maxShatterLevel = ItemShatterHelper.getMaxShatterLevel(stack);
+        int maxDamage = stack.getMaxDamage();
+
+        if (damage <= maxDamage && Unbreakable.CONFIG.allowRepairingShattered() && ItemShatterHelper.isShattered(stack)) {
+            shatterLevel--;
+
+            if (shatterLevel > 0) {
+                damage = Math.round(
+                        maxDamage * (Unbreakable.CONFIG.negativeDurabilityMultiplier() + 1)
+                );
+            }
+        } else if (damage > maxDamage && shatterLevel == 0) {
+            shatterLevel++;
+            breakCallback.accept(stack.getItem());
+        } else if (damage > maxDamage * (Unbreakable.CONFIG.negativeDurabilityMultiplier() + 1) && !ItemShatterHelper.isMaxShatterLevel(stack)) {
+            shatterLevel++;
+            damage = maxDamage + 1;
+            breakCallback.accept(stack.getItem());
+        }
+
+        stack.set(UnbreakableComponents.SHATTER_LEVEL, Math.min(shatterLevel, maxShatterLevel));
+
+        stack.set(DataComponentTypes.DAMAGE, Math.clamp(damage,
+                0,
+                Math.round(maxDamage * (Unbreakable.CONFIG.negativeDurabilityMultiplier() + 1)))
+        );
+    }
+
     public static float calculateShatterPenalty(ItemStack stack, float minEffectiveness) {
         return Math.max(
                 minEffectiveness,
-                1.0F - (float) stack.getOrDefault(UnbreakableComponents.SHATTER_LEVEL, 0)
-                        / getMaxShatterLevel(stack)
+                1.0F - (float) stack.getOrDefault(UnbreakableComponents.SHATTER_LEVEL, 0) / getMaxShatterLevel(stack)
         );
     }
 
