@@ -4,7 +4,8 @@ import net.minecraft.util.Identifier;
 
 public enum RepairMethod {
     SMITHING_TABLE("smithing_table"),
-    GRINDSTONE("grindstone");
+    GRINDSTONE("grindstone"),
+    MENDING("mending");
 
     private final Identifier name;
 
