@@ -14,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 import sylenthuntress.unbreakable.Unbreakable;
+import sylenthuntress.unbreakable.config.util.ConfigHelper;
 import sylenthuntress.unbreakable.util.ItemShatterHelper;
 
 
@@ -55,7 +56,7 @@ public abstract class Mixin_ProjectileEntity extends Entity {
 
         if (stack == null
                 || !ItemShatterHelper.isShattered(stack)
-                || ItemShatterHelper.isInList$shatterBlacklist(stack.getRegistryEntry())
+                || ConfigHelper.isInList$shatterBlacklist(stack.getRegistryEntry())
                 || !Unbreakable.CONFIG.shatterPenalties.PROJECTILES()) {
             return;
         }

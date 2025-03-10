@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import sylenthuntress.unbreakable.Unbreakable;
+import sylenthuntress.unbreakable.config.util.ConfigHelper;
 import sylenthuntress.unbreakable.util.ItemShatterHelper;
 
 
@@ -26,7 +27,7 @@ public abstract class Mixin_FishingBobberEntity {
         }
 
         if (!ItemShatterHelper.isShattered(stack)
-                || ItemShatterHelper.isInList$shatterBlacklist(stack.getRegistryEntry())
+                || ConfigHelper.isInList$shatterBlacklist(stack.getRegistryEntry())
                 || !Unbreakable.CONFIG.shatterPenalties.PROJECTILES()) {
             return original;
         }
@@ -44,7 +45,7 @@ public abstract class Mixin_FishingBobberEntity {
     )
     private float unbreakable$applyFishingLuckShatteredPenalty(float original, ItemStack stack) {
         if (!ItemShatterHelper.isShattered(stack)
-                || ItemShatterHelper.isInList$shatterBlacklist(stack.getRegistryEntry())
+                || ConfigHelper.isInList$shatterBlacklist(stack.getRegistryEntry())
                 || !Unbreakable.CONFIG.shatterPenalties.FISHING_LUCK()) {
             return original;
         }

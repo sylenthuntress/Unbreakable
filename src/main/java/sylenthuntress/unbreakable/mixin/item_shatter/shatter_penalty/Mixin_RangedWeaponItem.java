@@ -13,6 +13,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 import sylenthuntress.unbreakable.Unbreakable;
+import sylenthuntress.unbreakable.config.util.ConfigHelper;
 import sylenthuntress.unbreakable.util.ItemShatterHelper;
 
 import java.util.List;
@@ -42,7 +43,7 @@ public class Mixin_RangedWeaponItem {
         ItemStack stack = savedItemStack;
 
         if (!ItemShatterHelper.isShattered(stack)
-                || ItemShatterHelper.isInList$shatterBlacklist(stack.getRegistryEntry())
+                || ConfigHelper.isInList$shatterBlacklist(stack.getRegistryEntry())
                 || !Unbreakable.CONFIG.shatterPenalties.PROJECTILES()) {
             return;
         }

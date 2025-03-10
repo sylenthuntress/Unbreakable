@@ -18,6 +18,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import sylenthuntress.unbreakable.Unbreakable;
+import sylenthuntress.unbreakable.config.util.ConfigHelper;
 import sylenthuntress.unbreakable.registry.UnbreakableComponents;
 import sylenthuntress.unbreakable.registry.UnbreakableTags;
 import sylenthuntress.unbreakable.util.ItemShatterHelper;
@@ -78,7 +79,7 @@ public abstract class Mixin_ItemStack implements ComponentHolder {
     @Unique
     private int unbreakable$disableDamageCap(int original) {
         if (Unbreakable.CONFIG.negativeDurabilityMultiplier() == 0.0
-                || ItemShatterHelper.isInList$shatterBlacklist(this.getRegistryEntry())) {
+                || ConfigHelper.isInList$shatterBlacklist(this.getRegistryEntry())) {
             return original;
         }
         return (int) (original * (Unbreakable.CONFIG.negativeDurabilityMultiplier() + 1) + 1);
@@ -127,7 +128,7 @@ public abstract class Mixin_ItemStack implements ComponentHolder {
         final ItemStack stack = (ItemStack) (Object) this;
 
         if (ItemShatterHelper.getMaxShatterLevel(stack) == 0
-                || ItemShatterHelper.isInList$shatterBlacklist(this.getRegistryEntry())) {
+                || ConfigHelper.isInList$shatterBlacklist(this.getRegistryEntry())) {
             return;
         }
 

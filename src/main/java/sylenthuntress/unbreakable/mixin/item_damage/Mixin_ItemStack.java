@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import sylenthuntress.unbreakable.Unbreakable;
-import sylenthuntress.unbreakable.util.ItemShatterHelper;
+import sylenthuntress.unbreakable.config.util.ConfigHelper;
 
 
 @Mixin(ItemStack.class)
@@ -21,7 +21,7 @@ public abstract class Mixin_ItemStack {
             at = @At("RETURN")
     )
     private int unbreakable$maxDamageMultiplier(int original) {
-        if (ItemShatterHelper.isInList$durabilityModifier(this.getRegistryEntry())) {
+        if (ConfigHelper.isInList$durabilityModifier(this.getRegistryEntry())) {
             return original;
         }
 
