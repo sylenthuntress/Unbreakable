@@ -13,6 +13,7 @@
     "item_repair.anvil.Mixin_AnvilScreenHandler",
     "item_repair.grindstone.Mixin_GrindstoneScreenHandler",
     "item_repair.grindstone.Mixin_GrindstoneScreenHandlerOutputSlot",
+    "item_repair.mending.Mixin_ExperienceOrbEntity",
     "item_repair.smithing.Mixin_SmithingScreenHandler",
     "item_shatter.Mixin_ItemStack",
     "item_shatter.shatter_penalty.Mixin_EnchantmentHelper",
