@@ -8,7 +8,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 import sylenthuntress.unbreakable.Unbreakable;
 import sylenthuntress.unbreakable.client.ClientItemShatterHelper;
-import sylenthuntress.unbreakable.util.ItemShatterHelper;
+import sylenthuntress.unbreakable.util.ShatterHelper;
 
 public class PreventItemUseEvent implements UseItemCallback {
     @Override
@@ -18,7 +18,7 @@ public class PreventItemUseEvent implements UseItemCallback {
         if (Unbreakable.CONFIG.shatterPenalties.ITEM_USE()
                 && !player.isInCreativeMode()
                 && !player.isSpectator()
-                && ItemShatterHelper.shouldPreventUse(stack)) {
+                && ShatterHelper.shouldPreventUse(stack)) {
             player.stopUsingItem();
             ClientItemShatterHelper.sendMessageCantUseItem(stack);
             return ActionResult.FAIL;

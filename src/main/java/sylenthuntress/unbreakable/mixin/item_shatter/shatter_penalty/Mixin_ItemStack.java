@@ -9,7 +9,7 @@ import net.minecraft.util.ActionResult;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import sylenthuntress.unbreakable.util.ItemShatterHelper;
+import sylenthuntress.unbreakable.util.ShatterHelper;
 
 @Mixin(ItemStack.class)
 public abstract class Mixin_ItemStack implements ComponentHolder {
@@ -25,7 +25,7 @@ public abstract class Mixin_ItemStack implements ComponentHolder {
             )
     )
     private ActionResult unbreakable$preventBlockUseWhenShattered(ActionResult original) {
-        if (ItemShatterHelper.shouldPreventUse((ItemStack) (Object) this)) {
+        if (ShatterHelper.shouldPreventUse((ItemStack) (Object) this)) {
             return ActionResult.FAIL;
         }
 
@@ -40,7 +40,7 @@ public abstract class Mixin_ItemStack implements ComponentHolder {
             )
     )
     private ActionResult unbreakable$preventEntityUseWhenShattered(ActionResult original) {
-        if (ItemShatterHelper.shouldPreventUse((ItemStack) (Object) this)) {
+        if (ShatterHelper.shouldPreventUse((ItemStack) (Object) this)) {
             return ActionResult.FAIL;
         }
 
@@ -57,10 +57,10 @@ public abstract class Mixin_ItemStack implements ComponentHolder {
     private int unbreakable$applyDurabilityShatterPenalty(int original) {
         final ItemStack stack = (ItemStack) (Object) this;
 
-        if (!ItemShatterHelper.isShattered(stack)) {
+        if (!ShatterHelper.isShattered(stack)) {
             return original;
         }
 
-        return (int) Math.ceil(original * (2 - ItemShatterHelper.calculateShatterPenalty(stack)));
+        return (int) Math.ceil(original * (2 - ShatterHelper.calculateShatterPenalty(stack)));
     }
 }

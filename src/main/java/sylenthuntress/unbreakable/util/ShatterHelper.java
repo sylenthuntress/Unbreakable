@@ -14,19 +14,19 @@ import sylenthuntress.unbreakable.registry.UnbreakableComponents;
 
 import java.util.function.Consumer;
 
-public abstract class ItemShatterHelper {
+public abstract class ShatterHelper {
     public static void applyShatter(ItemStack stack, int damage, Consumer<Item> breakCallback) {
-        if (ItemShatterHelper.getMaxShatterLevel(stack) == 0) {
+        if (ShatterHelper.getMaxShatterLevel(stack) == 0) {
             return;
         } else if (ConfigHelper.isInList$shatterBlacklist(stack.getRegistryEntry())) {
             return;
         }
 
         int shatterLevel = stack.getOrDefault(UnbreakableComponents.SHATTER_LEVEL, 0);
-        int maxShatterLevel = ItemShatterHelper.getMaxShatterLevel(stack);
+        int maxShatterLevel = ShatterHelper.getMaxShatterLevel(stack);
         int maxDamage = stack.getMaxDamage();
 
-        if (damage <= maxDamage && Unbreakable.CONFIG.allowRepairingShattered() && ItemShatterHelper.isShattered(stack)) {
+        if (damage <= maxDamage && Unbreakable.CONFIG.allowRepairingShattered() && ShatterHelper.isShattered(stack)) {
             shatterLevel--;
 
             if (shatterLevel > 0) {
@@ -37,7 +37,7 @@ public abstract class ItemShatterHelper {
         } else if (damage > maxDamage && shatterLevel == 0) {
             shatterLevel++;
             breakCallback.accept(stack.getItem());
-        } else if (damage > maxDamage * (Unbreakable.CONFIG.negativeDurabilityMultiplier() + 1) && !ItemShatterHelper.isMaxShatterLevel(stack)) {
+        } else if (damage > maxDamage * (Unbreakable.CONFIG.negativeDurabilityMultiplier() + 1) && !ShatterHelper.isMaxShatterLevel(stack)) {
             shatterLevel++;
             damage = maxDamage + 1;
             breakCallback.accept(stack.getItem());
@@ -77,7 +77,7 @@ public abstract class ItemShatterHelper {
     public static boolean isMaxShatterLevel(ItemStack stack) {
         return stack.getOrDefault(
                 UnbreakableComponents.SHATTER_LEVEL, 0
-        ) >= ItemShatterHelper.getMaxShatterLevel(stack);
+        ) >= ShatterHelper.getMaxShatterLevel(stack);
     }
 
     public static boolean isShattered(ItemStack stack) {
@@ -109,7 +109,7 @@ public abstract class ItemShatterHelper {
 
         final int shatterLevel = stack.getOrDefault(UnbreakableComponents.SHATTER_LEVEL, 0);
 
-        if (Unbreakable.CONFIG.shatterPenalties.THRESHOLD() == -1 && shatterLevel == ItemShatterHelper.getMaxShatterLevel(stack))
+        if (Unbreakable.CONFIG.shatterPenalties.THRESHOLD() == -1 && shatterLevel == ShatterHelper.getMaxShatterLevel(stack))
             return true;
         else if (Unbreakable.CONFIG.shatterPenalties.THRESHOLD() != -1) {
             return shatterLevel >= Unbreakable.CONFIG.shatterPenalties.THRESHOLD();

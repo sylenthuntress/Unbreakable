@@ -19,16 +19,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import sylenthuntress.unbreakable.Unbreakable;
 import sylenthuntress.unbreakable.config.util.ConfigHelper;
 import sylenthuntress.unbreakable.registry.UnbreakableTags;
-import sylenthuntress.unbreakable.util.ItemShatterHelper;
+import sylenthuntress.unbreakable.util.ShatterHelper;
 
 import java.util.function.Consumer;
 
 @SuppressWarnings("ConstantValue")
 @Mixin(ItemStack.class)
 public abstract class Mixin_ItemStack implements ComponentHolder {
-    @Unique
-    boolean incrementedShatterLevel;
-
     @Shadow
     public abstract <T> T set(ComponentType<? super T> type, @Nullable T value);
 
@@ -68,7 +65,7 @@ public abstract class Mixin_ItemStack implements ComponentHolder {
     private boolean unbreakable$preventItemBreakCondition(boolean original) {
         return (Unbreakable.CONFIG.negativeDurabilityMultiplier() == 0.0
                 || (Unbreakable.CONFIG.breakItems()
-                && ItemShatterHelper.isMaxShatterLevel((ItemStack) (Object) this)
+                && ShatterHelper.isMaxShatterLevel((ItemStack) (Object) this)
                 && (this.getDamage() >= this.getMaxDamage() * (Unbreakable.CONFIG.negativeDurabilityMultiplier() + 1)))
                 || this.isIn(UnbreakableTags.BREAKABLE_ITEMS)) && original;
     }
@@ -133,7 +130,7 @@ public abstract class Mixin_ItemStack implements ComponentHolder {
             at = @At("TAIL")
     )
     private void unbreakable$applyShatter(int damage, CallbackInfo ci) {
-        ItemShatterHelper.applyShatter((ItemStack) (Object) this, damage, breakCallback);
+        ShatterHelper.applyShatter((ItemStack) (Object) this, damage, breakCallback);
         this.breakCallback = null;
     }
 }

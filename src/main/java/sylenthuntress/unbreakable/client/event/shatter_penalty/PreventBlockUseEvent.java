@@ -9,7 +9,7 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.world.World;
 import sylenthuntress.unbreakable.Unbreakable;
 import sylenthuntress.unbreakable.client.ClientItemShatterHelper;
-import sylenthuntress.unbreakable.util.ItemShatterHelper;
+import sylenthuntress.unbreakable.util.ShatterHelper;
 
 public class PreventBlockUseEvent implements UseBlockCallback {
     @Override
@@ -19,7 +19,7 @@ public class PreventBlockUseEvent implements UseBlockCallback {
         if (Unbreakable.CONFIG.shatterPenalties.BLOCK_USE()
                 && !player.isInCreativeMode()
                 && !player.isSpectator()
-                && ItemShatterHelper.shouldPreventUse(stack)) {
+                && ShatterHelper.shouldPreventUse(stack)) {
             ClientItemShatterHelper.sendMessageCantUseItem(stack);
             return ActionResult.FAIL;
         }

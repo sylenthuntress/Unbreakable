@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import sylenthuntress.unbreakable.Unbreakable;
 import sylenthuntress.unbreakable.config.util.ConfigHelper;
-import sylenthuntress.unbreakable.util.ItemShatterHelper;
+import sylenthuntress.unbreakable.util.ShatterHelper;
 
 
 @Mixin(TridentEntity.class)
@@ -35,12 +35,12 @@ public abstract class Mixin_TridentEntity extends Entity {
         ItemStack stack = this.getWeaponStack();
 
         if (stack == null
-                || !ItemShatterHelper.isShattered(stack)
+                || !ShatterHelper.isShattered(stack)
                 || ConfigHelper.isInList$shatterBlacklist(stack.getRegistryEntry())
                 || !Unbreakable.CONFIG.shatterPenalties.ATTACK_DAMAGE()) {
             return original;
         }
 
-        return original * ItemShatterHelper.calculateShatterPenalty(stack);
+        return original * ShatterHelper.calculateShatterPenalty(stack);
     }
 }

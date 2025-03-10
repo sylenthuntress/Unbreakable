@@ -23,7 +23,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import sylenthuntress.unbreakable.Unbreakable;
 import sylenthuntress.unbreakable.config.util.ConfigHelper;
 import sylenthuntress.unbreakable.registry.UnbreakableComponents;
-import sylenthuntress.unbreakable.util.ItemShatterHelper;
+import sylenthuntress.unbreakable.util.ShatterHelper;
 
 import java.util.Map;
 
@@ -41,7 +41,7 @@ public abstract class Mixin_LivingEntity extends Entity {
             )
     )
     private static boolean unbreakable$preventUseWhenShattered(boolean original, ItemStack stack) {
-        return original && !ItemShatterHelper.shouldPreventUse(stack);
+        return original && !ShatterHelper.shouldPreventUse(stack);
     }
 
     @Shadow
@@ -70,13 +70,13 @@ public abstract class Mixin_LivingEntity extends Entity {
     private float unbreakable$applyShieldArcShatterPenalty(float original) {
         final ItemStack stack = this.getBlockingItem();
 
-        if (!ItemShatterHelper.isShattered(stack)
+        if (!ShatterHelper.isShattered(stack)
                 || ConfigHelper.isInList$shatterBlacklist(stack.getRegistryEntry())
                 || !Unbreakable.CONFIG.shatterPenalties.SHIELD_ARC()) {
             return original;
         }
 
-        return original + -1 * (1 - ItemShatterHelper.calculateShatterPenalty(stack));
+        return original + -1 * (1 - ShatterHelper.calculateShatterPenalty(stack));
     }
 
     @ModifyExpressionValue(
@@ -103,7 +103,7 @@ public abstract class Mixin_LivingEntity extends Entity {
             }
 
             shatterLevelRecord = stack.getOrDefault(UnbreakableComponents.SHATTER_LEVEL, 0);
-            penaltyMultiplier = 3 - (ItemShatterHelper.calculateShatterPenalty(stack) * 2);
+            penaltyMultiplier = 3 - (ShatterHelper.calculateShatterPenalty(stack) * 2);
         }
 
         return original * penaltyMultiplier;
@@ -133,7 +133,7 @@ public abstract class Mixin_LivingEntity extends Entity {
             }
 
             shatterLevelRecord = stack.getOrDefault(UnbreakableComponents.SHATTER_LEVEL, 0);
-            penaltyMultiplier = Math.max(ItemShatterHelper.calculateShatterPenalty(stack), 0.1);
+            penaltyMultiplier = Math.max(ShatterHelper.calculateShatterPenalty(stack), 0.1);
         }
 
         return original * penaltyMultiplier;
@@ -163,11 +163,11 @@ public abstract class Mixin_LivingEntity extends Entity {
             CallbackInfo ci,
             @Local(argsOnly = true) LocalRef<EntityAttributeModifier> newModifier) {
         final ItemStack stack = sharedItemStack;
-        if (stack == null || !ItemShatterHelper.isShattered(stack)) {
+        if (stack == null || !ShatterHelper.isShattered(stack)) {
             return;
         }
 
-        double penaltyMultiplier = ItemShatterHelper.calculateShatterPenalty(stack);
+        double penaltyMultiplier = ShatterHelper.calculateShatterPenalty(stack);
         double newModifierValue;
 
         if (modifier.value() >= 0) {

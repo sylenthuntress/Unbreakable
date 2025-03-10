@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import sylenthuntress.unbreakable.Unbreakable;
 import sylenthuntress.unbreakable.config.util.ConfigHelper;
-import sylenthuntress.unbreakable.util.ItemShatterHelper;
+import sylenthuntress.unbreakable.util.ShatterHelper;
 
 
 @Mixin(PlayerEntity.class)
@@ -38,13 +38,13 @@ public abstract class Mixin_PlayerEntity extends Entity {
     int unbreakable$applyArmorEffectsShatterPenalty(int original) {
         ItemStack stack = getEquippedStack(EquipmentSlot.HEAD);
 
-        if (!ItemShatterHelper.isShattered(stack)
+        if (!ShatterHelper.isShattered(stack)
                 || ConfigHelper.isInList$shatterBlacklist(stack.getRegistryEntry())
                 || !Unbreakable.CONFIG.shatterPenalties.ARMOR_EFFECTS()) {
             return original;
         }
 
-        return Math.round(original * ItemShatterHelper.calculateShatterPenalty(stack));
+        return Math.round(original * ShatterHelper.calculateShatterPenalty(stack));
     }
 
 }

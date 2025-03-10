@@ -21,7 +21,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import sylenthuntress.unbreakable.Unbreakable;
-import sylenthuntress.unbreakable.util.ItemShatterHelper;
+import sylenthuntress.unbreakable.util.ShatterHelper;
 
 @Mixin(PlayerEntity.class)
 public abstract class Mixin_PlayerEntity extends LivingEntity {
@@ -60,12 +60,12 @@ public abstract class Mixin_PlayerEntity extends LivingEntity {
                     1, 1 + (livingTarget.getArmor() * 0.1F))
                     : 0;
 
-            if (Unbreakable.CONFIG.bonusDamageOnBreak.DO_BONUS() && !ItemShatterHelper.isShattered(stack)) {
+            if (Unbreakable.CONFIG.bonusDamageOnBreak.DO_BONUS() && !ShatterHelper.isShattered(stack)) {
                 ItemStack dummyStack = stack.copy();
                 dummyStack.damage(Math.round(itemDamage), attacker);
                 dummyStack.postDamageEntity(livingTarget, attacker);
 
-                if (ItemShatterHelper.isShattered(dummyStack)) {
+                if (ShatterHelper.isShattered(dummyStack)) {
                     unbreakable$doBonus = true;
                 }
             }

@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import sylenthuntress.unbreakable.Unbreakable;
-import sylenthuntress.unbreakable.util.ItemShatterHelper;
+import sylenthuntress.unbreakable.util.ShatterHelper;
 
 import java.util.function.Consumer;
 
@@ -63,7 +63,7 @@ public abstract class Mixin_ItemStack implements ComponentHolder {
             return original;
         }
 
-        return original * ItemShatterHelper.calculateShatterPenalty(stack);
+        return original * ShatterHelper.calculateShatterPenalty(stack);
     }
 
     @ModifyVariable(
@@ -81,7 +81,7 @@ public abstract class Mixin_ItemStack implements ComponentHolder {
             return original;
         }
 
-        return original * ItemShatterHelper.calculateShatterPenalty(stack);
+        return original * ShatterHelper.calculateShatterPenalty(stack);
     }
 
     @ModifyVariable(
@@ -99,6 +99,6 @@ public abstract class Mixin_ItemStack implements ComponentHolder {
             return original;
         }
 
-        return original * ItemShatterHelper.calculateShatterPenalty(stack);
+        return original * ShatterHelper.calculateShatterPenalty(stack);
     }
 }

@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import sylenthuntress.unbreakable.Unbreakable;
-import sylenthuntress.unbreakable.util.ItemShatterHelper;
+import sylenthuntress.unbreakable.util.ShatterHelper;
 
 @Mixin(Item.class)
 public abstract class Mixin_Item implements ComponentHolder {
@@ -20,6 +20,6 @@ public abstract class Mixin_Item implements ComponentHolder {
             return original;
         }
 
-        return original * ItemShatterHelper.calculateShatterPenalty(stack);
+        return original * ShatterHelper.calculateShatterPenalty(stack);
     }
 }

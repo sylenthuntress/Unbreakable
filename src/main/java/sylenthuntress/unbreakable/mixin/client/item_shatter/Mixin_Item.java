@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import sylenthuntress.unbreakable.Unbreakable;
 import sylenthuntress.unbreakable.registry.UnbreakableComponents;
-import sylenthuntress.unbreakable.util.ItemShatterHelper;
+import sylenthuntress.unbreakable.util.ShatterHelper;
 
 
 @Mixin(Item.class)
@@ -24,13 +24,13 @@ public abstract class Mixin_Item implements ComponentHolder {
         }
 
 
-        if (ItemShatterHelper.isShattered(stack)) {
+        if (ShatterHelper.isShattered(stack)) {
             itemBarStep = (int) 13.0F * stack.getOrDefault(
                     UnbreakableComponents.SHATTER_LEVEL,
                     0
-            ) / ItemShatterHelper.getMaxShatterLevel(stack);
+            ) / ShatterHelper.getMaxShatterLevel(stack);
 
-            int oneStep = (int) 13.0F / ItemShatterHelper.getMaxShatterLevel(stack);
+            int oneStep = (int) 13.0F / ShatterHelper.getMaxShatterLevel(stack);
 
             itemBarStep -= MathHelper.clamp(oneStep - Math.round(
                     (float) oneStep

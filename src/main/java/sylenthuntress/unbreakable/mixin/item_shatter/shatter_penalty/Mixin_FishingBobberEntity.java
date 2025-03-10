@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import sylenthuntress.unbreakable.Unbreakable;
 import sylenthuntress.unbreakable.config.util.ConfigHelper;
-import sylenthuntress.unbreakable.util.ItemShatterHelper;
+import sylenthuntress.unbreakable.util.ShatterHelper;
 
 
 @Mixin(FishingBobberEntity.class)
@@ -26,13 +26,13 @@ public abstract class Mixin_FishingBobberEntity {
             stack = thrower.getOffHandStack();
         }
 
-        if (!ItemShatterHelper.isShattered(stack)
+        if (!ShatterHelper.isShattered(stack)
                 || ConfigHelper.isInList$shatterBlacklist(stack.getRegistryEntry())
                 || !Unbreakable.CONFIG.shatterPenalties.PROJECTILES()) {
             return original;
         }
 
-        final double penaltyMultiplier = ItemShatterHelper.calculateShatterPenalty(stack);
+        final double penaltyMultiplier = ShatterHelper.calculateShatterPenalty(stack);
         return original.multiply(penaltyMultiplier);
     }
 
@@ -44,12 +44,12 @@ public abstract class Mixin_FishingBobberEntity {
             )
     )
     private float unbreakable$applyFishingLuckShatteredPenalty(float original, ItemStack stack) {
-        if (!ItemShatterHelper.isShattered(stack)
+        if (!ShatterHelper.isShattered(stack)
                 || ConfigHelper.isInList$shatterBlacklist(stack.getRegistryEntry())
                 || !Unbreakable.CONFIG.shatterPenalties.FISHING_LUCK()) {
             return original;
         }
 
-        return Math.round(original * ItemShatterHelper.calculateShatterPenalty(stack));
+        return Math.round(original * ShatterHelper.calculateShatterPenalty(stack));
     }
 }

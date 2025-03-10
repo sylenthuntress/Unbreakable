@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import sylenthuntress.unbreakable.Unbreakable;
-import sylenthuntress.unbreakable.util.ItemShatterHelper;
+import sylenthuntress.unbreakable.util.ShatterHelper;
 
 @Mixin(EnchantmentHelper.class)
 public class Mixin_EnchantmentHelper {
@@ -22,7 +22,7 @@ public class Mixin_EnchantmentHelper {
             ComponentType<?> componentType) {
         return original
                 && (componentType != EnchantmentEffectComponentTypes.PREVENT_ARMOR_CHANGE
-                || !ItemShatterHelper.isShattered(itemStack)
+                || !ShatterHelper.isShattered(itemStack)
                 || !Unbreakable.CONFIG.disableBindingWhenShattered()
         );
     }

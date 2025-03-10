@@ -72,7 +72,7 @@ public class RepairHelper {
         }
         if (enchantmentScaling) {
             for (RegistryEntry<Enchantment> enchantment : outputStack.getEnchantments().getEnchantments()) {
-                repairConstant += ItemShatterHelper.getEnchantmentLevel(enchantment.getKey().orElseThrow(), outputStack);
+                repairConstant += ShatterHelper.getEnchantmentLevel(enchantment.getKey().orElseThrow(), outputStack);
             }
         }
         if (degradeRepairFactor) {

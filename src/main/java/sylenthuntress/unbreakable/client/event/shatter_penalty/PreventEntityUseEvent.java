@@ -11,7 +11,7 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import sylenthuntress.unbreakable.Unbreakable;
 import sylenthuntress.unbreakable.client.ClientItemShatterHelper;
-import sylenthuntress.unbreakable.util.ItemShatterHelper;
+import sylenthuntress.unbreakable.util.ShatterHelper;
 
 public class PreventEntityUseEvent implements UseEntityCallback {
     @Override
@@ -21,7 +21,7 @@ public class PreventEntityUseEvent implements UseEntityCallback {
         if (Unbreakable.CONFIG.shatterPenalties.ENTITY_USE()
                 && !player.isInCreativeMode()
                 && !player.isSpectator()
-                && ItemShatterHelper.shouldPreventUse(stack)) {
+                && ShatterHelper.shouldPreventUse(stack)) {
             player.stopUsingItem();
             ClientItemShatterHelper.sendMessageCantUseItem(stack);
             return ActionResult.FAIL;

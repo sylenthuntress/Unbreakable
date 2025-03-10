@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import sylenthuntress.unbreakable.Unbreakable;
-import sylenthuntress.unbreakable.util.ItemShatterHelper;
+import sylenthuntress.unbreakable.util.ShatterHelper;
 
 @Mixin(EnchantmentHelper.class)
 public abstract class Mixin_EnchantmentHelper {
@@ -15,11 +15,11 @@ public abstract class Mixin_EnchantmentHelper {
             at = @At("RETURN")
     )
     private static float unbreakable$applyRiptideShatterPenalty(float original, ItemStack stack) {
-        if (!ItemShatterHelper.isShattered(stack)
+        if (!ShatterHelper.isShattered(stack)
                 || !Unbreakable.CONFIG.shatterPenalties.RIPTIDE()) {
             return original;
         }
 
-        return original * ItemShatterHelper.calculateShatterPenalty(stack);
+        return original * ShatterHelper.calculateShatterPenalty(stack);
     }
 }

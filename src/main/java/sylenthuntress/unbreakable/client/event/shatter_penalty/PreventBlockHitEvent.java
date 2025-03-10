@@ -10,7 +10,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import sylenthuntress.unbreakable.Unbreakable;
 import sylenthuntress.unbreakable.client.ClientItemShatterHelper;
-import sylenthuntress.unbreakable.util.ItemShatterHelper;
+import sylenthuntress.unbreakable.util.ShatterHelper;
 
 public class PreventBlockHitEvent implements AttackBlockCallback {
 
@@ -21,7 +21,7 @@ public class PreventBlockHitEvent implements AttackBlockCallback {
         if (Unbreakable.CONFIG.shatterPenalties.BLOCK_HIT()
                 && !player.isInCreativeMode()
                 && !player.isSpectator()
-                && ItemShatterHelper.shouldPreventUse(stack)) {
+                && ShatterHelper.shouldPreventUse(stack)) {
             ClientItemShatterHelper.sendMessageCantUseItem(stack);
             return ActionResult.FAIL;
         }

@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 import sylenthuntress.unbreakable.Unbreakable;
 import sylenthuntress.unbreakable.config.util.ConfigHelper;
-import sylenthuntress.unbreakable.util.ItemShatterHelper;
+import sylenthuntress.unbreakable.util.ShatterHelper;
 
 import java.util.List;
 
@@ -42,7 +42,7 @@ public class Mixin_RangedWeaponItem {
     public void unbreakable$applyShatterDamagePenalty(Args args) {
         ItemStack stack = savedItemStack;
 
-        if (!ItemShatterHelper.isShattered(stack)
+        if (!ShatterHelper.isShattered(stack)
                 || ConfigHelper.isInList$shatterBlacklist(stack.getRegistryEntry())
                 || !Unbreakable.CONFIG.shatterPenalties.PROJECTILES()) {
             return;
@@ -50,11 +50,11 @@ public class Mixin_RangedWeaponItem {
 
         // Speed
         float projectileSpeed = args.get(3);
-        projectileSpeed *= ItemShatterHelper.calculateShatterPenalty(stack);
+        projectileSpeed *= ShatterHelper.calculateShatterPenalty(stack);
         args.set(3, Math.max(0.5F, projectileSpeed));
         // Yaw
         float projectileYaw = args.get(5);
-        projectileYaw *= ItemShatterHelper.calculateShatterPenalty(stack);
+        projectileYaw *= ShatterHelper.calculateShatterPenalty(stack);
         args.set(5, Math.max(0.5F, projectileYaw));
     }
 }

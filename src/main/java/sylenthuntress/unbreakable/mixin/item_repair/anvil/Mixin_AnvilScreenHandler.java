@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import sylenthuntress.unbreakable.Unbreakable;
 import sylenthuntress.unbreakable.registry.UnbreakableComponents;
-import sylenthuntress.unbreakable.util.ItemShatterHelper;
+import sylenthuntress.unbreakable.util.ShatterHelper;
 import sylenthuntress.unbreakable.util.RepairMethod;
 
 import java.util.HashMap;
@@ -72,7 +72,7 @@ public class Mixin_AnvilScreenHandler {
 
         if (Unbreakable.CONFIG.anvilRepair.COST.ENCHANTMENT_SCALING()) {
             for (RegistryEntry<Enchantment> enchantment : inputStack.getEnchantments().getEnchantments()) {
-                repairCost += ItemShatterHelper.getEnchantmentLevel(enchantment.getKey().orElseThrow(), inputStack);
+                repairCost += ShatterHelper.getEnchantmentLevel(enchantment.getKey().orElseThrow(), inputStack);
             }
         }
 
@@ -111,7 +111,7 @@ public class Mixin_AnvilScreenHandler {
 
         if (Unbreakable.CONFIG.anvilRepair.COST.ENCHANTMENT_SCALING()) {
             for (RegistryEntry<Enchantment> enchantment : inputStack.getEnchantments().getEnchantments()) {
-                initialRepairCost += ItemShatterHelper.getEnchantmentLevel(
+                initialRepairCost += ShatterHelper.getEnchantmentLevel(
                         enchantment.getKey().orElseThrow(),
                         inputStack
                 );

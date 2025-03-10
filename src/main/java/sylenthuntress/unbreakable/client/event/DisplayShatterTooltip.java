@@ -11,7 +11,7 @@ import net.minecraft.text.TranslatableTextContent;
 import net.minecraft.util.Formatting;
 import sylenthuntress.unbreakable.Unbreakable;
 import sylenthuntress.unbreakable.registry.UnbreakableComponents;
-import sylenthuntress.unbreakable.util.ItemShatterHelper;
+import sylenthuntress.unbreakable.util.ShatterHelper;
 import sylenthuntress.unbreakable.util.NumberHelper;
 
 import java.util.List;
@@ -20,7 +20,7 @@ import java.util.List;
 public class DisplayShatterTooltip implements ItemTooltipCallback {
     @Override
     public void getTooltip(ItemStack stack, Item.TooltipContext context, TooltipType type, List<Text> lines) {
-        if (!ItemShatterHelper.isShattered(stack) || !Unbreakable.CONFIG.shatterTooltip.DISPLAY_TOOLTIP()) {
+        if (!ShatterHelper.isShattered(stack) || !Unbreakable.CONFIG.shatterTooltip.DISPLAY_TOOLTIP()) {
             return;
         }
 
@@ -57,7 +57,7 @@ public class DisplayShatterTooltip implements ItemTooltipCallback {
         }
 
         MutableText levelText = Text.translatable("unbreakable.shatter.level").formatted(Formatting.DARK_RED);
-        if (ItemShatterHelper.isMaxShatterLevel(stack) && Unbreakable.CONFIG.shatterTooltip.DISPLAY_TEXT_AT_MAX()) {
+        if (ShatterHelper.isMaxShatterLevel(stack) && Unbreakable.CONFIG.shatterTooltip.DISPLAY_TEXT_AT_MAX()) {
             levelText.append(Text.translatable("unbreakable.numbers.max"));
         } else if (shatterLevel > 1 || Unbreakable.CONFIG.shatterTooltip.DISPLAY_LEVEL_AT_ONE()) {
             levelText.append(NumberHelper.toRomanOrArabic(shatterLevel,

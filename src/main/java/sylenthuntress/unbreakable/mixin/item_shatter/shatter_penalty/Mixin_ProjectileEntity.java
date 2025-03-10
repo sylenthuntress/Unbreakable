@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 import sylenthuntress.unbreakable.Unbreakable;
 import sylenthuntress.unbreakable.config.util.ConfigHelper;
-import sylenthuntress.unbreakable.util.ItemShatterHelper;
+import sylenthuntress.unbreakable.util.ShatterHelper;
 
 
 @Mixin(ProjectileEntity.class)
@@ -55,13 +55,13 @@ public abstract class Mixin_ProjectileEntity extends Entity {
         final ItemStack stack = savedProjectileStack;
 
         if (stack == null
-                || !ItemShatterHelper.isShattered(stack)
+                || !ShatterHelper.isShattered(stack)
                 || ConfigHelper.isInList$shatterBlacklist(stack.getRegistryEntry())
                 || !Unbreakable.CONFIG.shatterPenalties.PROJECTILES()) {
             return;
         }
 
-        final float penaltyMultiplier = ItemShatterHelper.calculateShatterPenalty(stack);
+        final float penaltyMultiplier = ShatterHelper.calculateShatterPenalty(stack);
 
         double originalVelocity = args.get(0);
         args.set(0, originalVelocity * penaltyMultiplier);
