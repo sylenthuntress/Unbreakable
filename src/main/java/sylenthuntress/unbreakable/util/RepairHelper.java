@@ -6,7 +6,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryEntryList;
-import sylenthuntress.unbreakable.RepairStation;
+import sylenthuntress.unbreakable.RepairMethods;
 import sylenthuntress.unbreakable.Unbreakable;
 import sylenthuntress.unbreakable.registry.UnbreakableComponents;
 
@@ -29,7 +29,7 @@ public class RepairHelper {
         repairMaterials.add(items);
     }
 
-    public static int calculateRepairFactor(int repairConstant, ItemStack outputStack, ItemStack inputStack, boolean scaledWithShatterLevel, RepairStation repairStation) {
+    public static int calculateRepairFactor(int repairConstant, ItemStack outputStack, ItemStack inputStack, boolean scaledWithShatterLevel, RepairMethods repairMethods) {
         return Math.min(
                 outputStack.getDamage(),
                 outputStack.getMaxDamage() /
@@ -38,25 +38,25 @@ public class RepairHelper {
                                 outputStack,
                                 inputStack,
                                 scaledWithShatterLevel,
-                                repairStation
+                                repairMethods
                         )
         );
     }
 
-    private static int calculateRepairConstant(double repairConstant, ItemStack outputStack, ItemStack inputStack, boolean scaledWithShatterLevel, RepairStation repairStation) {
+    private static int calculateRepairConstant(double repairConstant, ItemStack outputStack, ItemStack inputStack, boolean scaledWithShatterLevel, RepairMethods repairMethods) {
         boolean shatterScaling = false;
         boolean enchantmentScaling = false;
         boolean degradeRepairFactor = false;
         float costMultiplier = 1;
 
-        switch (repairStation) {
-            case RepairStation.SMITHING_TABLE -> {
+        switch (repairMethods) {
+            case RepairMethods.SMITHING_TABLE -> {
                 shatterScaling = Unbreakable.CONFIG.smithingRepair.COST.SHATTER_SCALING();
                 enchantmentScaling = Unbreakable.CONFIG.smithingRepair.COST.ENCHANTMENT_SCALING();
                 degradeRepairFactor = Unbreakable.CONFIG.smithingRepair.COST.DEGRADE_REPAIR_FACTOR();
                 costMultiplier = Unbreakable.CONFIG.smithingRepair.COST.MULTIPLIER();
             }
-            case RepairStation.GRINDSTONE -> {
+            case RepairMethods.GRINDSTONE -> {
                 shatterScaling = Unbreakable.CONFIG.grindingRepair.COST.SHATTER_SCALING();
                 enchantmentScaling = Unbreakable.CONFIG.grindingRepair.COST.ENCHANTMENT_SCALING();
                 degradeRepairFactor = Unbreakable.CONFIG.grindingRepair.COST.DEGRADE_REPAIR_FACTOR();
@@ -78,7 +78,7 @@ public class RepairHelper {
         }
         if (degradeRepairFactor) {
             var degradationMap = new HashMap<>(outputStack.getOrDefault(UnbreakableComponents.DEGRADATION, Map.of()));
-            repairConstant *= 1 + degradationMap.getOrDefault(repairStation.getName().toString(), 0) * 0.1F;
+            repairConstant *= 1 + degradationMap.getOrDefault(repairMethods.getName().toString(), 0) * 0.1F;
         }
 
         repairConstant *= costMultiplier;

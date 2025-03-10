@@ -20,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
-import sylenthuntress.unbreakable.RepairStation;
+import sylenthuntress.unbreakable.RepairMethods;
 import sylenthuntress.unbreakable.Unbreakable;
 import sylenthuntress.unbreakable.access.SmithingScreenHandlerAccess;
 import sylenthuntress.unbreakable.registry.UnbreakableComponents;
@@ -131,7 +131,7 @@ public abstract class Mixin_SmithingScreenHandler extends ForgingScreenHandler i
                 outputStack,
                 repairBase,
                 unbreakable$scaledWithShatterLevel == outputStack.getOrDefault(UnbreakableComponents.SHATTER_LEVEL, 0),
-                RepairStation.SMITHING_TABLE
+                RepairMethods.SMITHING_TABLE
         );
         unbreakable$scaledWithShatterLevel = outputStack.getOrDefault(UnbreakableComponents.SHATTER_LEVEL, 0);
         int materialCost = 0;
@@ -143,15 +143,15 @@ public abstract class Mixin_SmithingScreenHandler extends ForgingScreenHandler i
             var degradationMap = new HashMap<>(outputStack.getOrDefault(UnbreakableComponents.DEGRADATION, Map.of()));
             if (Unbreakable.CONFIG.smithingRepair.COST.DEGRADE_REPAIR_FACTOR()) {
                 int newDegradation = Math.min(20,
-                        degradationMap.getOrDefault(RepairStation.SMITHING_TABLE.getName().toString(), 0) + 1
+                        degradationMap.getOrDefault(RepairMethods.SMITHING_TABLE.getName().toString(), 0) + 1
                 );
-                degradationMap.put(RepairStation.SMITHING_TABLE.getName().toString(), newDegradation);
+                degradationMap.put(RepairMethods.SMITHING_TABLE.getName().toString(), newDegradation);
             }
             if (Unbreakable.CONFIG.grindingRepair.COST.SMITHING_DECREMENTS_DEGRADATION()) {
                 int newDegradation = Math.max(0,
-                        degradationMap.getOrDefault(RepairStation.GRINDSTONE.getName().toString(), 0) - 2
+                        degradationMap.getOrDefault(RepairMethods.GRINDSTONE.getName().toString(), 0) - 2
                 );
-                degradationMap.put(RepairStation.GRINDSTONE.getName().toString(), newDegradation);
+                degradationMap.put(RepairMethods.GRINDSTONE.getName().toString(), newDegradation);
             }
             outputStack.set(UnbreakableComponents.DEGRADATION, degradationMap);
 
@@ -163,7 +163,7 @@ public abstract class Mixin_SmithingScreenHandler extends ForgingScreenHandler i
                             UnbreakableComponents.SHATTER_LEVEL,
                             0
                     ),
-                    RepairStation.SMITHING_TABLE
+                    RepairMethods.SMITHING_TABLE
             );
             unbreakable$scaledWithShatterLevel = outputStack.getOrDefault(UnbreakableComponents.SHATTER_LEVEL, 0);
             materialCost++;
