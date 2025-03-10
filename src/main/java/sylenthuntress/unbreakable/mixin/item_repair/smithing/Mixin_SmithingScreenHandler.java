@@ -143,15 +143,15 @@ public abstract class Mixin_SmithingScreenHandler extends ForgingScreenHandler i
             var degradationMap = new HashMap<>(outputStack.getOrDefault(UnbreakableComponents.DEGRADATION, Map.of()));
             if (Unbreakable.CONFIG.smithingRepair.COST.DEGRADE_REPAIR_FACTOR()) {
                 int newDegradation = Math.min(20,
-                        degradationMap.getOrDefault(RepairMethod.SMITHING_TABLE.getName().toString(), 0) + 1
+                        degradationMap.getOrDefault(RepairMethod.SMITHING_TABLE.getAsString(), 0) + 1
                 );
-                degradationMap.put(RepairMethod.SMITHING_TABLE.getName().toString(), newDegradation);
+                degradationMap.put(RepairMethod.SMITHING_TABLE.getAsString(), newDegradation);
             }
             if (Unbreakable.CONFIG.grindingRepair.COST.SMITHING_DECREMENTS_DEGRADATION()) {
                 int newDegradation = Math.max(0,
-                        degradationMap.getOrDefault(RepairMethod.GRINDSTONE.getName().toString(), 0) - 2
+                        degradationMap.getOrDefault(RepairMethod.GRINDSTONE.getAsString(), 0) - 2
                 );
-                degradationMap.put(RepairMethod.GRINDSTONE.getName().toString(), newDegradation);
+                degradationMap.put(RepairMethod.GRINDSTONE.getAsString(), newDegradation);
             }
             outputStack.set(UnbreakableComponents.DEGRADATION, degradationMap);
 

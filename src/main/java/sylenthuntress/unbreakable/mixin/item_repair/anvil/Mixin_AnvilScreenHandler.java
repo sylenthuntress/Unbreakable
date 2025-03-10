@@ -127,10 +127,10 @@ public class Mixin_AnvilScreenHandler {
     void unbreakable$clearDegradation(PlayerEntity player, ItemStack stack, CallbackInfo ci) {
         var degradationMap = new HashMap<>(stack.getOrDefault(UnbreakableComponents.DEGRADATION, Map.of()));
         if (Unbreakable.CONFIG.smithingRepair.COST.ANVILS_CLEAR_DEGRADATION()) {
-            degradationMap.remove(RepairMethod.SMITHING_TABLE.getName().toString());
+            degradationMap.remove(RepairMethod.SMITHING_TABLE.getAsString());
         }
         if (Unbreakable.CONFIG.grindingRepair.COST.ANVILS_CLEAR_DEGRADATION()) {
-            degradationMap.remove(RepairMethod.GRINDSTONE.getName().toString());
+            degradationMap.remove(RepairMethod.GRINDSTONE.getAsString());
         }
         stack.set(UnbreakableComponents.DEGRADATION, degradationMap);
     }

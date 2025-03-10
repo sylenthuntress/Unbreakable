@@ -15,4 +15,8 @@ public enum RepairMethod {
     public Identifier getName() {
         return this.name;
     }
+
+    public String getAsString() {
+        return getName().toString().replaceFirst("^minecraft:", "");
+    }
 }

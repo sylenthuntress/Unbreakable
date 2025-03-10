@@ -78,7 +78,7 @@ public class RepairHelper {
         }
         if (degradeRepairFactor) {
             var degradationMap = new HashMap<>(outputStack.getOrDefault(UnbreakableComponents.DEGRADATION, Map.of()));
-            repairConstant *= 1 + degradationMap.getOrDefault(repairMethod.getName().toString(), 0) * 0.1F;
+            repairConstant *= 1 + degradationMap.getOrDefault(repairMethod.getAsString(), 0) * 0.1F;
         }
 
         repairConstant *= costMultiplier;
