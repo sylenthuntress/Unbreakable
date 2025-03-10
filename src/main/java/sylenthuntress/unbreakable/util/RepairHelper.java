@@ -6,7 +6,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryEntryList;
-import net.minecraft.util.Identifier;
+import sylenthuntress.unbreakable.RepairStation;
 import sylenthuntress.unbreakable.Unbreakable;
 import sylenthuntress.unbreakable.registry.UnbreakableComponents;
 
@@ -83,20 +83,5 @@ public class RepairHelper {
 
         repairConstant *= costMultiplier;
         return (int) Math.round(repairConstant);
-    }
-
-    public enum RepairStation {
-        SMITHING_TABLE("smithing_table"),
-        GRINDSTONE("grindstone");
-
-        private final Identifier name;
-
-        RepairStation(final String name) {
-            this.name = Identifier.of(name);
-        }
-
-        public Identifier getName() {
-            return this.name;
-        }
     }
 }
