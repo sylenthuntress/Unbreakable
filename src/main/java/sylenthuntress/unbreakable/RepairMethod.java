@@ -2,13 +2,13 @@ package sylenthuntress.unbreakable;
 
 import net.minecraft.util.Identifier;
 
-public enum RepairMethods {
+public enum RepairMethod {
     SMITHING_TABLE("smithing_table"),
     GRINDSTONE("grindstone");
 
     private final Identifier name;
 
-    RepairMethods(final String name) {
+    RepairMethod(final String name) {
         this.name = Identifier.of(name);
     }
 
