@@ -7,7 +7,6 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -44,7 +43,7 @@ public abstract class Mixin_ItemEntity extends Entity {
         World world = this.getWorld();
 
         if (world instanceof ServerWorld serverWorld) {
-            stack.damage(1, serverWorld, null, item -> playSound(SoundEvents.ENTITY_ITEM_BREAK, 1, 1));
+            stack.damage(1, serverWorld, null, item -> playSound(item.getBreakSound(), 1, 1));
         }
     }
 }
