@@ -47,10 +47,7 @@ public abstract class ShatterHelper {
 
         stack.set(UnbreakableComponents.SHATTER_LEVEL, Math.min(shatterLevel, maxShatterLevel));
 
-        stack.set(DataComponentTypes.DAMAGE, Math.clamp(damage,
-                0,
-                getMaxDamageWithNegatives(stack))
-        );
+        stack.set(DataComponentTypes.DAMAGE, Math.clamp(damage, 0, getMaxDamageWithNegatives(stack)));
     }
 
     public static float calculateShatterPenalty(ItemStack stack, float minEffectiveness) {

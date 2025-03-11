@@ -68,7 +68,7 @@ public abstract class Mixin_ItemStack implements ComponentHolder {
         if (Unbreakable.CONFIG.negativeDurabilityMultiplier() == 0.0F || ConfigHelper.isInList$shatterBlacklist(this.getRegistryEntry())) {
             return original;
         } else {
-            return Math.round(original * (Unbreakable.CONFIG.negativeDurabilityMultiplier() + 1) + 1);
+            return ShatterHelper.getMaxDamageWithNegatives((ItemStack) (Object) this) + 1;
         }
     }
 

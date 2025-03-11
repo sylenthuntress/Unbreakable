@@ -39,8 +39,8 @@ public class DisplayShatterTooltip implements ItemTooltipCallback {
 
         if (advancedToolTips) {
             for (Text text : lines) {
-                if (text.getContent() instanceof TranslatableTextContent content && content.getKey().equals("item.durability")) {
-                    tooltipIndex = lines.indexOf(text);
+                if (text.getContent() instanceof TranslatableTextContent content && content.getKey().equals("item.components")) {
+                    tooltipIndex = lines.indexOf(text) - 2;
                 }
             }
         } else if (Unbreakable.CONFIG.shatterTooltip.INDEX_OVERRIDE()) {
@@ -51,8 +51,7 @@ public class DisplayShatterTooltip implements ItemTooltipCallback {
     }
 
     public void displayTooltip(List<Text> lines, ItemStack stack, int tooltipIndex, int shatterLevel, boolean advancedToolTips) {
-        if ((advancedToolTips && lines.size() > 2 || lines.size() > 4)
-                && Unbreakable.CONFIG.shatterTooltip.SEPARATE_TOOLTIP()) {
+        if ((advancedToolTips && lines.size() > 2 || lines.size() > 4) && Unbreakable.CONFIG.shatterTooltip.SEPARATE_TOOLTIP()) {
             lines.add(tooltipIndex, Text.empty());
             tooltipIndex += 1;
         }
