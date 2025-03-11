@@ -30,16 +30,14 @@ public abstract class ShatterHelper {
             shatterLevel--;
 
             if (shatterLevel > 0) {
-                damage = Math.round(
-                        maxDamage * (Unbreakable.CONFIG.negativeDurabilityMultiplier() + 1)
-                );
+                damage = getMaxDamageWithNegatives(stack);
             }
         } else if (damage > maxDamage && shatterLevel == 0) {
             shatterLevel++;
             if (breakCallback != null) {
                 breakCallback.accept(stack.getItem());
             }
-        } else if (damage > maxDamage * (Unbreakable.CONFIG.negativeDurabilityMultiplier() + 1) && !ShatterHelper.isMaxShatterLevel(stack)) {
+        } else if (damage > getMaxDamageWithNegatives(stack) && !ShatterHelper.isMaxShatterLevel(stack)) {
             shatterLevel++;
             damage = maxDamage + 1;
             if (breakCallback != null) {
@@ -51,7 +49,7 @@ public abstract class ShatterHelper {
 
         stack.set(DataComponentTypes.DAMAGE, Math.clamp(damage,
                 0,
-                Math.round(maxDamage * (Unbreakable.CONFIG.negativeDurabilityMultiplier() + 1)))
+                getMaxDamageWithNegatives(stack))
         );
     }
 
@@ -120,5 +118,9 @@ public abstract class ShatterHelper {
         } else {
             return false;
         }
+    }
+
+    public static int getMaxDamageWithNegatives(ItemStack stack) {
+        return Math.round(stack.getMaxDamage() * (Unbreakable.CONFIG.negativeDurabilityMultiplier() + 1));
     }
 }
