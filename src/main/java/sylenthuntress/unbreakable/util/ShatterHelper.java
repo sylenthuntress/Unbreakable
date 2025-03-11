@@ -22,6 +22,7 @@ public abstract class ShatterHelper {
             return;
         }
 
+        boolean doCallback = false;
         int shatterLevel = stack.getOrDefault(UnbreakableComponents.SHATTER_LEVEL, 0);
         int maxShatterLevel = ShatterHelper.getMaxShatterLevel(stack);
         int maxDamage = stack.getMaxDamage();
@@ -34,20 +35,19 @@ public abstract class ShatterHelper {
             }
         } else if (damage > maxDamage && shatterLevel == 0) {
             shatterLevel++;
-            if (breakCallback != null) {
-                breakCallback.accept(stack.getItem());
-            }
+            doCallback = true;
         } else if (damage > getMaxDamageWithNegatives(stack) && !ShatterHelper.isMaxShatterLevel(stack)) {
             shatterLevel++;
             damage = maxDamage + 1;
-            if (breakCallback != null) {
-                breakCallback.accept(stack.getItem());
-            }
+            doCallback = true;
         }
 
         stack.set(UnbreakableComponents.SHATTER_LEVEL, Math.min(shatterLevel, maxShatterLevel));
-
         stack.set(DataComponentTypes.DAMAGE, Math.clamp(damage, 0, getMaxDamageWithNegatives(stack)));
+
+        if (breakCallback != null && doCallback) {
+            breakCallback.accept(stack.getItem());
+        }
     }
 
     public static float calculateShatterPenalty(ItemStack stack, float minEffectiveness) {
