@@ -10,6 +10,7 @@
   "commands.item.durability.entity.success.get.single": "Item %s on %s has %s damage (%s)",
   "commands.item.durability.entity.success.set.multiple": "Set damage for items across %s entities. Items:\n",
   "commands.item.durability.entity.success.set.single": "Set item %s on entity %s to %s -> %s damage",
+  "commands.item.durability.entity.failure.no_item_found": "No item was found in the specified entities",
   "commands.item.durability.block.success.get": "Item %s at %s, %s, %s has %s damage (%s)",
   "commands.item.durability.block.success.set": "Set item %s at %s, %s, %s to %s -> %s damage",
   "commands.item.durability.block.failure.no_such_slot": "The target does not have slot %s",

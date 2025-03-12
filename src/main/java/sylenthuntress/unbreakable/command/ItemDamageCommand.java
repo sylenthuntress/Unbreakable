@@ -7,6 +7,7 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.Dynamic3CommandExceptionType;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
+import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.mojang.datafixers.util.Pair;
@@ -33,6 +34,9 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 
 public abstract class ItemDamageCommand {
+    static final SimpleCommandExceptionType NO_ITEM_FOUND_TARGET_EXCEPTION = new SimpleCommandExceptionType(
+            Text.translatable("commands.item.durability.entity.failure.no_item_found")
+    );
     static final DynamicCommandExceptionType NO_SUCH_SLOT_TARGET_EXCEPTION = new DynamicCommandExceptionType(
             slot -> Text.stringifiedTranslatable("commands.item.durability.block.failure.no_such_slot", slot)
     );
@@ -80,7 +84,7 @@ public abstract class ItemDamageCommand {
                                             .executes(context -> executeBlock(context.getSource(), BlockPosArgumentType.getLoadedBlockPos(context, "pos"), ItemSlotArgumentType.getItemSlot(context, "slot"), 1.0F))))).build();
         }
 
-        public static int executeEntity(ServerCommandSource source, Collection<? extends Entity> targets, int slot, float factor) {
+        public static int executeEntity(ServerCommandSource source, Collection<? extends Entity> targets, int slot, float factor) throws CommandSyntaxException {
             LinkedHashMap<Entity, ItemStack> itemDurabilityMap = Maps.newLinkedHashMapWithExpectedSize(targets.size());
 
             StackReference stackReference;
@@ -95,7 +99,9 @@ public abstract class ItemDamageCommand {
                 itemDurabilityMap.put(entity, stack);
             }
 
-            if (itemDurabilityMap.size() == 1) {
+            if (itemDurabilityMap.isEmpty()) {
+                throw NO_ITEM_FOUND_TARGET_EXCEPTION.create();
+            } else if (itemDurabilityMap.size() == 1) {
                 Entity entity = itemDurabilityMap.keySet().iterator().next();
                 ItemStack stack = entity.getStackReference(slot).get();
                 source.sendFeedback(
@@ -196,7 +202,7 @@ public abstract class ItemDamageCommand {
                                                             .executes(context -> executeBlock(context.getSource(), BlockPosArgumentType.getLoadedBlockPos(context, "pos"), ItemSlotArgumentType.getItemSlot(context, "slot"), IntegerArgumentType.getInteger(context, "amount"), BoolArgumentType.getBool(context, "canBreak")))))))).build();
         }
 
-        public static int executeEntity(ServerCommandSource source, Collection<? extends Entity> targets, int slot, int amount, boolean canBreak) {
+        public static int executeEntity(ServerCommandSource source, Collection<? extends Entity> targets, int slot, int amount, boolean canBreak) throws CommandSyntaxException {
             LinkedHashMap<Pair<Entity, ItemStack>, Integer> itemDurabilityMap = Maps.newLinkedHashMapWithExpectedSize(targets.size());
             ItemStack displayStack = ItemStack.EMPTY;
 
@@ -246,7 +252,9 @@ public abstract class ItemDamageCommand {
             }
 
             ItemStack finalDisplayStack = displayStack;
-            if (itemDurabilityMap.size() == 1) {
+            if (itemDurabilityMap.isEmpty()) {
+                throw NO_ITEM_FOUND_TARGET_EXCEPTION.create();
+            } else if (itemDurabilityMap.size() == 1) {
                 Entity entity = itemDurabilityMap.keySet().iterator().next().getFirst();
                 ItemStack stack = entity.getStackReference(slot).get();
                 source.sendFeedback(
@@ -355,7 +363,7 @@ public abstract class ItemDamageCommand {
                                                     .executes(context -> executeBlock(context.getSource(), BlockPosArgumentType.getLoadedBlockPos(context, "pos"), ItemSlotArgumentType.getItemSlot(context, "slot"), IntegerArgumentType.getInteger(context, "amount"))))))).build();
         }
 
-        public static int executeEntity(ServerCommandSource source, Collection<? extends Entity> targets, int slot, int amount) {
+        public static int executeEntity(ServerCommandSource source, Collection<? extends Entity> targets, int slot, int amount) throws CommandSyntaxException {
             LinkedHashMap<Pair<Entity, ItemStack>, Pair<Integer, Integer>> itemDurabilityMap = Maps.newLinkedHashMapWithExpectedSize(targets.size());
 
             for (Entity entity : targets) {
@@ -374,7 +382,9 @@ public abstract class ItemDamageCommand {
                 stack.setDamage(amount);
             }
 
-            if (itemDurabilityMap.size() == 1) {
+            if (itemDurabilityMap.isEmpty()) {
+                throw NO_ITEM_FOUND_TARGET_EXCEPTION.create();
+            } else if (itemDurabilityMap.size() == 1) {
                 Entity entity = itemDurabilityMap.keySet().iterator().next().getFirst();
                 ItemStack stack = entity.getStackReference(slot).get();
                 source.sendFeedback(
