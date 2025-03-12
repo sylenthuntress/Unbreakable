@@ -24,6 +24,7 @@ import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
 import sylenthuntress.unbreakable.registry.UnbreakableComponents;
 import sylenthuntress.unbreakable.util.ShatterHelper;
@@ -33,10 +34,10 @@ import java.util.LinkedHashMap;
 
 public abstract class ItemDamageCommand {
     static final DynamicCommandExceptionType NO_SUCH_SLOT_TARGET_EXCEPTION = new DynamicCommandExceptionType(
-            slot -> Text.stringifiedTranslatable("commands.item.durability.failure.block.no_such_slot", slot)
+            slot -> Text.stringifiedTranslatable("commands.item.durability.block.failure.no_such_slot", slot)
     );
     private static final Dynamic3CommandExceptionType NOT_A_CONTAINER_TARGET_EXCEPTION = new Dynamic3CommandExceptionType(
-            (x, y, z) -> Text.stringifiedTranslatable("commands.item.durability.failure.block.not_a_container", x, y, z)
+            (x, y, z) -> Text.stringifiedTranslatable("commands.item.durability.block.failure.not_a_container", x, y, z)
     );
 
     public static void register(CommandNode<ServerCommandSource> baseNode) {
@@ -102,7 +103,13 @@ public abstract class ItemDamageCommand {
                                 "commands.item.durability.entity.success.get.single",
                                 stack.toHoverableText(),
                                 entity.getName(),
-                                Math.round(stack.getDamage() * factor)
+                                Math.round(stack.getDamage() * factor),
+                                Text.translatable(
+                                        "commands.item.durability.total",
+                                        stack.getMaxDamage()
+                                                - stack.getDamage(),
+                                        stack.getMaxDamage()
+                                ).formatted(Formatting.GRAY)
                         ), false
                 );
             } else {
@@ -117,11 +124,17 @@ public abstract class ItemDamageCommand {
                                         "commands.item.durability.mapped_item.get",
                                         itemDurabilityMap.get(entity).toHoverableText(),
                                         entity.getName(),
-                                        Math.round(itemDurabilityMap.get(entity).getDamage() * factor)
+                                        Math.round(itemDurabilityMap.get(entity).getDamage() * factor),
+                                        Text.translatable(
+                                                "commands.item.durability.total",
+                                                itemDurabilityMap.get(entity).getMaxDamage()
+                                                        - itemDurabilityMap.get(entity).getDamage(),
+                                                itemDurabilityMap.get(entity).getMaxDamage()
+                                        ).formatted(Formatting.GRAY)
                                 ).append(
                                         entity.equals(itemDurabilityMap.sequencedKeySet().getLast())
                                                 ? ";"
-                                                : ", \n"
+                                                : "\n"
                                 )
                         )
                 );
@@ -145,11 +158,17 @@ public abstract class ItemDamageCommand {
             source.sendFeedback(
                     () -> Text.translatable(
                             "commands.item.durability.block.success.get",
-                            damage,
                             stack.toHoverableText(),
                             pos.getX(),
                             pos.getY(),
-                            pos.getZ()
+                            pos.getZ(),
+                            damage,
+                            Text.translatable(
+                                    "commands.item.durability.total",
+                                    stack.getMaxDamage()
+                                            - stack.getDamage(),
+                                    stack.getMaxDamage()
+                            ).formatted(Formatting.GRAY)
                     ), true
             );
 
@@ -254,7 +273,7 @@ public abstract class ItemDamageCommand {
                                 ).append(
                                         pair.getSecond().equals(itemDurabilityMap.sequencedKeySet().getLast().getSecond())
                                                 ? ";"
-                                                : ", \n"
+                                                : "\n"
                                 )
                         )
                 );
@@ -377,14 +396,14 @@ public abstract class ItemDamageCommand {
                                 -> successText.append(
                                 Text.translatable(
                                         "commands.item.durability.mapped_item.set",
+                                        pair.getSecond().toHoverableText(),
                                         itemDurabilityMap.get(pair).getFirst(),
                                         itemDurabilityMap.get(pair).getSecond(),
-                                        pair.getSecond().toHoverableText(),
                                         pair.getFirst().getName()
                                 ).append(
                                         pair.getSecond().equals(itemDurabilityMap.sequencedKeySet().getLast().getSecond())
                                                 ? ";"
-                                                : ", \n"
+                                                : "\n"
                                 )
                         )
                 );
@@ -403,18 +422,19 @@ public abstract class ItemDamageCommand {
 
             ItemStack stack = inventory.getStack(slot);
 
-            stack.setDamage(amount);
-
             source.sendFeedback(
                     () -> Text.translatable(
                             "commands.item.durability.block.success.set",
-                            amount,
                             stack.toHoverableText(),
                             pos.getX(),
                             pos.getY(),
-                            pos.getZ()
+                            pos.getZ(),
+                            stack.getDamage(),
+                            Math.clamp(amount, 0, ShatterHelper.getMaxDamageWithNegatives(stack))
                     ), true
             );
+
+            stack.setDamage(amount);
 
             return amount;
         }
