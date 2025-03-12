@@ -8,18 +8,18 @@ import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 import sylenthuntress.unbreakable.Unbreakable;
 import sylenthuntress.unbreakable.client.ClientItemShatterHelper;
-import sylenthuntress.unbreakable.util.ItemShatterHelper;
+import sylenthuntress.unbreakable.util.ShatterHelper;
 
 public class PreventItemUseEvent implements UseItemCallback {
     @Override
     public ActionResult interact(PlayerEntity player, World world, Hand hand) {
         ItemStack stack = player.getStackInHand(hand);
 
-        if (Unbreakable.CONFIG.shatterPenalties.ITEM_USE()
-                && !player.isInCreativeMode()
-                && !player.isSpectator()
-                && ItemShatterHelper.shouldPreventUse(stack)) {
-            player.stopUsingItem();
+        boolean configDisableInteraction = Unbreakable.CONFIG.shatterPenalties.ITEM_USE();
+        boolean playerIsCheating = !(player.isInCreativeMode() && player.isSpectator());
+        boolean shouldPreventUsingStack = ShatterHelper.shouldPreventUse(stack);
+
+        if (configDisableInteraction && playerIsCheating && shouldPreventUsingStack) {
             ClientItemShatterHelper.sendMessageCantUseItem(stack);
             return ActionResult.FAIL;
         }

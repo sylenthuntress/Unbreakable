@@ -1,103 +1,47 @@
 {
-  "unbreakable.discord": "https://discord.gg/gYWwjRfNH7",
-  "unbreakable.shatter.info": [
-    {
-      "text": "Less effective until repaired",
-      "color": "#555555",
-      "italic": true
-    }
-  ],
-  "unbreakable.shatter.level": [
-    {
-      "text": "Shattered ",
-      "color": "#AA0000"
-    }
-  ],
-  "unbreakable.shatter.cant_use_item": "%s is too shattered to use!",
-  "unbreakable.numbers.max": [
-    {
-      "text": "MAX",
-      "color": "#AA0000"
-    }
-  ],
-  "unbreakable.numbers.null": " ",
-  "unbreakable.roman_numeral.1": [
-    {
-      "text": "I",
-      "color": "#AA0000"
-    }
-  ],
-  "unbreakable.roman_numeral.4": [
-    {
-      "text": "IV",
-      "color": "#AA0000"
-    }
-  ],
-  "unbreakable.roman_numeral.5": [
-    {
-      "text": "V",
-      "color": "#AA0000"
-    }
-  ],
-  "unbreakable.roman_numeral.10": [
-    {
-      "text": "X",
-      "color": "#AA0000"
-    }
-  ],
-  "unbreakable.roman_numeral.40": [
-    {
-      "text": "XL",
-      "color": "#AA0000"
-    }
-  ],
-  "unbreakable.roman_numeral.50": [
-    {
-      "text": "L",
-      "color": "#AA0000"
-    }
-  ],
-  "unbreakable.roman_numeral.90": [
-    {
-      "text": "XC",
-      "color": "#AA0000"
-    }
-  ],
-  "unbreakable.roman_numeral.100": [
-    {
-      "text": "C",
-      "color": "#AA0000"
-    }
-  ],
-  "unbreakable.roman_numeral.400": [
-    {
-      "text": "CD",
-      "color": "#AA0000"
-    }
-  ],
-  "unbreakable.roman_numeral.500": [
-    {
-      "text": "D",
-      "color": "#AA0000"
-    }
-  ],
-  "unbreakable.roman_numeral.900": [
-    {
-      "text": "CM",
-      "color": "#AA0000"
-    }
-  ],
-  "unbreakable.roman_numeral.1000": [
-    {
-      "text": "M",
-      "color": "#AA0000"
-    }
-  ],
-  "tag.item.unbreakable.retains_breaking": "Retains vanilla breaking",
-  "tag.item.unbreakable.shatter_blacklist": "Can't shatter",
-  "tag.item.unbreakable.prevent_use_when_shattered": "Can't be used when shattered",
+  "commands.item.durability.block.success.add": "Applied %s damage to item %s at %s, %s, %s",
+  "commands.item.durability.block.success.add.broke": "The item %s at %s broke!",
+  "commands.item.durability.block.success.add.shattered": "The item %s at %s, %s, %s was shattered! (%s/%s)",
+  "commands.item.durability.entity.success.add.broke": "The item %s on %s broke!",
+  "commands.item.durability.entity.success.add.multiple": "Added damage to items across %s different entities. Items:\n",
+  "commands.item.durability.entity.success.add.shattered": "The item %s on %s was shattered! (Shatter %s/%s)",
+  "commands.item.durability.entity.success.add.single": "Applied %s damage to item %s on %s",
+  "commands.item.durability.entity.success.get.multiple": "Queried damage for items across %s entities. Items:\n",
+  "commands.item.durability.entity.success.get.single": "Item %s on %s has %s damage (%s)",
+  "commands.item.durability.entity.success.set.multiple": "Set damage for items across %s entities. Items:\n",
+  "commands.item.durability.entity.success.set.single": "Set item %s on entity %s to %s -> %s damage",
+  "commands.item.durability.entity.failure.no_item_found": "No item was found in the specified entities",
+  "commands.item.durability.block.success.get": "Item %s at %s, %s, %s has %s damage (%s)",
+  "commands.item.durability.block.success.set": "Set item %s at %s, %s, %s to %s -> %s damage",
+  "commands.item.durability.block.failure.no_such_slot": "The target does not have slot %s",
+  "commands.item.durability.block.failure.not_a_container": "Target position %s, %s, %s is not a container",
+  "commands.item.durability.mapped_item.add": " Added %s damage to %s for %s",
+  "commands.item.durability.mapped_item.get": " %s on %s has %s damage (%s)",
+  "commands.item.durability.mapped_item.set": " Set %s damage to %s -> %s for %s",
+  "commands.item.durability.total": "%s / %s",
   "tag.item.unbreakable.exclude_modifier": "Has normal durability",
   "tag.item.unbreakable.golden_equipment": "Golden Equipment",
+  "tag.item.unbreakable.prevent_use_when_shattered": "Can't be used when shattered",
+  "tag.item.unbreakable.retains_breaking": "Retains vanilla breaking",
+  "tag.item.unbreakable.shatter_blacklist": "Can't shatter",
   "unbreakable.container.repair.levelCost": "Level Cost: %s",
-  "unbreakable.container.repair.materialCost": "Material Cost: %s"
+  "unbreakable.container.repair.materialCost": "Material Cost: %s",
+  "unbreakable.discord": "https://discord.gg/gYWwjRfNH7",
+  "unbreakable.numbers.max": "MAX",
+  "unbreakable.numbers.null": "",
+  "unbreakable.roman_numeral.1": "I",
+  "unbreakable.roman_numeral.4": "IV",
+  "unbreakable.roman_numeral.5": "V",
+  "unbreakable.roman_numeral.10": "X",
+  "unbreakable.roman_numeral.40": "XL",
+  "unbreakable.roman_numeral.50": "L",
+  "unbreakable.roman_numeral.90": "XC",
+  "unbreakable.roman_numeral.100": "C",
+  "unbreakable.roman_numeral.400": "CD",
+  "unbreakable.roman_numeral.500": "D",
+  "unbreakable.roman_numeral.900": "CM",
+  "unbreakable.roman_numeral.1000": "M",
+  "unbreakable.shatter.cant_use_item": "%s is too shattered to use!",
+  "unbreakable.shatter.info": "Less effective until repaired",
+  "unbreakable.shatter.level": "Shattered %s"
 }

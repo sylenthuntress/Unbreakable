@@ -5,26 +5,28 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.tooltip.TooltipType;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableTextContent;
+import net.minecraft.util.Formatting;
 import sylenthuntress.unbreakable.Unbreakable;
 import sylenthuntress.unbreakable.registry.UnbreakableComponents;
-import sylenthuntress.unbreakable.util.ItemShatterHelper;
 import sylenthuntress.unbreakable.util.NumberHelper;
+import sylenthuntress.unbreakable.util.ShatterHelper;
 
 import java.util.List;
 
 
 public class DisplayShatterTooltip implements ItemTooltipCallback {
+    private static final MinecraftClient client = MinecraftClient.getInstance();
+
     @Override
     public void getTooltip(ItemStack stack, Item.TooltipContext context, TooltipType type, List<Text> lines) {
-        if (!ItemShatterHelper.isShattered(stack)
-                || !Unbreakable.CONFIG.shatterTooltip.DISPLAY_TOOLTIP()) {
+        if (!ShatterHelper.isShattered(stack) || !Unbreakable.CONFIG.shatterTooltip.DISPLAY_TOOLTIP()) {
             return;
         }
 
-        boolean advancedToolTips = !Unbreakable.CONFIG.shatterTooltip.INDEX_OVERRIDE()
-                && MinecraftClient.getInstance().options.advancedItemTooltips;
+        boolean advancedToolTips = !Unbreakable.CONFIG.shatterTooltip.INDEX_OVERRIDE() && client.options.advancedItemTooltips;
 
         int shatterLevel = stack.getOrDefault(UnbreakableComponents.SHATTER_LEVEL, 0);
         int tooltipIndex = getTooltipIndex(lines, advancedToolTips);
@@ -37,11 +39,8 @@ public class DisplayShatterTooltip implements ItemTooltipCallback {
 
         if (advancedToolTips) {
             for (Text text : lines) {
-                if (!(text.getContent() instanceof TranslatableTextContent translatableContent)) {
-                    continue;
-                }
-                if (translatableContent.getKey().equalsIgnoreCase("item.durability")) {
-                    tooltipIndex = lines.indexOf(text);
+                if (text.getContent() instanceof TranslatableTextContent content && content.getKey().equals("item.components")) {
+                    tooltipIndex = lines.indexOf(text) - 2;
                 }
             }
         } else if (Unbreakable.CONFIG.shatterTooltip.INDEX_OVERRIDE()) {
@@ -52,30 +51,28 @@ public class DisplayShatterTooltip implements ItemTooltipCallback {
     }
 
     public void displayTooltip(List<Text> lines, ItemStack stack, int tooltipIndex, int shatterLevel, boolean advancedToolTips) {
-        if (Unbreakable.CONFIG.shatterTooltip.DISPLAY_TOOLTIP_DESC()) {
-            lines.add(
-                    tooltipIndex,
-                    Text.translatable(
-                            "unbreakable.shatter.info",
-                            shatterLevel
-                    )
-            );
+        if ((advancedToolTips && lines.size() > 2 || lines.size() > 4) && Unbreakable.CONFIG.shatterTooltip.SEPARATE_TOOLTIP()) {
+            lines.add(tooltipIndex, Text.empty());
+            tooltipIndex += 1;
         }
 
-        lines.add(
-                tooltipIndex,
-                Text.translatable("unbreakable.shatter.level").append(
-                        ItemShatterHelper.isMaxShatterLevel(stack) && Unbreakable.CONFIG.shatterTooltip.DISPLAY_TEXT_AT_MAX() ? Text.translatable("unbreakable.numbers.max") : (Unbreakable.CONFIG.shatterTooltip.DISPLAY_LEVEL_AT_ONE() || shatterLevel > 1 ? NumberHelper.toRomanOrArabic(
-                                shatterLevel, "unbreakable.roman_numeral.",
-                                Unbreakable.CONFIG.shatterTooltip.ROMAN_NUMERALS()
-                        ) : Text.translatable("unbreakable.numbers.null"))
-                )
-        );
+        MutableText levelText = Text.translatable("unbreakable.numbers.null");
+        if (ShatterHelper.isMaxShatterLevel(stack) && Unbreakable.CONFIG.shatterTooltip.DISPLAY_TEXT_AT_MAX()) {
+            levelText = Text.translatable("unbreakable.numbers.max");
+        } else if (shatterLevel > 1 || Unbreakable.CONFIG.shatterTooltip.DISPLAY_LEVEL_AT_ONE()) {
+            levelText = NumberHelper.toRomanOrArabic(shatterLevel,
+                    "unbreakable.roman_numeral.",
+                    Unbreakable.CONFIG.shatterTooltip.ROMAN_NUMERALS()
+            );
+        }
+        lines.add(tooltipIndex, Text.translatable("unbreakable.shatter.level", levelText).formatted(Formatting.DARK_RED));
+        tooltipIndex += 1;
 
-        if ((advancedToolTips && lines.size() > 2
-                || lines.size() > 4)
-                && Unbreakable.CONFIG.shatterTooltip.SEPARATE_TOOLTIP()) {
-            lines.add(tooltipIndex, Text.of(" "));
+        if (Unbreakable.CONFIG.shatterTooltip.DISPLAY_TOOLTIP_DESC()) {
+            lines.add(tooltipIndex,
+                    Text.translatable("unbreakable.shatter.info", shatterLevel)
+                            .formatted(Formatting.GRAY, Formatting.ITALIC)
+            );
         }
     }
 }

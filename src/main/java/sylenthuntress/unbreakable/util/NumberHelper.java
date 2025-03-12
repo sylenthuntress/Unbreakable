@@ -6,7 +6,7 @@ import net.minecraft.text.Text;
 import java.util.TreeMap;
 
 
-public class NumberHelper {
+public abstract class NumberHelper {
     private final static TreeMap<Integer, Integer> romanNumerals = new TreeMap<>();
 
     static {

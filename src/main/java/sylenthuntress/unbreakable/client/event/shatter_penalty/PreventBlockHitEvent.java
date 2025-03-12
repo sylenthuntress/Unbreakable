@@ -10,7 +10,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import sylenthuntress.unbreakable.Unbreakable;
 import sylenthuntress.unbreakable.client.ClientItemShatterHelper;
-import sylenthuntress.unbreakable.util.ItemShatterHelper;
+import sylenthuntress.unbreakable.util.ShatterHelper;
 
 public class PreventBlockHitEvent implements AttackBlockCallback {
 
@@ -18,10 +18,11 @@ public class PreventBlockHitEvent implements AttackBlockCallback {
     public ActionResult interact(PlayerEntity player, World world, Hand hand, BlockPos blockPos, Direction direction) {
         ItemStack stack = player.getMainHandStack();
 
-        if (Unbreakable.CONFIG.shatterPenalties.BLOCK_HIT()
-                && !player.isInCreativeMode()
-                && !player.isSpectator()
-                && ItemShatterHelper.shouldPreventUse(stack)) {
+        boolean configDisableInteraction = Unbreakable.CONFIG.shatterPenalties.BLOCK_HIT();
+        boolean playerIsCheating = !(player.isInCreativeMode() && player.isSpectator());
+        boolean shouldPreventUsingStack = ShatterHelper.shouldPreventUse(stack);
+
+        if (configDisableInteraction && playerIsCheating && shouldPreventUsingStack) {
             ClientItemShatterHelper.sendMessageCantUseItem(stack);
             return ActionResult.FAIL;
         }

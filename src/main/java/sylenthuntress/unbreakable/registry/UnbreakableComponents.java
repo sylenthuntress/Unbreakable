@@ -1,32 +1,31 @@
 package sylenthuntress.unbreakable.registry;
 
+import com.mojang.serialization.Codec;
 import net.minecraft.component.ComponentType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.dynamic.Codecs;
 import sylenthuntress.unbreakable.Unbreakable;
 
-public class UnbreakableComponents {
-    public static final ComponentType<Integer> SHATTER_LEVEL = Registry.register(
+import java.util.Map;
+
+public abstract class UnbreakableComponents {
+    public static final ComponentType<Integer> SHATTER_LEVEL = register("shatter_level");
+    public static final ComponentType<Integer> MAX_SHATTER_LEVEL = register("max_shatter_level");
+
+    public static final ComponentType<Map<String, Integer>> DEGRADATION = Registry.register(
             Registries.DATA_COMPONENT_TYPE,
-            Unbreakable.modIdentifier("shatter_level"),
-            ComponentType.<Integer>builder().codec(Codecs.rangedInt(0, 255)).build()
+            Unbreakable.modIdentifier("degradation"),
+            ComponentType.<Map<String, Integer>>builder().codec(Codec.unboundedMap(Codec.STRING, Codec.INT)).build()
     );
-    public static final ComponentType<Integer> MAX_SHATTER_LEVEL = Registry.register(
-            Registries.DATA_COMPONENT_TYPE,
-            Unbreakable.modIdentifier("max_shatter_level"),
-            ComponentType.<Integer>builder().codec(Codecs.rangedInt(0, 255)).build()
-    );
-    public static final ComponentType<Integer> SMITHING_DEGRADATION = Registry.register(
-            Registries.DATA_COMPONENT_TYPE,
-            Unbreakable.modIdentifier("smithing_degradation"),
-            ComponentType.<Integer>builder().codec(Codecs.rangedInt(0, 20)).build()
-    );
-    public static final ComponentType<Integer> GRINDING_DEGRADATION = Registry.register(
-            Registries.DATA_COMPONENT_TYPE,
-            Unbreakable.modIdentifier("grinding_degradation"),
-            ComponentType.<Integer>builder().codec(Codecs.rangedInt(0, 40)).build()
-    );
+
+    private static ComponentType<Integer> register(String id) {
+        return Registry.register(
+                Registries.DATA_COMPONENT_TYPE,
+                Unbreakable.modIdentifier(id),
+                ComponentType.<Integer>builder().codec(Codecs.rangedInt(0, 255)).build()
+        );
+    }
 
     public static void initialize() {
 

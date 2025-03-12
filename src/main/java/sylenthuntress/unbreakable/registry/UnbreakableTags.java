@@ -1,6 +1,5 @@
 package sylenthuntress.unbreakable.registry;
 
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.Item;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
@@ -24,9 +23,4 @@ public abstract class UnbreakableTags {
             RegistryKeys.ITEM,
             Unbreakable.modIdentifier("golden_equipment")
     );
-    public static final TagKey<Enchantment> INCOMPATIBLE_ENCHANTMENTS = TagKey.of(
-            RegistryKeys.ENCHANTMENT,
-            Unbreakable.modIdentifier("incompatible_enchantments")
-    );
-
 }

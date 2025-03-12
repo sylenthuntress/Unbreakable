@@ -91,8 +91,19 @@ public class UnbreakableConfigModel {
     @Comment(UnbreakableConfigComments.shatterCursedItems)
     public boolean shatterCursedItems = true;
 
-    @Comment(UnbreakableConfigComments.exclusiveMending)
-    public boolean exclusiveMending = true;
+    @Nest
+    @Expanded
+    public MendingTweaks mendingTweaks = new MendingTweaks();
+
+    public static class MendingTweaks {
+        @Comment(UnbreakableConfigComments.EXCLUSIVE)
+        public boolean EXCLUSIVE = true;
+        @Comment(UnbreakableConfigComments.DEGRADE_MENDING_MULTIPLIER)
+        public boolean DEGRADE = true;
+        @Comment(UnbreakableConfigComments.DEGRADE_MENDING)
+        @RangeConstraint(min = 0.0F, max = 3.0F, decimalPlaces = 1)
+        public float DEGRADE_MULTIPLIER = 1F;
+    }
 
     public static boolean shatterLevelConstraint(int integer) {
         return integer >= 0 && integer <= 255;
@@ -101,6 +112,8 @@ public class UnbreakableConfigModel {
     public static class AnvilRepair {
         @Comment(UnbreakableConfigComments.ALLOW_REPAIR)
         public boolean ALLOW = true;
+        @Comment(UnbreakableConfigComments.CLEAR_MENDING_DEGRADATION)
+        public boolean CLEARS_MENDING_DEGRADATION = true;
         @Comment(UnbreakableConfigComments.TOO_EXPENSIVE)
         public boolean TOO_EXPENSIVE = false;
         @Nest
@@ -111,6 +124,8 @@ public class UnbreakableConfigModel {
     public static class SmithingRepair {
         @Comment(UnbreakableConfigComments.ALLOW_REPAIR)
         public boolean ALLOW = true;
+        @Comment(UnbreakableConfigComments.CLEAR_MENDING_DEGRADATION)
+        public boolean CLEARS_MENDING_DEGRADATION = true;
         @Nest
         @Expanded
         public SmithingRepairCost COST = new SmithingRepairCost();
@@ -119,6 +134,8 @@ public class UnbreakableConfigModel {
     public static class GrindingRepair {
         @Comment(UnbreakableConfigComments.ALLOW_REPAIR)
         public boolean ALLOW = true;
+        @Comment(UnbreakableConfigComments.CLEAR_MENDING_DEGRADATION)
+        public boolean CLEARS_MENDING_DEGRADATION = true;
         @Nest
         @Expanded
         public GrindingRepairCost COST = new GrindingRepairCost();
