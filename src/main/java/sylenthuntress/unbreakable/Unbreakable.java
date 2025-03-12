@@ -1,9 +1,11 @@
 package sylenthuntress.unbreakable;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.fabricmc.fabric.api.item.v1.EnchantmentEvents;
 import net.minecraft.util.Identifier;
+import sylenthuntress.unbreakable.command.ItemDamageCommand;
 import sylenthuntress.unbreakable.config.UnbreakableConfig;
 import sylenthuntress.unbreakable.event.enchantment.ExclusiveMending;
 import sylenthuntress.unbreakable.event.item_damage.DynamicMiningDamageEvent;
@@ -23,5 +25,6 @@ public class Unbreakable implements ModInitializer {
 
         EnchantmentEvents.ALLOW_ENCHANTING.register(new ExclusiveMending());
         PlayerBlockBreakEvents.AFTER.register(new DynamicMiningDamageEvent());
+        CommandRegistrationCallback.EVENT.register((dispatcher, access, environment) -> ItemDamageCommand.register(dispatcher.getRoot()));
     }
 }
