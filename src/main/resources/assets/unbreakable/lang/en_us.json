@@ -1,10 +1,10 @@
 {
   "unbreakable.discord": "https://discord.gg/gYWwjRfNH7",
   "unbreakable.shatter.info": "Less effective until repaired",
-  "unbreakable.shatter.level": "Shattered ",
+  "unbreakable.shatter.level": "Shattered %s",
   "unbreakable.shatter.cant_use_item": "%s is too shattered to use!",
   "unbreakable.numbers.max": "MAX",
-  "unbreakable.numbers.null": " ",
+  "unbreakable.numbers.null": "",
   "unbreakable.roman_numeral.1": "I",
   "unbreakable.roman_numeral.4": "IV",
   "unbreakable.roman_numeral.5": "V",

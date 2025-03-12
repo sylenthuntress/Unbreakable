@@ -56,17 +56,16 @@ public class DisplayShatterTooltip implements ItemTooltipCallback {
             tooltipIndex += 1;
         }
 
-        MutableText levelText = Text.translatable("unbreakable.shatter.level").formatted(Formatting.DARK_RED);
+        MutableText levelText = Text.translatable("unbreakable.numbers.null");
         if (ShatterHelper.isMaxShatterLevel(stack) && Unbreakable.CONFIG.shatterTooltip.DISPLAY_TEXT_AT_MAX()) {
-            levelText.append(Text.translatable("unbreakable.numbers.max"));
+            levelText = Text.translatable("unbreakable.numbers.max");
         } else if (shatterLevel > 1 || Unbreakable.CONFIG.shatterTooltip.DISPLAY_LEVEL_AT_ONE()) {
-            levelText.append(NumberHelper.toRomanOrArabic(shatterLevel,
+            levelText = NumberHelper.toRomanOrArabic(shatterLevel,
                     "unbreakable.roman_numeral.",
-                    Unbreakable.CONFIG.shatterTooltip.ROMAN_NUMERALS())
+                    Unbreakable.CONFIG.shatterTooltip.ROMAN_NUMERALS()
             );
-        } else levelText.append(Text.translatable("unbreakable.numbers.null"));
-
-        lines.add(tooltipIndex, levelText);
+        }
+        lines.add(tooltipIndex, Text.translatable("unbreakable.shatter.level", levelText).formatted(Formatting.DARK_RED));
         tooltipIndex += 1;
 
         if (Unbreakable.CONFIG.shatterTooltip.DISPLAY_TOOLTIP_DESC()) {
