@@ -29,7 +29,7 @@ public class Mixin_ExperienceOrbEntity {
 
         var degradationMap = new HashMap<>(stack.getOrDefault(UnbreakableComponents.DEGRADATION, Map.of()));
         int degradation = degradationMap.getOrDefault(RepairMethod.MENDING.getAsString(), 0);
-        degradation *= Unbreakable.CONFIG.mendingTweaks.DEGRADE_MULTIPLIER();
+        degradation = Math.round(degradation * Unbreakable.CONFIG.mendingTweaks.DEGRADE_MULTIPLIER());
 
         original = Math.round(original * (1 - degradation * 0.01F));
 
