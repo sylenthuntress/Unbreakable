@@ -18,7 +18,7 @@ public class ExclusiveMending implements EnchantmentEvents.AllowEnchanting {
     public TriState allowEnchanting(RegistryEntry<Enchantment> enchantment, ItemStack stack, EnchantingContext context) {
         List<RegistryKey<?>> incompatibleEnchantments = List.of(Enchantments.MENDING, Enchantments.UNBREAKING);
 
-        boolean configExclusiveMending = Unbreakable.CONFIG.exclusiveMending();
+        boolean configExclusiveMending = Unbreakable.CONFIG.mendingTweaks.EXCLUSIVE();
         boolean targetEnchantmentIsExclusive = enchantment.matches(incompatibleEnchantments::contains);
         boolean stackHasExclusiveEnchant = EnchantmentHelper.getEnchantments(stack)
                 .getEnchantments()

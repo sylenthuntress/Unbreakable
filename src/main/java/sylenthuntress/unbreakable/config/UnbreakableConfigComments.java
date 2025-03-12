@@ -69,5 +69,8 @@ public abstract class UnbreakableConfigComments {
     // Enchantments
     public final static String disableBindingWhenShattered = "Whether curse of binding should work on shattered items";
     public final static String shatterCursedItems = "Whether curse of vanishing should shatter items instead of deleting them";
-    public final static String exclusiveMending = "Whether to mending and unbreaking should be incompatible";
+    // -> Mending Tweaks
+    public final static String EXCLUSIVE = "Whether mending and unbreaking should be incompatible";
+    public final static String DEGRADE_MENDING = "Whether mending should get less effective over time";
+    public final static String DEGRADE_MENDING_MULTIPLIER = "The rate at which mending loses effectiveness";
 }

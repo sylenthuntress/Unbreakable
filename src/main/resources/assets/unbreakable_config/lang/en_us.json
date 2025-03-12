@@ -94,5 +94,8 @@
   "text.config.unbreakable-config.section.enchantmentSection": "Enchantment Tweaks",
   "text.config.unbreakable-config.option.disableBindingWhenShattered": "Disable binding curse on shattered\nitems",
   "text.config.unbreakable-config.option.shatterCursedItems": "Shatter and retain items with curse of \nvanishing on death",
-  "text.config.unbreakable-config.option.exclusiveMending": "Mending is incompatible with unbreaking"
+  "text.config.unbreakable-config.category.mendingTweaks": "Mending Tweaks",
+  "text.config.unbreakable-config.option.mendingTweaks.EXCLUSIVE": "Mending is exclusive with unbreaking",
+  "text.config.unbreakable-config.option.mendingTweaks.DEGRADE": "Mending loses effectiveness over time",
+  "text.config.unbreakable-config.option.mendingTweaks.DEGRADE_MULTIPLIER": "The rate at which mending loses effectiveness"
 }

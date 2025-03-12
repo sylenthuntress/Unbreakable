@@ -6,6 +6,7 @@ import net.minecraft.entity.ExperienceOrbEntity;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import sylenthuntress.unbreakable.Unbreakable;
 import sylenthuntress.unbreakable.registry.UnbreakableComponents;
 import sylenthuntress.unbreakable.util.RepairMethod;
 
@@ -22,8 +23,13 @@ public class Mixin_ExperienceOrbEntity {
             )
     )
     private int degradeMendingRepair(int original, @Local ItemStack stack) {
+        if (Unbreakable.CONFIG.mendingTweaks.DEGRADE()) {
+            return original;
+        }
+
         var degradationMap = new HashMap<>(stack.getOrDefault(UnbreakableComponents.DEGRADATION, Map.of()));
         int degradation = degradationMap.getOrDefault(RepairMethod.MENDING.getAsString(), 0);
+        degradation *= Unbreakable.CONFIG.mendingTweaks.DEGRADE_MULTIPLIER();
 
         original = Math.round(original * (1 - degradation * 0.01F));
 

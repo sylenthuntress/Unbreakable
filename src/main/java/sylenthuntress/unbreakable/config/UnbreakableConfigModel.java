@@ -91,8 +91,19 @@ public class UnbreakableConfigModel {
     @Comment(UnbreakableConfigComments.shatterCursedItems)
     public boolean shatterCursedItems = true;
 
-    @Comment(UnbreakableConfigComments.exclusiveMending)
-    public boolean exclusiveMending = true;
+    @Nest
+    @Expanded
+    public MendingTweaks mendingTweaks = new MendingTweaks();
+
+    public static class MendingTweaks {
+        @Comment(UnbreakableConfigComments.EXCLUSIVE)
+        public boolean EXCLUSIVE = true;
+        @Comment(UnbreakableConfigComments.DEGRADE_MENDING_MULTIPLIER)
+        public boolean DEGRADE = true;
+        @Comment(UnbreakableConfigComments.DEGRADE_MENDING)
+        @RangeConstraint(min = 0.0F, max = 3.0F, decimalPlaces = 1)
+        public float DEGRADE_MULTIPLIER = 1F;
+    }
 
     public static boolean shatterLevelConstraint(int integer) {
         return integer >= 0 && integer <= 255;
