@@ -5,10 +5,11 @@
   "name": "${mod_name}",
   "description": "${description}",
   "authors": [
-    "${mod_author}\n\n"
+    "${mod_author}"
   ],
   "contributors": [
-    "Hexasan\n\n"
+    "Hexasan (Turkish Translator)",
+    "Nacmoonsilver (Titlecard Artist)\n\n"
   ],
   "contact": {
     "homepage": "https://modrinth.com/mod/${modrinth_slug}",
