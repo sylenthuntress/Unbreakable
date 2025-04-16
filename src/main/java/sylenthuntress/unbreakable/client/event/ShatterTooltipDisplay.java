@@ -17,7 +17,7 @@ import sylenthuntress.unbreakable.util.ShatterHelper;
 import java.util.List;
 
 
-public class DisplayShatterTooltip implements ItemTooltipCallback {
+public class ShatterTooltipDisplay implements ItemTooltipCallback {
     private static final MinecraftClient client = MinecraftClient.getInstance();
 
     @Override
