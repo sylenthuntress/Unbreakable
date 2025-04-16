@@ -10,20 +10,15 @@ import sylenthuntress.unbreakable.Unbreakable;
 import java.util.Map;
 
 public abstract class UnbreakableComponents {
-    public static final ComponentType<Integer> SHATTER_LEVEL = register("shatter_level");
-    public static final ComponentType<Integer> MAX_SHATTER_LEVEL = register("max_shatter_level");
+    public static final ComponentType<Integer> SHATTER_LEVEL = register("shatter_level", Codecs.rangedInt(0, 255));
+    public static final ComponentType<Integer> MAX_SHATTER_LEVEL = register("max_shatter_level", Codecs.rangedInt(0, 255));
+    public static final ComponentType<Map<String, Integer>> DEGRADATION = register("degradation", Codec.unboundedMap(Codec.STRING, Codec.INT));
 
-    public static final ComponentType<Map<String, Integer>> DEGRADATION = Registry.register(
-            Registries.DATA_COMPONENT_TYPE,
-            Unbreakable.modIdentifier("degradation"),
-            ComponentType.<Map<String, Integer>>builder().codec(Codec.unboundedMap(Codec.STRING, Codec.INT)).build()
-    );
-
-    private static ComponentType<Integer> register(String id) {
+    private static <T> ComponentType<T> register(String id, Codec<T> codec) {
         return Registry.register(
                 Registries.DATA_COMPONENT_TYPE,
                 Unbreakable.modIdentifier(id),
-                ComponentType.<Integer>builder().codec(Codecs.rangedInt(0, 255)).build()
+                ComponentType.<T>builder().codec(codec).build()
         );
     }
 
